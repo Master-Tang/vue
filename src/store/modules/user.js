@@ -32,11 +32,17 @@ const actions = {
   login({ commit }, userInfo) {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
-      login({ username: username.trim(), password: password }).then(response => {
+      login({ loginName: username.trim(), loginPass: password }).then(response => {
         const { data } = response
-        commit('SET_TOKEN', data.token)
-        setToken(data.token)
-        resolve()
+        if(response.success)
+        {
+          commit('SET_TOKEN', response.data)
+          setToken(response.data)
+          resolve()
+        }else
+        {
+          reject('错误的用户名或密码！')
+        }
       }).catch(error => {
         reject(error)
       })
