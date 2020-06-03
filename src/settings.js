@@ -1,6 +1,6 @@
 module.exports = {
 
-  title: 'Vue Admin Template',
+  title: '非诚勿扰企业业务管理系统',
 
   /**
    * @type {boolean} true | false

@@ -33,14 +33,12 @@ const actions = {
     const { username, password } = userInfo
     return new Promise((resolve, reject) => {
       login({ loginName: username.trim(), loginPass: password }).then(response => {
-        const { data } = response
-        if(response.success)
-        {
+        // const { data } = response
+        if (response.success) {
           commit('SET_TOKEN', response.data)
           setToken(response.data)
           resolve()
-        }else
-        {
+        } else {
           reject('错误的用户名或密码！')
         }
       }).catch(error => {
@@ -54,7 +52,7 @@ const actions = {
     return new Promise((resolve, reject) => {
       getInfo(state.token).then(response => {
         const { data } = response
-
+       
         if (!data) {
           reject('Verification failed, please Login again.')
         }
