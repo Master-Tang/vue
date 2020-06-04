@@ -44,7 +44,7 @@
 </template>
 
 <script>
-import  $ from '@/api/department'
+import  $ from '@/api/dict'
 
 export default {
 
