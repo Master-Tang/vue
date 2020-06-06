@@ -36,7 +36,7 @@ export const constantRoutes = [
     component: () => import('@/views/login/index'),
     hidden: true
   },
-
+  
   {
     path: '/404',
     component: () => import('@/views/404'),
@@ -65,48 +65,45 @@ export const constantRoutes = [
       {
         path: 'assets',
         name: '资产伙伴',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/assets/Index'),
         meta: { title: '资产伙伴', icon: 'table' }
       },
       {
         path: 'fund',
         name: '资金伙伴',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/fund/Index'),
         meta: { title: '资金伙伴', icon: 'table' }
       },
       {
         path: 'exit',
         name: '退出伙伴',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/exit/Index'),
         meta: { title: '退出伙伴', icon: 'table' }
       },
       {
         path: 'justice',
         name: '司法伙伴',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/justice/Index'),
         meta: { title: '司法伙伴', icon: 'table' }
       },
       {
         path: 'gov',
         name: '政府伙伴',
-        component: () => import('@/views/form/index'),
+        component: () => import('@/views/gov/Index'),
         meta: { title: '政府伙伴', icon: 'table' }
       }
     ]
   },
 
   {
-    path: '/query',
+    path: '/find',
     component: Layout,
-    redirect: '/query/index',
-    children: [
-      {
-        path: 'index',
-        name: 'Index',
-        component: () => import('@/views/form/index'),
-        meta: { title: '查询伙伴', icon: 'form' }
-      }
-    ]
+    redirect: '/system/dep',
+    name: 'Nested',
+    meta: {
+      title: '查询伙伴',
+      icon: 'nested'
+    }
   },
 
   {
@@ -121,18 +118,31 @@ export const constantRoutes = [
     children: [
       {
         path: 'dep',
-        component: () => import('@/views/nested/menu1/index'), // Parent router-view
+        component: () => import('@/views/department/Index'), // Parent router-view
         name: 'Dep',
         meta: { title: '部门设置' },
       },
       {
         path: 'dict',
-        component: () => import('@/views/crm/system/department/Index'),
+        component: () => import('@/views/crm/system/dict/Index'),
         meta: { title: '字典设置' }
       },
       {
+        path:'/adddepartment',
+        component: () =>import('@/views/department/add'),
+      },
+      {
+        path:'/add',
+        component: () =>import('@/views/crm/system/dict/add'),
+      },
+      {
+        path:'/edit',
+        component: () =>import('@/views/crm/system/dict/edit'),
+
+      },
+      {
         path: 'user',
-        component: () => import('@/views/nested/menu2/index'),
+        component: () => import('@/views/sysuser/Index'),
         meta: { title: '用户设置' }
       },
       {
