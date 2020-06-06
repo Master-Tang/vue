@@ -41,7 +41,7 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="分组名称">
+      <el-table-column label="分组名称" fixed>
         <template slot-scope="scope">{{ scope.row.groupName }}</template>
       </el-table-column>
       <el-table-column label="标签名称" width align="center">
@@ -132,6 +132,7 @@ export default {
           this.list = response.data.list;
           this.total = response.data.total;
           this.listLoading = false;
+          console.log(response.data)
         }
       );
     },

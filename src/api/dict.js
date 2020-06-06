@@ -9,6 +9,15 @@ export default
         params
       })
    },
+
+   listByGroup(params)
+   {
+      return request({
+         url: '/admin/dict/listByGroup',
+         method: 'post',
+         params
+      })
+   },
    listByGroupName(params)
    {
       return request({

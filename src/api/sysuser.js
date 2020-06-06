@@ -17,10 +17,10 @@ export default
          data
       })
    },
-   getByLoginName(params)
+   getByUserId(params)
    {
       return request({
-         url: '/admin/sysUser/getByLoginName',
+         url: '/admin/sysUser/getByUserId',
          method: 'post',
          params
        })
@@ -33,5 +33,14 @@ export default
          data
       })
    },
+   remove(params)
+   {
+      
+    return request({
+        url: '/admin/sysUser/remove',
+        method: 'post',
+        params
+      })
+   }
   
 }

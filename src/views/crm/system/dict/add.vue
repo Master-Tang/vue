@@ -5,9 +5,9 @@
         <el-select v-model="value" placeholder="请选择">
           <el-option
             v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.label"
+            :key="item"
+            :label="item"
+            :value="item"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -43,7 +43,7 @@ export default {
   },
   methods: {
     addData() {
-      console.log(this.value, this.form.name, this.form.region);
+     // console.log(this.value, this.form.name, this.form.region);
       $.add({
         dicKey: this.form.name,
         dicValue: this.form.region,
@@ -59,11 +59,8 @@ export default {
       this.options.splice(0,this.options.length)
       $.getGroupName().then(response=>{
         console.log(response.data)
-      
-        for(let s of response.data)
-        {
-          this.options.push({label:s,value:s});
-        }
+        this.options=response.data;
+     
       })
     }
   }

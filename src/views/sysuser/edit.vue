@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="用户名">
-        <el-input v-model="form.loginName"></el-input>
+        <el-input disabled="" v-model="form.loginName"></el-input>
       </el-form-item>
       <el-form-item label="部门名称">
         <el-input v-model="form.depId"></el-input>
@@ -62,18 +62,20 @@ export default {
   methods: {
     getData() {
       console.log(this.id);
-      $.getByLoginName({ userId: this.id }).then(response => {
+      $.getByUserId({ userId: this.id }).then(response => {
+        console.log(response.data);
         this.form.loginName = response.data.loginName
         this.form.depId = response.data.depId
         this.form.trueName = response.data.trueName
         this.form.telephone = response.data.telephone
         this.form.dingDing = response.data.dingDing
         this.form.roleId = response.data.roleId
-        console.log(response.data);
+        
       });
     },
     updateData() {
-      if (this.form.depId.length > 0 && this.form.telephone.length > 0) {
+      if (this.form.depId.length > 0 && this.form.telephone.length > 0
+          && this.form.dingDing.length > 0 && this.form.roleId.length > 0) {
         $.update({
           loginName:this.form.loginName,
           depId: this.form.depId,

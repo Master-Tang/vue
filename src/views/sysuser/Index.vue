@@ -64,7 +64,7 @@
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.userId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.userId)">删除</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.row.loginName)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -167,7 +167,7 @@ export default {
         query: { id: id }
       });
     },
-    handleDel(id) {
+    handleDel(loginName) {
       this.$confirm("此操作将删除该字典项, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
@@ -175,7 +175,7 @@ export default {
       })
         .then(() => {
           //console.log(id)
-          $.removeDict({ id }).then(response => {
+          $.remove({ loginName }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"

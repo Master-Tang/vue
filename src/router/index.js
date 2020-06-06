@@ -69,6 +69,16 @@ export const constantRoutes = [
         meta: { title: '资产伙伴', icon: 'table' }
       },
       {
+        path: '/addAssets',
+        name: '添加资产伙伴',
+        component: () => import('@/views/assets/add')
+      },
+      {
+        path: '/editAssets',
+        name: '编辑资产伙伴',
+        component: () => import('@/views/assets/edit')
+      },
+      {
         path: 'fund',
         name: '资金伙伴',
         component: () => import('@/views/fund/Index'),
