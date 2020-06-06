@@ -146,6 +146,14 @@ export const constantRoutes = [
         meta: { title: '用户设置' }
       },
       {
+        path:'/addsysuser',
+        component: () =>import('@/views/sysuser/add'),
+      },
+      {
+        path:'/editsysuser',
+        component: () =>import('@/views/sysuser/edit'),
+      },
+      {
         path: 'total',
         component: () => import('@/views/nested/menu2/index'),
         meta: { title: '绩效统计' }

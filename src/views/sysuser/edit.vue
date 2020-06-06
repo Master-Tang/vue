@@ -11,11 +11,23 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="标签名称">
-        <el-input v-model="form.dicKey"></el-input>
+      <el-form-item label="用户名">
+        <el-input v-model="form.loginName"></el-input>
       </el-form-item>
-      <el-form-item label="标签值">
-        <el-input v-model="form.dicValue"></el-input>
+      <el-form-item label="部门名称">
+        <el-input v-model="form.depId"></el-input>
+      </el-form-item>
+      <el-form-item label="姓名">
+        <el-input v-model="form.trueName"></el-input>
+      </el-form-item>
+      <el-form-item label="电话号码">
+        <el-input v-model="form.telephone"></el-input>
+      </el-form-item>
+      <el-form-item label="钉钉号">
+        <el-input v-model="form.dingDing"></el-input>
+      </el-form-item>
+      <el-form-item label="角色号">
+        <el-input v-model="form.roleId"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
@@ -26,51 +38,58 @@
 </template>
   
 <script>
-import $ from "@/api/dict";
+import $ from "@/api/sysuser";
 export default {
   data() {
     return {
       id: "",
       form: {
-        id: "",
-        dicKey: "",
-        dicValue: "",
-        groupName: ""
+        loginName: "",
+        depId: "",
+        telephone: "",
+        dingDing: "",
+        roleId: "",
+        trueName: ""
       },
       options: []
     };
   },
   created() {
-    (this.id = this.$route.query.id),
+      this.id = this.$route.query.id,
       // this.fetchData()
       this.getData();
   },
   methods: {
     getData() {
-      console.log(this.form.id);
-      $.getDict({ id: this.id }).then(response => {
-        this.form.groupName = response.data.dict.groupName;
-        this.form.dicKey = response.data.dict.dicKey;
-        this.form.dicValue = response.data.dict.dicValue;
-        console.log(response.data.dict);
+      console.log(this.id);
+      $.getByLoginName({ userId: this.id }).then(response => {
+        this.form.loginName = response.data.loginName
+        this.form.depId = response.data.depId
+        this.form.trueName = response.data.trueName
+        this.form.telephone = response.data.telephone
+        this.form.dingDing = response.data.dingDing
+        this.form.roleId = response.data.roleId
+        console.log(response.data);
       });
     },
     updateData() {
-      if (this.form.dicKey.length > 0 && this.form.dicValue.length > 0) {
+      if (this.form.depId.length > 0 && this.form.telephone.length > 0) {
         $.update({
-          id: this.id,
-          dicKey: this.form.dicKey,
-          dicValue: this.form.dicValue,
-          groupName: this.form.groupName
+          loginName:this.form.loginName,
+          depId: this.form.depId,
+          telephone: this.form.telephone,
+          dingDing: this.form.dingDing,
+          roleId: this.form.roleId,
+          trueName: this.form.trueName,
         }).then(response => {
           if (response.success) {
-            this.$router.replace("/system/dict");
+            this.$router.replace("/system/user");
           }
         });
       } else {
         this.$message({
           type: "fail",
-          message: "标签名称和标签值不能为空!"
+          message: "值不能为空!"
         });
       }
     }

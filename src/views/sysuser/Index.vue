@@ -25,7 +25,7 @@
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="$router.push('/add')">添加</el-button>
+                <el-button type="primary" @click="$router.push('/addsysuser')">添加</el-button>
               </div>
             </el-col>
           </el-row>
@@ -42,20 +42,29 @@
       highlight-current-row
     >
       <el-table-column label="用户名">
-        <template slot-scope="scope">{{ scope.row.groupName }}</template>
+        <template slot-scope="scope">{{ scope.row.loginName }}</template>
       </el-table-column>
-      <el-table-column label="标签名称" width align="center">
+      <el-table-column label="部门名称" width align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.dicKey }}</span>
+          <span>{{ scope.row.depId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签值" width align="center">
-        <template slot-scope="scope">{{ scope.row.dicValue }}</template>
+      <el-table-column label="姓名" width align="center">
+        <template slot-scope="scope">{{ scope.row.trueName }}</template>
+      </el-table-column>
+      <el-table-column label="电话号码" width align="center">
+        <template slot-scope="scope">{{ scope.row.telephone }}</template>
+      </el-table-column>
+      <el-table-column label="钉钉号" width align="center">
+        <template slot-scope="scope">{{ scope.row.dingDing }}</template>
+      </el-table-column>
+      <el-table-column label="角色号" width align="center">
+        <template slot-scope="scope">{{ scope.row.roleId }}</template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.id)">删除</el-button>
+          <el-button type="primary" size="small" @click="handleEdit(scope.row.userId)">编辑</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.row.userId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,7 +81,7 @@
 </template>
 
 <script>
-import $ from "@/api/dict";
+import $ from "@/api/sysuser";
 
 export default {
   data() {
@@ -89,42 +98,42 @@ export default {
     };
   },
   created() {
-    this.fetchData(), this.findData();
+    this.fetchData();
   },
   methods: {
     vvv() {
       this.currentPage = 1;
     },
-    find() {
-      if (this.value==null) {
-        this.fetchData()
-      } else {
-        $.listByGroupName({
-          groupName: this.value,
-          pageIndex: this.currentPage,
-          pageSize: this.pageSize
-        }).then(response => {
-          this.list = null;
-          this.total = 0;
-          this.listLoading = true;
-          this.pageSize = 10;
-          this.state = 1;
-          this.list = response.data.list;
-          this.total = response.data.total;
-          this.listLoading = false;
-          //console.log(response.data)
-        });
-      }
-    },
-    findData() {
-      this.options.splice(0, this.options.length);
-      $.getGroupName().then(response => {
-        console.log(response.data);
-        for (let s of response.data) {
-          this.options.push({ label: s, value: s });
-        }
-      });
-    },
+    // find() {
+    //   if (this.value==null) {
+    //     this.fetchData()
+    //   } else {
+    //     $.listByGroupName({
+    //       groupName: this.value,
+    //       pageIndex: this.currentPage,
+    //       pageSize: this.pageSize
+    //     }).then(response => {
+    //       this.list = null;
+    //       this.total = 0;
+    //       this.listLoading = true;
+    //       this.pageSize = 10;
+    //       this.state = 1;
+    //       this.list = response.data.list;
+    //       this.total = response.data.total;
+    //       this.listLoading = false;
+    //       //console.log(response.data)
+    //     });
+    //   }
+    // },
+    // findData() {
+    //   this.options.splice(0, this.options.length);
+    //   $.getGroupName().then(response => {
+    //     console.log(response.data);
+    //     for (let s of response.data) {
+    //       this.options.push({ label: s, value: s });
+    //     }
+    //   });
+    // },
     fetchData() {
       this.listLoading = true;
       $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
@@ -154,7 +163,7 @@ export default {
 
     handleEdit(id) {
       this.$router.push({
-        path: "/edit",
+        path: "/editsysuser",
         query: { id: id }
       });
     },
