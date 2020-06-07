@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <el-form :inline="true">
+    <!-- <el-form :inline="true">
       <el-form-item>
         <el-row>
           <el-col :span="24">
@@ -10,7 +10,37 @@
           </el-col>
         </el-row>
       </el-form-item>
-    </el-form>
+    </el-form> -->
+    <div class="button">
+      <el-form :inline="true">
+          <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label"
+            ></el-option>
+          </el-select>
+        <el-form-item>
+          <el-row>
+            <el-col :span="24">
+              <div class="grid-content bg-purple-dark">
+                <el-button type="primary" @click="find()">查找</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item style="float:right">
+          <el-row>
+            <el-col :span="24">
+              <div class="grid-content bg-purple-dark">
+                <el-button type="primary" @click="$router.push('/addAssets')">添加</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-table
       id="myform"
       v-loading="listLoading"
@@ -21,18 +51,18 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴名称" fixed width="120">
+      <el-table-column label="伙伴姓名" fixed>
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" width="120" align="center" >
+      <el-table-column label="性别" align="center" >
         <template slot-scope="scope">
           <span>{{ scope.row.sex }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" width="120">
+      <el-table-column label="手机号" align="center">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
-      <el-table-column label="微信号" width="120">
+      <!-- <el-table-column label="微信号" width="120">
         <template slot-scope="scope">{{ scope.row.weixin }}</template>
       </el-table-column>
       <el-table-column label="电子邮件" width="120">
@@ -49,11 +79,11 @@
       </el-table-column>
       <el-table-column label="岗位" width="120">
         <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column>
-      <el-table-column label="伙伴来源" width="120">
+      </el-table-column> -->
+      <el-table-column label="伙伴来源" align="center">
         <template slot-scope="scope">{{ scope.row.source }}</template>
       </el-table-column>
-      <el-table-column label="伙伴对应项目" width="120">
+      <!-- <el-table-column label="伙伴对应项目" width="120">
         <template slot-scope="scope">{{ scope.row.item }}</template>
       </el-table-column>
       <el-table-column label="伙伴对应债权" width="120">
@@ -64,9 +94,10 @@
       </el-table-column>
       <el-table-column label="债权属性" width="120">
         <template slot-scope="scope">{{ scope.row.assetAttr }}</template>
-      </el-table-column>
-      <el-table-column label="操作" width="150" align="center" fixed="right">
+      </el-table-column> -->
+      <el-table-column label="操作"  align="center" fixed="right">
         <template slot-scope="scope">
+          <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看详情</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
         </template>
@@ -105,7 +136,9 @@ export default {
     this.fetchData();
   },
   methods: {
+    showMore(){
 
+    },
     fetchData() {
       this.listLoading = true;
       $.findAll({ partnerType: "资产伙伴", pageIndex: this.currentPage, pageSize: this.pageSize }).then(

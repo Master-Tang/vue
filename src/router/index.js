@@ -85,10 +85,30 @@ export const constantRoutes = [
         meta: { title: '资金伙伴', icon: 'table' }
       },
       {
+        path: '/addFund',
+        name: '添加资金伙伴',
+        component: () => import('@/views/fund/add')
+      },
+      {
+        path: '/editFund',
+        name: '编辑资金伙伴',
+        component: () => import('@/views/fund/edit')
+      },
+      {
         path: 'exit',
         name: '退出伙伴',
         component: () => import('@/views/exit/Index'),
         meta: { title: '退出伙伴', icon: 'table' }
+      },
+      {
+        path: '/addExit',
+        name: '添加退出伙伴',
+        component: () => import('@/views/exit/add')
+      },
+      {
+        path: '/editExit',
+        name: '编辑退出伙伴',
+        component: () => import('@/views/exit/edit')
       },
       {
         path: 'justice',
@@ -97,11 +117,31 @@ export const constantRoutes = [
         meta: { title: '司法伙伴', icon: 'table' }
       },
       {
+        path: '/addJustice',
+        name: '添加司法伙伴',
+        component: () => import('@/views/justice/add')
+      },
+      {
+        path: '/editJustice',
+        name: '编辑司法伙伴',
+        component: () => import('@/views/justice/edit')
+      },
+      {
         path: 'gov',
         name: '政府伙伴',
         component: () => import('@/views/gov/Index'),
         meta: { title: '政府伙伴', icon: 'table' }
-      }
+      },
+      {
+        path: '/addGov',
+        name: '添加政府伙伴',
+        component: () => import('@/views/gov/add')
+      },
+      {
+        path: '/editGov',
+        name: '编辑政府伙伴',
+        component: () => import('@/views/gov/edit')
+      },
     ]
   },
 

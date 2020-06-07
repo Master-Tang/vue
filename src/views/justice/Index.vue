@@ -2,8 +2,7 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-        <el-form-item label="分组名称">
-          <el-select v-model="value" placeholder="请选择">
+          <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -11,12 +10,11 @@
               :value="item.label"
             ></el-option>
           </el-select>
-        </el-form-item>
         <el-form-item>
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="vvv(),find()">查询</el-button>
+                <el-button type="primary" @click="find()">查找</el-button>
               </div>
             </el-col>
           </el-row>
@@ -25,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="$router.push('/add')">添加</el-button>
+                <el-button type="primary" @click="$router.push('/addJustice')">添加</el-button>
               </div>
             </el-col>
           </el-row>
@@ -39,23 +37,58 @@
       element-loading-text="Loading"
       border
       fit
+      style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="分组名称">
-        <template slot-scope="scope">{{ scope.row.groupName }}</template>
+      <el-table-column label="伙伴姓名" fixed>
+        <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="标签名称" width align="center">
+      <el-table-column label="性别" align="center" >
         <template slot-scope="scope">
-          <span>{{ scope.row.dicKey }}</span>
+          <span>{{ scope.row.sex }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="标签值" width align="center">
-        <template slot-scope="scope">{{ scope.row.dicValue }}</template>
+      <el-table-column label="手机号" align="center">
+        <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
-      <el-table-column label="操作" width="150" align="center">
+      <!-- <el-table-column label="微信号" width="120">
+        <template slot-scope="scope">{{ scope.row.weixin }}</template>
+      </el-table-column>
+      <el-table-column label="电子邮件" width="120">
+        <template slot-scope="scope">{{ scope.row.email }}</template>
+      </el-table-column>
+      <el-table-column label="单位名称" width="120">
+        <template slot-scope="scope">{{ scope.row.company }}</template>
+      </el-table-column>
+      <el-table-column label="联系地址" width="120">
+        <template slot-scope="scope">{{ scope.row.address }}</template>
+      </el-table-column>
+      <el-table-column label="部门" width="120">
+        <template slot-scope="scope">{{ scope.row.department }}</template>
+      </el-table-column>
+      <el-table-column label="岗位" width="120">
+        <template slot-scope="scope">{{ scope.row.post }}</template>
+      </el-table-column> -->
+      <el-table-column label="伙伴来源" align="center">
+        <template slot-scope="scope">{{ scope.row.source }}</template>
+      </el-table-column>
+      <!-- <el-table-column label="伙伴对应项目" width="120">
+        <template slot-scope="scope">{{ scope.row.item }}</template>
+      </el-table-column>
+      <el-table-column label="伙伴对应债权" width="120">
+        <template slot-scope="scope">{{ scope.row.debt }}</template>
+      </el-table-column>
+      <el-table-column label="伙伴备注" width="120">
+        <template slot-scope="scope">{{ scope.row.partnerRemark }}</template>
+      </el-table-column>
+      <el-table-column label="债权属性" width="120">
+        <template slot-scope="scope">{{ scope.row.assetAttr }}</template>
+      </el-table-column> -->
+      <el-table-column label="操作"  align="center" fixed="right">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.id)">删除</el-button>
+          <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看详情</el-button>
+          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -72,7 +105,7 @@
 </template>
 
 <script>
-import $ from "@/api/dict";
+import $ from "@/api/assets";
 
 export default {
   data() {
@@ -89,49 +122,21 @@ export default {
     };
   },
   created() {
-    this.fetchData(), this.findData();
+    this.fetchData();
   },
   methods: {
-    vvv() {
-      this.currentPage = 1;
-    },
-    find() {
-      if (this.value==null) {
-        this.fetchData()
-      } else {
-        $.listByGroupName({
-          groupName: this.value,
-          pageIndex: this.currentPage,
-          pageSize: this.pageSize
-        }).then(response => {
-          this.list = null;
-          this.total = 0;
-          this.listLoading = true;
-          this.pageSize = 10;
-          this.state = 1;
-          this.list = response.data.list;
-          this.total = response.data.total;
-          this.listLoading = false;
-          //console.log(response.data)
-        });
-      }
-    },
-    findData() {
-      this.options.splice(0, this.options.length);
-      $.getGroupName().then(response => {
-        console.log(response.data);
-        for (let s of response.data) {
-          this.options.push({ label: s, value: s });
-        }
-      });
+    showMore(){
+
     },
     fetchData() {
       this.listLoading = true;
-      $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findAll({ partnerType: "资产伙伴", pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
-          this.list = response.data.list;
-          this.total = response.data.total;
-          this.listLoading = false;
+          console.log(response.data)
+            this.list = response.data.list;
+            this.total = response.data.total;
+            this.listLoading = false;
+           console.log(response.data.list)
         }
       );
     },
@@ -154,7 +159,7 @@ export default {
 
     handleEdit(id) {
       this.$router.push({
-        path: "/edit",
+        path: "/editAssets",
         query: { id: id }
       });
     },
@@ -184,8 +189,3 @@ export default {
   }
 };
 </script>
-<style scoped>
-.button {
-  padding-left: 1rem;
-}
-</style>

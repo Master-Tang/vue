@@ -14,9 +14,6 @@
       <el-form-item label="标签名称">
         <el-input v-model="form.dicKey"></el-input>
       </el-form-item>
-      <el-form-item label="标签值">
-        <el-input v-model="form.dicValue"></el-input>
-      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
         <el-button>取消</el-button>
@@ -26,7 +23,8 @@
 </template>
   
 <script>
-import $ from "@/api/dict";
+import $ from "@/api/assets";
+
 export default {
   data() {
     return {
