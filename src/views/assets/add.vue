@@ -7,8 +7,11 @@
       <el-form-item label="性别">
         <el-input v-model="form.sex"></el-input>
       </el-form-item>
-      <el-form-item >
-        <span slot="label">手机号<span class="red">*</span></span>
+      <el-form-item>
+        <span slot="label">
+          手机号
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.telephone"></el-input>
       </el-form-item>
       <el-form-item label="微信号">
@@ -51,14 +54,16 @@
           ></el-option>
         </el-select>
       </el-form-item>
-       <el-form-item label="覆盖地区">
-          <el-cascader style="width:100%"
-    placeholder="试试搜索：指南"
-     v-model="form.overArea"
-    :options="provinceList"
-    :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
-    filterable></el-cascader>
-       </el-form-item>
+      <el-form-item label="覆盖地区">
+        <el-cascader
+          style="width:100%"
+          placeholder="试试搜索：指南"
+          v-model="form.overArea"
+          :options="provinceList"
+          :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+          filterable
+        ></el-cascader>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addData()">立即创建</el-button>
         <el-button>取消</el-button>
@@ -88,37 +93,32 @@ export default {
         address: "",
         partnerRemark: "",
         assetAttr: "",
-        overArea:[],
+        overArea: []
       },
-       assetAttrList:[],
-       provinceList:[]
+      assetAttrList: [],
+      provinceList: []
     };
   },
   created() {
-
-    var _this=this;
-     $.findInit().then(res=>{
-
-        if(res.success)
-       {
+    var _this = this;
+    $.findInit().then(res => {
+      if (res.success) {
         // console.log(res.data)
-         this.assetAttrList=res.data.source;
-         this.provinceList=res.data.province;
-         console.log(this.provinceList)
-       }
-     })
- 
+        this.assetAttrList = res.data.source;
+        this.provinceList = res.data.province;
+        console.log(this.provinceList);
+      }
+    });
   },
   methods: {
     addData() {
       console.log(this.form.overArea);
-      var areas=[]
-      for(let row of this.form.overArea)
-      {
-          let obj={province:row[0],city:row[1]}
-          areas.push(obj)
+      var areas = [];
+      for (let row of this.form.overArea) {
+        let obj = { province: row[0], city: row[1] };
+        areas.push(obj);
       }
-     $.insert({
+      $.insert({
         partnerType: "资产伙伴",
         name: this.form.name,
         sex: this.form.sex,
@@ -134,7 +134,7 @@ export default {
         address: this.form.address,
         partnerRemark: this.form.partnerRemark,
         assetAttr: this.form.assetAttr,
-        overArea:areas
+        overArea: areas
       }).then(response => {
         if (response.success) {
           this.$router.replace("/partner/assets");
@@ -148,10 +148,10 @@ export default {
 .add {
   padding: 1rem;
 }
-.red{
+.red {
   color: red;
-  font-size:1.5rem;
+  font-size: 1.5rem;
 
-  vertical-align:middle;
+  vertical-align: middle;
 }
 </style>

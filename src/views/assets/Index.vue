@@ -1,16 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <el-form :inline="true">
-      <el-form-item>
-        <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">
-              <el-button type="primary" @click="$router.push('/addAssets')">添加</el-button>
-            </div>
-          </el-col>
-        </el-row>
-      </el-form-item>
-    </el-form> -->
     <div class="button">
       <el-form :inline="true">
           <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
@@ -141,7 +130,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: "资产伙伴", pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findAll({ partnerType: 1, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           console.log(response.data)
             this.list = response.data.list;

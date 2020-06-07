@@ -148,12 +148,20 @@ export const constantRoutes = [
   {
     path: '/find',
     component: Layout,
-    redirect: '/system/dep',
+    redirect: '/find/find',
     name: 'Nested',
     meta: {
       title: '查询伙伴',
       icon: 'nested'
-    }
+    },
+    children:[
+      {
+        path: 'find',
+        component: () => import('@/views/find/index'), // Parent router-view
+        name: 'Find',
+        meta: { title: '查询伙伴' },  
+      },
+    ]
   },
 
   {
