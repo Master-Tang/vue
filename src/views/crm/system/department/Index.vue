@@ -5,7 +5,7 @@
         <el-row>
           <el-col :span="24">
             <div class="grid-content bg-purple-dark">
-              <el-button type="primary" @click="$router.push('/adddepartment')">添加</el-button>
+              <el-button type="primary" @click="$router.push('add')">添加</el-button>
             </div>
           </el-col>
         </el-row>
@@ -20,6 +20,9 @@
       fit
       highlight-current-row
     >
+     <el-table-column label="部门编号">
+        <template slot-scope="scope">{{ scope.row.id }}</template>
+      </el-table-column>
       <el-table-column label="部门名称">
         <template slot-scope="scope">{{ scope.row.depName }}</template>
       </el-table-column>
@@ -60,18 +63,10 @@ export default {
     };
   },
   created() {
-    this.fetchData(), this.findData();
+    this.fetchData()
   },
   methods: {
-    findData() {
-      this.options.splice(0, this.options.length);
-      $.getGroupName().then(response => {
-        console.log(response.data);
-        for (let s of response.data) {
-          this.options.push({ label: s, value: s });
-        }
-      });
-    },
+    
     fetchData() {
       this.listLoading = true;
       $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
@@ -102,7 +97,7 @@ export default {
 
     handleEdit(id) {
       this.$router.push({
-        path: "/edit",
+        path: "edit",
         query: { id: id }
       });
     },

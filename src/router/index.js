@@ -5,7 +5,8 @@ Vue.use(Router)
 
 /* Layout */
 import Layout from '@/layout'
-
+import system from './system'
+import partner from './partner'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -55,172 +56,6 @@ export const constantRoutes = [
     }]
   },
 
-  {
-    path: '/partner',
-    component: Layout,
-    redirect: '/partner/assets',
-    name: 'partner',
-    meta: { title: '我的伙伴', icon: 'example' },
-    children: [
-      {
-        path: 'assets',
-        name: '资产伙伴',
-        component: () => import('@/views/assets/Index'),
-        meta: { title: '资产伙伴', icon: 'table' }
-      },
-      {
-        path: '/addAssets',
-        name: '添加资产伙伴',
-        component: () => import('@/views/assets/add')
-      },
-      {
-        path: '/editAssets',
-        name: '编辑资产伙伴',
-        component: () => import('@/views/assets/edit')
-      },
-      {
-        path: 'fund',
-        name: '资金伙伴',
-        component: () => import('@/views/fund/Index'),
-        meta: { title: '资金伙伴', icon: 'table' }
-      },
-      {
-        path: '/addFund',
-        name: '添加资金伙伴',
-        component: () => import('@/views/fund/add')
-      },
-      {
-        path: '/editFund',
-        name: '编辑资金伙伴',
-        component: () => import('@/views/fund/edit')
-      },
-      {
-        path: 'exit',
-        name: '退出伙伴',
-        component: () => import('@/views/exit/Index'),
-        meta: { title: '退出伙伴', icon: 'table' }
-      },
-      {
-        path: '/addExit',
-        name: '添加退出伙伴',
-        component: () => import('@/views/exit/add')
-      },
-      {
-        path: '/editExit',
-        name: '编辑退出伙伴',
-        component: () => import('@/views/exit/edit')
-      },
-      {
-        path: 'justice',
-        name: '司法伙伴',
-        component: () => import('@/views/justice/Index'),
-        meta: { title: '司法伙伴', icon: 'table' }
-      },
-      {
-        path: '/addJustice',
-        name: '添加司法伙伴',
-        component: () => import('@/views/justice/add')
-      },
-      {
-        path: '/editJustice',
-        name: '编辑司法伙伴',
-        component: () => import('@/views/justice/edit')
-      },
-      {
-        path: 'gov',
-        name: '政府伙伴',
-        component: () => import('@/views/gov/Index'),
-        meta: { title: '政府伙伴', icon: 'table' }
-      },
-      {
-        path: '/addGov',
-        name: '添加政府伙伴',
-        component: () => import('@/views/gov/add')
-      },
-      {
-        path: '/editGov',
-        name: '编辑政府伙伴',
-        component: () => import('@/views/gov/edit')
-      },
-    ]
-  },
-
-  {
-    path: '/find',
-    component: Layout,
-    redirect: '/find/find',
-    name: 'Nested',
-    meta: {
-      title: '查询伙伴',
-      icon: 'nested'
-    },
-    children:[
-      {
-        path: 'find',
-        component: () => import('@/views/find/index'), // Parent router-view
-        name: 'Find',
-        meta: { title: '查询伙伴' },  
-      },
-    ]
-  },
-
-  {
-    path: '/system',
-    component: Layout,
-    redirect: '/system/dep',
-    name: 'Nested',
-    meta: {
-      title: '系统设置',
-      icon: 'nested'
-    },
-    children: [
-      {
-        path: 'dep',
-        component: () => import('@/views/department/Index'), // Parent router-view
-        name: 'Dep',
-        meta: { title: '部门设置' },
-      },
-      {
-        path: 'dict',
-        component: () => import('@/views/crm/system/dict/Index'),
-        meta: { title: '字典设置' }
-      },
-      {
-        path:'/adddepartment',
-        component: () =>import('@/views/department/add'),
-      },
-      {
-        path:'/add',
-        component: () =>import('@/views/crm/system/dict/add'),
-      },
-      {
-        path:'/edit',
-        component: () =>import('@/views/crm/system/dict/edit'),
-
-      },
-      {
-        path: 'user',
-        component: () => import('@/views/sysuser/Index'),
-        meta: { title: '用户设置' }
-      },
-      {
-        path:'/addsysuser',
-        component: () =>import('@/views/sysuser/add'),
-      },
-      {
-        path:'/editsysuser',
-        component: () =>import('@/views/sysuser/edit'),
-      },
-      {
-        path: 'total',
-        component: () => import('@/views/nested/menu2/index'),
-        meta: { title: '绩效统计' }
-      }
-    ]
-  },
-
-
-
   // 404 page must be placed at the end !!!
   { path: '*', redirect: '/404', hidden: true }
 ]
@@ -228,7 +63,10 @@ export const constantRoutes = [
 const createRouter = () => new Router({
   // mode: 'history', // require service support
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes:[
+    ...constantRoutes,
+    ...partner,
+    ...system]
 })
 
 const router = createRouter()

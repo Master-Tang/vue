@@ -8,19 +8,35 @@ export default
                 params
             })
         },
-        insert(data) {
+        add(data) {
             return request({
-                url: '/user/partner/insert',
+                url: '/user/partner/add',
                 method: 'post',
                 data
             })
         },
         
-        findInit()
+        addInit()
         {
             return request({
-                url: '/user/partner/findInit',
+                url: '/user/partner/addInit',
                 method: 'get',
+            })
+        },
+        editInit(params)
+        {
+            return request({
+                url: '/user/partner/editInit',
+                method: 'get',
+                params
+            })
+        },
+        update(data)
+        {
+            return request({
+                url: '/user/partner/update',
+                method: 'post',
+                data
             })
         }
     }

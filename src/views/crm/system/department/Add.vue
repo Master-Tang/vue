@@ -1,12 +1,15 @@
 <template>
   <div class="add">
     <el-form ref="form" :model="form" label-width="8rem">
+     <el-form-item label="部门编号">
+        <el-input v-model="form.id"></el-input>
+      </el-form-item>
       <el-form-item label="部门名称">
-        <el-input v-model="form.name"></el-input>
+        <el-input v-model="form.depName"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addData()">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button type="default" @click="back()">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -18,22 +21,25 @@ export default {
   data() {
     return {
       form: {
-        name: "",
+        id: "",
+        depName:""
       },
-      value: "",
+     
     };
   },
   methods: {
     addData() {
-      console.log( this.form.name);
-      $.add({
-        depName: this.form.name
-      }).then(response => {
+      console.log( this.form);
+      $.add(this.form).then(response => {
         if(response.success)
           {
-            this.$router.replace('/system/dep')
+            this.$router.replace('index')
           }
       });
+    },
+    back()
+    {
+      this.$router.back()
     }
   }
 };

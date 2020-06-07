@@ -17,7 +17,7 @@
         <el-input v-model="form.dingDing"></el-input>
       </el-form-item>
       <el-form-item label="角色号">
-        <el-input v-model="form.roleId"></el-input>
+      
       </el-form-item>
       <el-form-item label="姓名">
         <el-input v-model="form.trueName"></el-input>
@@ -68,17 +68,7 @@ export default {
           }
       });
     },
-    fetchData() {
-      this.options.splice(0,this.options.length)
-      $.getGroupName().then(response=>{
-        console.log(response.data)
-      
-        for(let s of response.data)
-        {
-          this.options.push({label:s,value:s});
-        }
-      })
-    }
+
   }
 };
 </script>

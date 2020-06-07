@@ -25,5 +25,21 @@ export default
          params
       })
    }
-  
+   ,
+   get(params)
+   {
+      return request({
+         url:'/admin/department/get',
+         method:'get',
+         params
+      })
+   },
+   save(params)
+   {
+      return request({
+         url:'/admin/department/save',
+         method:'post',
+         params
+      })
+   }
 }
