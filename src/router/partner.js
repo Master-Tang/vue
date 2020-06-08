@@ -13,6 +13,12 @@ export default[
             meta: { title: '资产伙伴', icon: 'table' }
           },
           {
+            path: 'assets/find',
+            component: () => import('@/views/crm/partner/assets/Find'),
+            meta:{title:'查看'},
+            hidden:true
+          },
+          {
             path: 'assets/add',
             component: () => import('@/views/crm/partner/assets/Add'),
             meta:{title:'新增'},
@@ -27,16 +33,16 @@ export default[
 
           {
             path: 'fund/index',
-            component: () => import('@/views/crm/partner/assets/Index'),
+            component: () => import('@/views/crm/partner/fund/Index'),
             meta: { title: '资金伙伴', icon: 'table' }
           },
           {
             path: 'fund/add',
-            component: () => import('@/views/crm/partner/assets/Add')
+            component: () => import('@/views/crm/partner/fund/Add')
           },
           {
             path: 'fund/edit',
-            component: () => import('@/views/crm/partner/assets/Edit')
+            component: () => import('@/views/crm/partner/fund/Edit')
           },
 
           {
@@ -51,6 +57,45 @@ export default[
           {
             path: 'exit/edit',
             component: () => import('@/views/crm/partner/exit/Edit')
+          },
+          {
+            path: 'justice/index',
+            component: () => import('@/views/crm/partner/justice/Index'),
+            meta: { title: '司法伙伴', icon: 'table' }
+          },
+          {
+            path: 'justice/add',
+            component: () => import('@/views/crm/partner/justice/Add')
+          },
+          {
+            path: 'justice/edit',
+            component: () => import('@/views/crm/partner/justice/Edit')
+          },
+          {
+            path: 'peer/index',
+            component: () => import('@/views/crm/partner/peer/Index'),
+            meta: { title: '同业伙伴', icon: 'table' }
+          },
+          {
+            path: 'peer/add',
+            component: () => import('@/views/crm/partner/peer/Add')
+          },
+          {
+            path: 'peer/edit',
+            component: () => import('@/views/crm/partner/peer/Edit')
+          },
+          {
+            path: 'gov/index',
+            component: () => import('@/views/crm/partner/gov/Index'),
+            meta: { title: '政府伙伴', icon: 'table' }
+          },
+          {
+            path: 'gov/add',
+            component: () => import('@/views/crm/partner/gov/Add')
+          },
+          {
+            path: 'gov/edit',
+            component: () => import('@/views/crm/partner/gov/Edit')
           },
         ]
       },

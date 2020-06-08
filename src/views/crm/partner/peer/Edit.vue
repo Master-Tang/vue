@@ -49,8 +49,9 @@
       <el-form-item label="伙伴对应债权">
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
-       <el-form-item label="机构类型">
-        <el-select v-model="form.fundInfo.orgType" placeholder="请选择" style="width:100%">
+    
+      <el-form-item label="机构类型">
+        <el-select v-model="form.peerInfo.orgType" placeholder="请选择" style="width:100%">
           <el-option 
             v-for="item in orgTypeList"
             :key="item.dicValue"
@@ -59,78 +60,34 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构" v-if="form.fundInfo.orgType==='26'">
-        <el-input v-model="form.fundInfo.orgRemark"></el-input>
+      <el-form-item label="其他机构" v-if="form.peerInfo.orgType==='26'">
+        <el-input v-model="form.peerInfo.orgRemark"></el-input>
       </el-form-item>
-      <el-form-item label="资产类型">
-        <el-select v-model="form.fundInfo.preferences" placeholder="请选择" style="width:100%">
+       <el-form-item label="同业业务类型">
+        <el-select v-model="form.peerInfo.peerType" placeholder="请选择" style="width:100%">
           <el-option 
-            v-for="item in assetsTypeList"
+            v-for="item in peerTypeList"
             :key="item.dicValue"
             :label="item.dicKey"
             :value="item.dicValue"
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="收益类型">
-        <el-select v-model="form.fundInfo.incomesType" placeholder="请选择" style="width:100%">
+      <el-form-item label="其他业务类型" v-if="form.peerInfo.peerType==='11'">
+        <el-input v-model="form.peerInfo.peerRemark"></el-input>
+      </el-form-item>
+      <el-form-item label="同业合作方式">
+        <el-select v-model="form.peerInfo.peerBiz" placeholder="请选择" style="width:100%">
           <el-option 
-            v-for="item in incomeTypeList"
+            v-for="item in peerBizList"
             :key="item.dicValue"
             :label="item.dicKey"
             :value="item.dicValue"
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="收益率">
-        <el-input v-model="form.fundInfo.incomeRate"></el-input>
-      </el-form-item>
-      <el-form-item label="其他要求">
-        <el-input v-model="form.fundInfo.otherMark"></el-input>
-      </el-form-item>
-      <el-form-item label="资金类型">
-        <el-select v-model="form.fundStruct.currency" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in currencyList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="投资结构">
-        <el-select v-model="form.fundStruct.struct" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in structList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="投资比例">
-        <el-input v-model="form.fundStruct.min"></el-input>
-        <el-input v-model="form.fundStruct.max"></el-input>
-      </el-form-item>
-      <el-form-item label="投资规模">
-        <el-select v-model="form.fundStruct.scale" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in abilityList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="投资期限">
-        <el-select v-model="form.fundStruct.deadline" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in deadlineList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
+      <el-form-item label="其他合作方式" v-if="form.peerInfo.peerBiz==='13'">
+        <el-input v-model="form.peerInfo.peerCoop"></el-input>
       </el-form-item>
       <el-form-item label="覆盖地区">
         <el-cascader
@@ -157,7 +114,7 @@ export default {
   data() {
     return {
       form: {
-        partnerType:2,
+        partnerType:5,
         name: "",
         sex: "",
         telephone: "",
@@ -171,63 +128,36 @@ export default {
         debt: "",
         address: "",
         overArea: [],
-        assetInfo:{
+        peerInfo:{
           orgType:'01',
           orgRemark:'',
-          belong:'01',
-          bizType:'01',
-          bizRemark:''
-        },
-        fundInfo:{
-          orgType:'',
-          orgRemark:'',
-          preferences:'',
-          incomesType:'',
-          incomeRate:'',
-          otherMark:''
-        },
-        fundStruct:{
-          currency:'',
-          struct:'',
-          min: 1,
-          max:2,
-          scale:'',
-          deadline:''
+          peerType:'01',
+          peerRemark:'01',
+          peerBiz:'',
+          peerCoop:''
         }
       },
       assetAttrList: [],
       provinceList: [],
-      sourceList: [],
-      bizTypeList: [],
-      orgTypeList: [],
-      exitTypeList: [],
-      usageList:[],
-      abilityList:[],
-      assetsTypeList:[],
-      incomeTypeList:[],
-      currencyList:[],
-      structList:[],
-      deadlineList:[],
+      sourceList:[],
+       bizTypeList:[],
+       orgTypeList:[],
+       peerTypeList:[],
+       peerBizList:[],
        sexList:[{label:'男',value:'男'},{label:'女',value:'女'}],
     };
   },
   created() {
-    $.editInit({partnerId:this.$route.query.id}).then(res => {
+     $.editInit({partnerId:this.$route.query.id}).then(res => {
       console.log(res.data.partner)
       if (res.success) {
-         this.sourceList = res.data.source;
+        this.sourceList = res.data.source;
         this.provinceList = res.data.province;
-        this.assetAttrList = res.data.attr;
-        this.bizTypeList = res.data.bizTypeList;
-        this.orgTypeList = res.data.orgTypeList;
-        this.exitTypeList=res.data.exitTypeList;
-        this.usageList=res.data.usageList;
-        this.abilityList=res.data.abilityList;
-        this.assetsTypeList=res.data.assetsTypeList;
-        this.incomeTypeList=res.data.incomeTypeList;
-        this.currencyList=res.data.currencyList;
-        this.structList=res.data.structList;
-        this.deadlineList=res.data.deadlineList;
+        this.assetAttrList=res.data.attr;
+        this.bizTypeList=res.data.bizTypeList;
+        this.orgTypeList=res.data.orgTypeList;
+        this.peerTypeList=res.data.peerTypeList;
+        this.peerBizList=res.data.peerBizList;
         let partner= res.data.partner;
         this.form=partner
       }

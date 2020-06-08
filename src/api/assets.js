@@ -8,6 +8,14 @@ export default
                 params
             })
         },
+        get(params)
+        {
+            return request({
+                url: '/user/partner/get',
+                method: 'post',
+                params
+            })
+        },
         add(data) {
             return request({
                 url: '/user/partner/add',
@@ -38,5 +46,13 @@ export default
                 method: 'post',
                 data
             })
-        }
+        },
+        remove(params)
+        {
+            return request({
+                url: '/user/partner/remove',
+                method: 'post',
+                params
+            })
+        },
     }

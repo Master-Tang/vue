@@ -105,7 +105,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: 2, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findAll({ partnerType: 6, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           console.log(response.data)
             this.list = response.data.list;
@@ -145,7 +145,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          //console.log(id)
+          console.log(id)
           $.remove({ partnerId:id }).then(response => {
             this.$message({
               type: "success",

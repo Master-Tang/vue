@@ -1,16 +1,5 @@
 <template>
   <div class="app-container">
-    <!-- <el-form :inline="true">
-      <el-form-item>
-        <el-row>
-          <el-col :span="24">
-            <div class="grid-content bg-purple-dark">
-              <el-button type="primary" @click="$router.push('/addAssets')">添加</el-button>
-            </div>
-          </el-col>
-        </el-row>
-      </el-form-item>
-    </el-form> -->
     <div class="button">
       <el-form :inline="true">
           <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
@@ -34,7 +23,7 @@
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="$router.push('/addGov')">添加</el-button>
+                <el-button type="primary" @click="$router.push('add')">添加</el-button>
               </div>
             </el-col>
           </el-row>
@@ -51,53 +40,28 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" fixed>
+      <el-table-column label="伙伴姓名" width="80" >
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center" >
+      <el-table-column label="性别" align="center" width="50">
         <template slot-scope="scope">
           <span>{{ scope.row.sex }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center">
+      <el-table-column label="手机号" align="center" width="120">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
-      <!-- <el-table-column label="微信号" width="120">
-        <template slot-scope="scope">{{ scope.row.weixin }}</template>
-      </el-table-column>
-      <el-table-column label="电子邮件" width="120">
-        <template slot-scope="scope">{{ scope.row.email }}</template>
-      </el-table-column>
-      <el-table-column label="单位名称" width="120">
+    
+      <el-table-column label="单位名称">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
-      <el-table-column label="联系地址" width="120">
-        <template slot-scope="scope">{{ scope.row.address }}</template>
-      </el-table-column>
-      <el-table-column label="部门" width="120">
-        <template slot-scope="scope">{{ scope.row.department }}</template>
-      </el-table-column>
-      <el-table-column label="岗位" width="120">
+      <el-table-column label="岗位" width="160">
         <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column> -->
-      <el-table-column label="伙伴来源" align="center">
-        <template slot-scope="scope">{{ scope.row.source }}</template>
       </el-table-column>
-      <!-- <el-table-column label="伙伴对应项目" width="120">
-        <template slot-scope="scope">{{ scope.row.item }}</template>
-      </el-table-column>
-      <el-table-column label="伙伴对应债权" width="120">
-        <template slot-scope="scope">{{ scope.row.debt }}</template>
-      </el-table-column>
-      <el-table-column label="伙伴备注" width="120">
-        <template slot-scope="scope">{{ scope.row.partnerRemark }}</template>
-      </el-table-column>
-      <el-table-column label="债权属性" width="120">
-        <template slot-scope="scope">{{ scope.row.assetAttr }}</template>
-      </el-table-column> -->
-      <el-table-column label="操作"  align="center" fixed="right">
+    
+      <el-table-column label="操作"  align="center" width="270">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看详情</el-button>
+          <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
         </template>
@@ -141,7 +105,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: "资产伙伴", pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findAll({ partnerType: 2, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           console.log(response.data)
             this.list = response.data.list;
@@ -170,19 +134,19 @@ export default {
 
     handleEdit(id) {
       this.$router.push({
-        path: "/editAssets",
+        path: "edit",
         query: { id: id }
       });
     },
     handleDel(id) {
-      this.$confirm("此操作将删除该字典项, 是否继续?", "提示", {
+      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           //console.log(id)
-          $.removeDict({ id }).then(response => {
+          $.remove({ partnerId:id }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"

@@ -5,8 +5,8 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-         <el-radio v-model="form.sex" label="男">男</el-radio>
-  <el-radio v-model="form.sex" label="女">女</el-radio>
+        <el-radio v-model="form.sex" label="男">男</el-radio>
+        <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
       <el-form-item>
         <span slot="label">
@@ -34,14 +34,14 @@
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
-          <el-select v-model="form.source" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in sourceList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
+        <el-select v-model="form.source" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in sourceList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
         <el-input v-model="form.item"></el-input>
@@ -49,20 +49,10 @@
       <el-form-item label="伙伴对应债权">
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
-    
-      <el-form-item label="债权属性">
-        <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in assetAttrList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-       <el-form-item label="机构类型">
-        <el-select v-model="form.assetInfo.orgType" placeholder="请选择" style="width:100%">
-          <el-option 
+
+      <el-form-item label="机构类型">
+        <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
+          <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
             :label="item.dicKey"
@@ -70,22 +60,39 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构" v-if="form.assetInfo.orgType==='26'">
-        <el-input v-model="form.assetInfo.orgRemark"></el-input>
+      <el-form-item label="其他机构" v-if="form.orgType==='26'">
+        <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
-       <el-form-item label="业务类型">
-        <el-select v-model="form.assetInfo.bizType" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in bizTypeList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
+
+      <div v-for="(item, index) in form.assetInfo" :key="index">
+        <el-form-item label="债权属性">
+          <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in assetAttrList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="业务类型">
+          <el-select v-model="form.assetInfo.bizType" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in bizTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="其他业务类型" v-if="form.assetInfo.bizType==='09'">
+          <el-input v-model="form.assetInfo.bizRemark"></el-input>
+        </el-form-item>
+      </div>
+      <el-form-item label="业务类型">
+        <el-button @click="addItem()" type>业务类型</el-button>
       </el-form-item>
-      <el-form-item label="其他业务类型" v-if="form.assetInfo.bizType==='09'">
-        <el-input v-model="form.assetInfo.bizRemark"></el-input>
-      </el-form-item>
+
       <el-form-item label="覆盖地区">
         <el-cascader
           style="width:100%"
@@ -111,34 +118,33 @@ export default {
   data() {
     return {
       form: {
-        partnerType:1,
-        name: "",
+        partnerType: 1,
+        name: "ddd",
         sex: "",
-        telephone: "",
-        weixin: "",
-        email: "",
-        company: "",
-        department: "",
-        post: "",
-        source: "",
-        item: "",
-        debt: "",
+        telephone: "dd",
+        weixin: "dd",
+        email: "dd",
+        company: "dd",
+        department: "ddd",
+        post: "d",
+        source: "d",
+        item: "d",
+        debt: "d",
         address: "",
+        orgType: "01",
+        orgRemark: "",
         overArea: [],
-        assetInfo:{
-          orgType:'01',
-          orgRemark:'',
-          belong:'01',
-          bizType:'01',
-          bizRemark:''
-        }
+        assetInfo: []
       },
       assetAttrList: [],
       provinceList: [],
-      sourceList:[],
-       bizTypeList:[],
-       orgTypeList:[],
-       sexList:[{label:'男',value:'男'},{label:'女',value:'女'}],
+      sourceList: [],
+      bizTypeList: [],
+      orgTypeList: [],
+      sexList: [
+        { label: "男", value: "男" },
+        { label: "女", value: "女" }
+      ]
     };
   },
   created() {
@@ -146,43 +152,47 @@ export default {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
-        this.assetAttrList=res.data.attr;
-        this.bizTypeList=res.data.bizTypeList;
-        this.orgTypeList=res.data.orgTypeList;
+        this.assetAttrList = res.data.attr;
+        this.bizTypeList = res.data.bizTypeList;
+        this.orgTypeList = res.data.orgTypeList;
       }
     });
   },
   methods: {
+    addItem() {
+      this.form.assetInfo.push({
+        belong: "01",
+        bizType: "01",
+        bizRemark: ""
+      });
+    },
     addData() {
-      if(!this.validate()) return;
+      if (!this.validate()) return;
       $.add(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
         }
       });
     },
-    validate(){
-      let error='';
-      if(this.form.name.length<=2)
-      {
-        error='姓名至少两位\n';
+    validate() {
+      let error = "";
+      if (this.form.name.length <= 1) {
+        error = "姓名至少两位\n";
       }
 
-     if(error)
-     {
-       this.$message({
+      if (error) {
+        this.$message({
           message: error,
-          type: 'error'
+          type: "error"
         });
         return false;
-     }
-     return true;
+      }
+      return true;
     }
   }
 };
 </script>
 <style scoped>
-
 .red {
   color: red;
   font-size: 1.5rem;
