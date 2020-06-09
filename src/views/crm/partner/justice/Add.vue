@@ -5,7 +5,8 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-        <el-input v-model="form.sex"></el-input>
+        <el-radio v-model="form.sex" label="男">男</el-radio>
+        <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
       <el-form-item>
         <span slot="label">
@@ -20,16 +21,13 @@
       <el-form-item label="电子邮件">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
-      <el-form-item label="单位名称">
+      <el-form-item label="机构名称">
         <el-input v-model="form.company"></el-input>
       </el-form-item>
       <el-form-item label="联系地址">
         <el-input v-model="form.address"></el-input>
       </el-form-item>
-      <el-form-item label="部门">
-        <el-input v-model="form.department"></el-input>
-      </el-form-item>
-      <el-form-item label="岗位">
+      <el-form-item label="岗位职务">
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
@@ -44,9 +42,8 @@
       <el-form-item label="伙伴备注">
         <el-input v-model="form.partnerRemark"></el-input>
       </el-form-item>
-
       <el-form-item label="机构类型">
-        <el-select v-model="form.justiceInfo.orgType" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
@@ -55,34 +52,24 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构" v-if="form.justiceInfo.orgType==='26'">
-        <el-input v-model="form.justiceInfo.orgRemark"></el-input>
-      </el-form-item>
-      <el-form-item label="机构名称">
-        <el-input v-model="form.justiceInfo.relativeOrg"></el-input>
+      <el-form-item label="其他机构" v-if="form.orgType==='26'">
+        <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
       <el-form-item label="管辖区域">
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
-          v-model="form.justiceInfo.relativeOver"
+          v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="岗位职务">
-        <el-input v-model="form.justiceInfo.relativePos"></el-input>
-      </el-form-item>
 
-      <!-- 固定项目 -->
-      <el-form-item label="履历">
-        <el-button @click="addItem()" type>添加履历</el-button>
-      </el-form-item>
       <!-- 动态增加项目 -->
       <div v-for="(item, index) in form.justiceResume" :key="index">
         <el-form-item label="机构类型">
-          <el-select v-model="form.justiceResume.orgType" placeholder="请选择" style="width:100%">
+          <el-select v-model="item.resumeType" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in orgTypeList"
               :key="item.dicValue"
@@ -91,29 +78,32 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他机构" v-if="form.justiceResume.orgType==='26'">
-          <el-input v-model="form.justiceResume.orgRemark"></el-input>
+        <el-form-item label="其他机构" v-if="item.resumeType==='26'">
+          <el-input v-model="item.resumeRemark"></el-input>
         </el-form-item>
         <el-form-item label="机构名称">
-          <el-input v-model="form.justiceResume.resumeOrg"></el-input>
+          <el-input v-model="item.resumeOrg"></el-input>
         </el-form-item>
         <el-form-item label="管辖区域">
           <el-cascader
             style="width:100%"
             placeholder="试试搜索：无锡"
-            v-model="form.justiceResume.resumeOver"
+            v-model="item.resumeOver"
             :options="provinceList"
             :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
             filterable
           ></el-cascader>
         </el-form-item>
         <el-form-item label="岗位职务">
-          <el-input v-model="form.justiceResume.resumePos"></el-input>
+          <el-input v-model="item.resumePos"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
       </div>
+      <el-form-item label="履历">
+        <el-button @click="addItem()" type>添加履历</el-button>
+      </el-form-item>
 
       <el-form-item label="关系人姓名">
         <el-input v-model="form.justiceInfo.name"></el-input>
@@ -179,6 +169,7 @@ export default {
   data() {
     return {
       form: {
+        partnerType: 4,
         name: "",
         sex: "",
         telephone: "",
@@ -190,9 +181,12 @@ export default {
         source: "",
         item: "",
         debt: "",
+        orgType: "",
+        orgRemark: "",
         address: "",
         partnerRemark: "",
         assetAttr: "",
+        overArea: [],
         justiceInfo: {
           name: "",
           telephone: "",
@@ -204,24 +198,19 @@ export default {
           relativeOver: [],
           relativePos: ""
         },
-        justiceResume: [
-          {
-            resumeType: "",
-            resumeRemark: "",
-            resumeOrg: "",
-            resumeOver: [],
-            resumePos: ""
-          }
-        ]
+        justiceResume: []
       },
       assetAttrList: [],
       provinceList: [],
       orgTypeList: [],
-      relativeList: []
+      relativeList: [],
+      sexList: [
+        { label: "男", value: "男" },
+        { label: "女", value: "女" }
+      ]
     };
   },
   created() {
-    var _this = this;
     $.addInit().then(res => {
       if (res.success) {
         // console.log(res.data)
@@ -236,6 +225,8 @@ export default {
   methods: {
     addItem() {
       this.form.justiceResume.push({
+        resumeType: "",
+        resumeRemark: "",
         resumeOrg: "",
         resumeOver: [],
         resumePos: ""
@@ -246,7 +237,7 @@ export default {
     },
     addData() {
       if (!this.validate()) return;
-      console.log(this.form)
+      console.log(this.form);
       $.add(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");

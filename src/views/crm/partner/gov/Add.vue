@@ -4,8 +4,9 @@
       <el-form-item label="伙伴名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="性别">
-        <el-input v-model="form.sex"></el-input>
+       <el-form-item label="性别">
+        <el-radio v-model="form.sex" label="男">男</el-radio>
+        <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
       <el-form-item>
         <span slot="label">
@@ -20,16 +21,13 @@
       <el-form-item label="电子邮件">
         <el-input v-model="form.email"></el-input>
       </el-form-item>
-      <el-form-item label="单位名称">
+      <el-form-item label="机构名称">
         <el-input v-model="form.company"></el-input>
       </el-form-item>
       <el-form-item label="联系地址">
         <el-input v-model="form.address"></el-input>
       </el-form-item>
-      <el-form-item label="部门">
-        <el-input v-model="form.department"></el-input>
-      </el-form-item>
-      <el-form-item label="岗位">
+      <el-form-item label="岗位职务">
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
@@ -45,9 +43,6 @@
         <el-input v-model="form.partnerRemark"></el-input>
       </el-form-item>
 
-      <el-form-item label="机构名称">
-        <el-input v-model="orgInfoPartner.relativeOrg"></el-input>
-      </el-form-item>
       <el-form-item label="管辖区域">
         <el-cascader
           style="width:100%"
@@ -58,14 +53,7 @@
           filterable
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="岗位职务">
-        <el-input v-model="form.orgInfo.relativePos"></el-input>
-      </el-form-item>
 
-      <!-- 固定项目 -->
-      <el-form-item label="履历">
-        <el-button @click="addItem()" type>添加履历</el-button>
-      </el-form-item>
       <!-- 动态增加项目 -->
       <div v-for="(item, index) in form.orgResume" :key="index">
         <el-form-item label="机构名称">
@@ -88,6 +76,9 @@
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
       </div>
+      <el-form-item label="履历">
+        <el-button @click="addItem()" type>添加履历</el-button>
+      </el-form-item>
 
       <el-form-item label="关系人姓名">
         <el-input v-model="form.orgInfo.name"></el-input>
@@ -153,6 +144,7 @@ export default {
   data() {
     return {
       form: {
+        partnerType:6,
         name: "",
         sex: "",
         telephone: "",
@@ -167,25 +159,20 @@ export default {
         address: "",
         partnerRemark: "",
         assetAttr: "",
-        orgInfo: [],
+        orgInfo: {
+          name: "",
+          telephone: "",
+          relative: "",
+          relativeRemark: "",
+          orgType: "",
+          orgRemark: "",
+          relativeOrg: "",
+          relativeOver: [],
+          relativePos: ""
+        },
         orgResume: []
       },
-      orgInfoPartner: {
-        name: "",
-        telephone: "",
-        relative: "",
-        relativeRemark: "",
-        orgType: "",
-        orgRemark: "",
-        relativeOrg: "",
-        relativeOver: [],
-        relativePos: ""
-      },
-      orgResumePartner: {
-        resumeOrg: "",
-        resumeOver: [],
-        resumePos: ""
-      },
+
       assetAttrList: [],
       provinceList: [],
       orgTypeList: [],
@@ -193,10 +180,6 @@ export default {
     };
   },
   created() {
-    for (let i = 0; i < orgInfo.length; i++) {
-      orgInfoPartner = orgInfo[i];
-    }
-    var _this = this;
     $.addInit().then(res => {
       if (res.success) {
         // console.log(res.data)

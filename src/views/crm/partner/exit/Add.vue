@@ -50,7 +50,7 @@
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
       <el-form-item label="退出类型">
-        <el-select v-model="form.exitInfo.exitType" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in exitTypeList"
             :key="item.dicValue"
@@ -59,8 +59,10 @@
           ></el-option>
         </el-select>
       </el-form-item>
+
+ <div v-for="(item, index) in form.exitInfo" :key="index">
       <el-form-item label="用途偏好">
-        <el-select v-model="form.exitInfo.usage" placeholder="请选择" style="width:100%">
+        <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in usageList"
             :key="item.dicValue"
@@ -70,7 +72,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="投资规模">
-        <el-select v-model="form.exitInfo.ability" placeholder="请选择" style="width:100%">
+        <el-select v-model="item.ability" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in abilityList"
             :key="item.dicValue"
@@ -80,7 +82,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="资产类型">
-        <el-select v-model="form.exitInfo.preferences" placeholder="请选择" style="width:100%">
+        <el-select v-model="item.preferences" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in assetsTypeList"
             :key="item.dicValue"
@@ -89,9 +91,15 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="资产类型其它" v-if="form.exitInfo.preferences==='20'">
-        <el-input v-model="form.exitInfo.bizPrefer"></el-input>
+      <el-form-item label="资产类型其它" v-if="item.preferences==='20'">
+        <el-input v-model="item.bizPrefer"></el-input>
       </el-form-item>
+      </div>
+      <el-form-item label="偏好">
+        <el-button @click="addItem()" type>偏好</el-button>
+      </el-form-item>
+
+
       <el-form-item label="覆盖地区">
         <el-cascader
           style="width:100%"
@@ -126,18 +134,13 @@ export default {
         company: "",
         department: "",
         post: "",
+        orgType:"",
         source: "",
         item: "",
         debt: "",
         address: "",
         overArea: [],
-        exitInfo:{
-          exitType:"01",
-          usage:"",
-          ability:"",
-          preferences:"",
-          bizPrefer:''
-        }
+        exitInfo:[]
       },
       assetAttrList: [],
       provinceList: [],
@@ -171,6 +174,15 @@ export default {
     });
   },
   methods: {
+    addItem() {
+      this.form.exitInfo.push({
+          exitType:"",
+          usage:"",
+          ability:"",
+          preferences:"",
+          bizPrefer:''
+      });
+    },
     addData() {
       if (!this.validate()) return;
       $.add(this.form).then(response => {

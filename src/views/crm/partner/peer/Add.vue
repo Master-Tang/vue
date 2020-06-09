@@ -5,8 +5,8 @@
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-         <el-radio v-model="form.sex" label="男">男</el-radio>
-  <el-radio v-model="form.sex" label="女">女</el-radio>
+        <el-radio v-model="form.sex" label="男">男</el-radio>
+        <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
       <el-form-item>
         <span slot="label">
@@ -34,14 +34,14 @@
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
-          <el-select v-model="form.source" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in sourceList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
+        <el-select v-model="form.source" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in sourceList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
         <el-input v-model="form.item"></el-input>
@@ -49,10 +49,10 @@
       <el-form-item label="伙伴对应债权">
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
-    
+
       <el-form-item label="机构类型">
-        <el-select v-model="form.peerInfo.orgType" placeholder="请选择" style="width:100%">
-          <el-option 
+        <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
+          <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
             :label="item.dicKey"
@@ -60,35 +60,42 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构" v-if="form.peerInfo.orgType==='26'">
-        <el-input v-model="form.peerInfo.orgRemark"></el-input>
+      <el-form-item label="其他机构" v-if="form.orgType==='26'">
+        <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
-       <el-form-item label="同业业务类型">
-        <el-select v-model="form.peerInfo.peerType" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in peerTypeList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
+
+      <div v-for="(item, index) in form.peerInfo" :key="index">
+        <el-form-item label="同业业务类型">
+          <el-select v-model="item.peerType" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in peerTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="其他业务类型" v-if="item.peerType==='11'">
+          <el-input v-model="item.peerRemark"></el-input>
+        </el-form-item>
+        <el-form-item label="同业合作方式">
+          <el-select v-model="item.peerBiz" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in peerBizList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="其他合作方式" v-if="item.peerBiz==='13'">
+          <el-input v-model="item.peerCoop"></el-input>
+        </el-form-item>
+      </div>
+      <el-form-item label="同业业务类型">
+        <el-button @click="addItem()" type>同业业务类型</el-button>
       </el-form-item>
-      <el-form-item label="其他业务类型" v-if="form.peerInfo.peerType==='11'">
-        <el-input v-model="form.peerInfo.peerRemark"></el-input>
-      </el-form-item>
-      <el-form-item label="同业合作方式">
-        <el-select v-model="form.peerInfo.peerBiz" placeholder="请选择" style="width:100%">
-          <el-option 
-            v-for="item in peerBizList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="其他合作方式" v-if="form.peerInfo.peerBiz==='13'">
-        <el-input v-model="form.peerInfo.peerCoop"></el-input>
-      </el-form-item>
+
       <el-form-item label="覆盖地区">
         <el-cascader
           style="width:100%"
@@ -114,7 +121,7 @@ export default {
   data() {
     return {
       form: {
-        partnerType:5,
+        partnerType: 5,
         name: "",
         sex: "",
         telephone: "",
@@ -127,24 +134,22 @@ export default {
         item: "",
         debt: "",
         address: "",
+        orgType:"",
+        orgRemark:"",
         overArea: [],
-        peerInfo:{
-          orgType:'01',
-          orgRemark:'',
-          peerType:'01',
-          peerRemark:'01',
-          peerBiz:'',
-          peerCoop:''
-        }
+        peerInfo: []
       },
       assetAttrList: [],
       provinceList: [],
-      sourceList:[],
-       bizTypeList:[],
-       orgTypeList:[],
-       peerTypeList:[],
-       peerBizList:[],
-       sexList:[{label:'男',value:'男'},{label:'女',value:'女'}],
+      sourceList: [],
+      bizTypeList: [],
+      orgTypeList: [],
+      peerTypeList: [],
+      peerBizList: [],
+      sexList: [
+        { label: "男", value: "男" },
+        { label: "女", value: "女" }
+      ]
     };
   },
   created() {
@@ -152,45 +157,50 @@ export default {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
-        this.assetAttrList=res.data.attr;
-        this.bizTypeList=res.data.bizTypeList;
-        this.orgTypeList=res.data.orgTypeList;
-        this.peerTypeList=res.data.peerTypeList;
-        this.peerBizList=res.data.peerBizList;
+        this.assetAttrList = res.data.attr;
+        this.bizTypeList = res.data.bizTypeList;
+        this.orgTypeList = res.data.orgTypeList;
+        this.peerTypeList = res.data.peerTypeList;
+        this.peerBizList = res.data.peerBizList;
       }
     });
   },
   methods: {
+    addItem() {
+      this.form.peerInfo.push({
+        peerType: "01",
+          peerRemark: "01",
+          peerBiz: "",
+          peerCoop: ""
+      });
+    },
     addData() {
-      if(!this.validate()) return;
+      if (!this.validate()) return;
       $.add(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
         }
       });
     },
-    validate(){
-      let error='';
-      if(this.form.name.length<=1)
-      {
-        error='姓名至少两位\n';
+    validate() {
+      let error = "";
+      if (this.form.name.length <= 1) {
+        error = "姓名至少两位\n";
       }
 
-     if(error)
-     {
-       this.$message({
+      if (error) {
+        this.$message({
           message: error,
-          type: 'error'
+          type: "error"
         });
         return false;
-     }
-     return true;
+      }
+      return true;
     }
   }
 };
 </script>
 <style scoped>
-
 .red {
   color: red;
   font-size: 1.5rem;

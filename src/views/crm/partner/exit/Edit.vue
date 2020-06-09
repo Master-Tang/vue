@@ -50,7 +50,7 @@
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
       <el-form-item label="退出类型">
-        <el-select v-model="form.exitInfo.exitType" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in exitTypeList"
             :key="item.dicValue"
@@ -59,8 +59,10 @@
           ></el-option>
         </el-select>
       </el-form-item>
+
+ <div v-for="(item, index) in form.exitInfo" :key="index">
       <el-form-item label="用途偏好">
-        <el-select v-model="form.exitInfo.usage" placeholder="请选择" style="width:100%">
+        <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in usageList"
             :key="item.dicValue"
@@ -70,7 +72,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="投资规模">
-        <el-select v-model="form.exitInfo.ability" placeholder="请选择" style="width:100%">
+        <el-select v-model="item.ability" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in abilityList"
             :key="item.dicValue"
@@ -80,7 +82,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="资产类型">
-        <el-select v-model="form.exitInfo.preferences" placeholder="请选择" style="width:100%">
+        <el-select v-model="item.preferences" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in assetsTypeList"
             :key="item.dicValue"
@@ -88,6 +90,25 @@
             :value="item.dicValue"
           ></el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="资产类型其它" v-if="item.preferences==='20'">
+        <el-input v-model="item.bizPrefer"></el-input>
+      </el-form-item>
+      </div>
+      <el-form-item label="偏好">
+        <el-button @click="addItem()" type>偏好</el-button>
+      </el-form-item>
+
+
+      <el-form-item label="覆盖地区">
+        <el-cascader
+          style="width:100%"
+          placeholder="试试搜索：无锡"
+          v-model="form.overArea"
+          :options="provinceList"
+          :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+          filterable
+        ></el-cascader>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
@@ -104,26 +125,22 @@ export default {
   data() {
     return {
       form: {
-        partnerType:1,
-        name: "1",
-        sex: "男",
-        telephone: "1",
-        weixin: "1",
-        email: "1",
-        company: "1",
-        department: "1",
-        post: "1",
-        source: "1",
-        item: "1",
-        debt: "1",
-        address: "1",
+        partnerType: 3,
+        name: "",
+        sex: "",
+        telephone: "",
+        weixin: "",
+        email: "",
+        company: "",
+        department: "",
+        post: "",
+        orgType:"",
+        source: "",
+        item: "",
+        debt: "",
+        address: "",
         overArea: [],
-        exitInfo:{
-          exitType:"01",
-          usage:"",
-          ability:"",
-          preferences:""
-        }
+        exitInfo:[]
       },
       assetAttrList: [],
       provinceList: [],
@@ -134,14 +151,16 @@ export default {
       usageList:[],
       abilityList:[],
       assetsTypeList:[],
-       sexList:[{label:'男',value:'男'},{label:'女',value:'女'}],
+      sexList: [
+        { label: "男", value: "男" },
+        { label: "女", value: "女" }
+      ]
     };
   },
   created() {
     $.editInit({partnerId:this.$route.query.id}).then(res => {
-      console.log(res.data.partner)
       if (res.success) {
-         this.sourceList = res.data.source;
+        this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
@@ -150,14 +169,22 @@ export default {
         this.usageList=res.data.usageList;
         this.abilityList=res.data.abilityList;
         this.assetsTypeList=res.data.assetsTypeList;
-        let partner= res.data.partner;
+          let partner= res.data.partner;
         this.form=partner
       }
     });
   },
   methods: {
+    addItem() {
+      this.form.exitInfo.push({
+          exitType:"",
+          usage:"",
+          ability:"",
+          preferences:"",
+          bizPrefer:''
+      });
+    },
     updateData() {
-
       $.update(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
@@ -168,7 +195,6 @@ export default {
 };
 </script>
 <style scoped>
-
 .red {
   color: red;
   font-size: 1.5rem;

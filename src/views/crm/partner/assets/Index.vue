@@ -2,14 +2,7 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-          <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label"
-            ></el-option>
-          </el-select>
+          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value" ></el-input>
         <el-form-item>
           <el-row>
             <el-col :span="24">
@@ -100,6 +93,19 @@ export default {
     this.fetchData();
   },
   methods: {
+    find(){
+      this.listLoading = true;
+      this.list=null
+      $.findByNameTel({ partnerType: 1, name:this.value,telephone:"",pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+        response => {
+          console.log(response.data)
+            this.list = response.data.list;
+            this.total = response.data.total;
+            this.listLoading = false;
+           console.log(response.data.list)
+        }
+      );
+    },
     showMore(id){
         this.$router.push({
         path: "find",

@@ -1,15 +1,20 @@
 <template>
   <div class="app-container">
+    <el-form>
+      <el-form-item label="伙伴类型">
+        <el-select v-model="type"  @change="select()" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in partnerTypeList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+    </el-form>
     <div class="button">
       <el-form :inline="true">
-          <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label"
-            ></el-option>
-          </el-select>
+        <el-input placeholder="请输入伙伴姓名或手机号" v-model="value"></el-input>
         <el-form-item>
           <el-row>
             <el-col :span="24">
@@ -40,7 +45,7 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" width="80" >
+      <el-table-column label="伙伴姓名" width="80">
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
       <el-table-column label="性别" align="center" width="50">
@@ -51,15 +56,12 @@
       <el-table-column label="手机号" align="center" width="120">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
-    
-      <el-table-column label="单位名称">
+
+      <el-table-column label="伙伴来源">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
-      <el-table-column label="岗位" width="160">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column>
-    
-      <el-table-column label="操作"  align="center" width="270">
+
+      <el-table-column label="操作" align="center" width="270">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
@@ -85,6 +87,7 @@ import $ from "@/api/assets";
 export default {
   data() {
     return {
+      type:"资产伙伴",
       value: "",
       state: 0,
       list: null,
@@ -93,30 +96,71 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      options: []
+      options: [],
+      partnerTypeList: []
     };
   },
   created() {
     this.fetchData();
+    
+    $.addInit().then(res => {
+      if (res.success) {
+        this.partnerTypeList = res.data.partnerTypeList;
+        console.log(this.partnerTypeList);
+      }
+    });
   },
   methods: {
-    showMore(id){
-        this.$router.push({
-        path: "find",
-        query: { id: id }
+    select(){
+      console.log(this.type)
+      this.list=null
+      findchaxun();
+    },
+    find() {
+      this.listLoading = true;
+      this.list = null;
+      $.findByNameTel({
+        partnerType: this.type,
+        name: this.value,
+        telephone: "",
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
+        console.log(response.data);
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        console.log(response.data.list);
+      });
+    },
+    showMore() {},
+    findchaxun() {
+      this.listLoading = true;
+      $.findchaxun({
+        partnerType: this.type,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
+        console.log(response.data);
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        console.log(response.data.list);
       });
     },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: 1, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
-        response => {
-          console.log(response.data)
-            this.list = response.data.list;
-            this.total = response.data.total;
-            this.listLoading = false;
-           console.log(response.data.list)
-        }
-      );
+      $.findchaxun({
+        partnerType: 1,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
+        console.log(response.data);
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        console.log(response.data.list);
+      });
     },
     handleSizeChange(val) {
       this.pageSize = val;
@@ -148,8 +192,8 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log(id)
-          $.remove({ partnerId:id }).then(response => {
+          console.log(id);
+          $.remove({ partnerId: id }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"

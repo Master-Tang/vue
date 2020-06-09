@@ -1,9 +1,23 @@
 import request from '@/utils/request'
 export default
     {
+        findByNameTel(params) {
+            return request({
+                url: '/user/select/findByNameTel',
+                method: 'post',
+                params
+            })
+        }, 
         findAll(params) {
             return request({
                 url: '/user/partner/findAll',
+                method: 'post',
+                params
+            })
+        },
+        findchaxun(params) {
+            return request({
+                url: '/user/partner/findchaxun',
                 method: 'post',
                 params
             })
