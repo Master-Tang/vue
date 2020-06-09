@@ -156,7 +156,7 @@
 
       <el-form-item>
         <el-button type="primary" @click="addData()">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>

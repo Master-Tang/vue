@@ -40,16 +40,16 @@ export default[
           },
           {
             path: 'user/index',
-            component: () => import('@/views/sysuser/Index'),
+            component: () => import('@/views/crm/system/sysuser/Index'),
             meta: { title: '用户设置' }
           },
           {
             path:'user/add',
-            component: () =>import('@/views/sysuser/add'),
+            component: () =>import('@/views/crm/system/sysuser/add'),
           },
           {
             path:'user/edit',
-            component: () =>import('@/views/sysuser/edit'),
+            component: () =>import('@/views/crm/system/sysuser/edit'),
           },
           {
             path: 'user/total',

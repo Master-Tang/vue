@@ -94,6 +94,9 @@
       <el-form-item label="资产类型其它" v-if="item.preferences==='20'">
         <el-input v-model="item.bizPrefer"></el-input>
       </el-form-item>
+      <el-form-item>
+          <el-button type @click="deleteItem(item, index)">删除</el-button>
+        </el-form-item>
       </div>
       <el-form-item label="偏好">
         <el-button @click="addItem()" type>偏好</el-button>
@@ -112,7 +115,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -183,6 +186,9 @@ export default {
           preferences:"",
           bizPrefer:''
       });
+    },
+     deleteItem(item, index) {
+      this.form.exitInfo.splice(index, 1);
     },
     updateData() {
       $.update(this.form).then(response => {

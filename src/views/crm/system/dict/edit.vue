@@ -19,7 +19,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.back()">取消</el-button>
       </el-form-item>
     </el-form>
   </div>

@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 export default
     {
+        findByCity(params){
+            return request({
+                url: '/user/partner/findByCity',
+                method: 'post',
+                params
+            })
+        },
         findByNameTel(params) {
             return request({
                 url: '/user/select/findByNameTel',

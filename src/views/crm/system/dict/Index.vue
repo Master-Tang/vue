@@ -25,7 +25,7 @@
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="$router.push('/add')">添加</el-button>
+                <el-button type="primary" @click="$router.push('add')">添加</el-button>
               </div>
             </el-col>
           </el-row>
@@ -155,7 +155,7 @@ export default {
 
     handleEdit(id) {
       this.$router.push({
-        path: "/edit",
+        path: "edit",
         query: { id: id }
       });
     },

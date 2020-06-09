@@ -17,6 +17,14 @@ export default
          data
       })
    },
+   get(params)
+   {
+      return request({
+         url: '/admin/sysUser/get',
+         method: 'post',
+         params
+       })
+   },
    getByUserId(params)
    {
       return request({

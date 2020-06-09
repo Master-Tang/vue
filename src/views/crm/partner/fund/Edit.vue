@@ -93,6 +93,9 @@
         <el-form-item label="其他要求">
           <el-input v-model="item.otherMark"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem1(item, index)">删除</el-button>
+        </el-form-item>
       </div>
       <el-form-item label="资产信息">
         <el-button @click="addItem1()" type>资产信息</el-button>
@@ -143,6 +146,9 @@
             ></el-option>
           </el-select>
         </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem(item, index)">删除</el-button>
+        </el-form-item>
       </div>
       <el-form-item label="投资结构偏好">
         <el-button @click="addItem()" type>投资结构偏好</el-button>
@@ -160,7 +166,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -242,6 +248,10 @@ export default {
         otherMark: ""
       });
     },
+     deleteItem1(item, index) {
+      this.form.fundInfo.splice(index, 1);
+    },
+
     addItem() {
       this.form.fundStruct.push({
         currency: "",
@@ -252,6 +262,10 @@ export default {
         deadline: ""
       });
     },
+     deleteItem(item, index) {
+      this.form.orgResume.splice(index, 1);
+    },
+
      updateData() {
       $.update(this.form).then(response => {
         if (response.success) {

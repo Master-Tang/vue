@@ -91,6 +91,9 @@
         <el-form-item label="其他合作方式" v-if="item.peerBiz==='13'">
           <el-input v-model="item.peerCoop"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem(item, index)">删除</el-button>
+        </el-form-item>
       </div>
       <el-form-item label="同业业务类型">
         <el-button @click="addItem()" type>同业业务类型</el-button>
@@ -108,7 +111,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addData()">保存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -174,6 +177,10 @@ export default {
           peerCoop: ""
       });
     },
+     deleteItem(item, index) {
+      this.form.peerInfo.splice(index, 1);
+    },
+
     addData() {
       if (!this.validate()) return;
       $.add(this.form).then(response => {

@@ -31,7 +31,14 @@
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
-        <el-input v-model="form.source"></el-input>
+         <el-select v-model="form.source" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in sourceList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
         <el-input v-model="form.item"></el-input>
@@ -131,7 +138,7 @@
 
       <el-form-item>
         <el-button type="primary" @click="updateData()">立即创建</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -172,8 +179,7 @@ export default {
         },
         orgResume: []
       },
-
-      assetAttrList: [],
+      sourceList:[],
       provinceList: [],
       orgTypeList: [],
       relativeList: []
@@ -183,7 +189,7 @@ export default {
     $.editInit({partnerId:this.$route.query.id}).then(res => {
       if (res.success) {
         // console.log(res.data)
-        this.assetAttrList = res.data.source;
+        this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.orgTypeList = res.data.orgTypeList;
         this.relativeList = res.data.relativeList;

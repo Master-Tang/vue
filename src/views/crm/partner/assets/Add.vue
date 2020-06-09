@@ -88,6 +88,10 @@
         <el-form-item label="其他业务类型" v-if="form.assetInfo.bizType==='09'">
           <el-input v-model="form.assetInfo.bizRemark"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem(item, index)">删除</el-button>
+        </el-form-item>
+
       </div>
       <el-form-item label="业务类型">
         <el-button @click="addItem()" type>业务类型</el-button>
@@ -105,7 +109,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addData()">保存</el-button>
-        <el-button>取消</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -165,6 +169,9 @@ export default {
         bizType: "01",
         bizRemark: ""
       });
+    },
+     deleteItem(item, index) {
+      this.form.assetInfo.splice(index, 1);
     },
     addData() {
       if (!this.validate()) return;

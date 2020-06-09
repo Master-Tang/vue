@@ -13,12 +13,6 @@ export default[
             meta: { title: '资产伙伴', icon: 'table' }
           },
           {
-            path: 'assets/find',
-            component: () => import('@/views/crm/partner/assets/Find'),
-            meta:{title:'查看'},
-            hidden:true
-          },
-          {
             path: 'assets/add',
             component: () => import('@/views/crm/partner/assets/Add'),
             meta:{title:'新增'},

@@ -2,7 +2,8 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-          <el-select v-model="value" placeholder="请输入伙伴姓名或手机号">
+        <el-form-item label="分组名称">
+          <el-select v-model="value" placeholder="请选择">
             <el-option
               v-for="item in options"
               :key="item.value"
@@ -10,11 +11,12 @@
               :value="item.label"
             ></el-option>
           </el-select>
+        </el-form-item>
         <el-form-item>
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="find()">查找</el-button>
+                <el-button type="primary" @click="vvv(),find()">查询</el-button>
               </div>
             </el-col>
           </el-row>
@@ -37,33 +39,32 @@
       element-loading-text="Loading"
       border
       fit
-      style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" width="80" >
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+      <el-table-column label="用户名">
+        <template slot-scope="scope">{{ scope.row.loginName }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center" width="50">
+      <el-table-column label="部门名称" width align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sex }}</span>
+          <span>{{ scope.row.depId }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center" width="120">
+      <el-table-column label="姓名" width align="center">
+        <template slot-scope="scope">{{ scope.row.trueName }}</template>
+      </el-table-column>
+      <el-table-column label="电话号码" width align="center">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
-    
-      <el-table-column label="单位名称">
-        <template slot-scope="scope">{{ scope.row.company }}</template>
+      <el-table-column label="钉钉号" width align="center">
+        <template slot-scope="scope">{{ scope.row.dingDing }}</template>
       </el-table-column>
-      <el-table-column label="岗位" width="160">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
+      <el-table-column label="角色号" width align="center">
+        <template slot-scope="scope">{{ scope.row.roleId }}</template>
       </el-table-column>
-    
-      <el-table-column label="操作"  align="center" width="270">
+      <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看</el-button>
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
+          <el-button type="primary" size="small" @click="handleEdit(scope.row.userId)">编辑</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.row.loginName)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -80,7 +81,7 @@
 </template>
 
 <script>
-import $ from "@/api/assets";
+import $ from "@/api/sysuser";
 
 export default {
   data() {
@@ -100,18 +101,46 @@ export default {
     this.fetchData();
   },
   methods: {
-    showMore(){
-
+    vvv() {
+      this.currentPage = 1;
     },
+    // find() {
+    //   if (this.value==null) {
+    //     this.fetchData()
+    //   } else {
+    //     $.listByGroupName({
+    //       groupName: this.value,
+    //       pageIndex: this.currentPage,
+    //       pageSize: this.pageSize
+    //     }).then(response => {
+    //       this.list = null;
+    //       this.total = 0;
+    //       this.listLoading = true;
+    //       this.pageSize = 10;
+    //       this.state = 1;
+    //       this.list = response.data.list;
+    //       this.total = response.data.total;
+    //       this.listLoading = false;
+    //       //console.log(response.data)
+    //     });
+    //   }
+    // },
+    // findData() {
+    //   this.options.splice(0, this.options.length);
+    //   $.getGroupName().then(response => {
+    //     console.log(response.data);
+    //     for (let s of response.data) {
+    //       this.options.push({ label: s, value: s });
+    //     }
+    //   });
+    // },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: 2, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
-          console.log(response.data)
-            this.list = response.data.list;
-            this.total = response.data.total;
-            this.listLoading = false;
-           console.log(response.data.list)
+          this.list = response.data.list;
+          this.total = response.data.total;
+          this.listLoading = false;
         }
       );
     },
@@ -138,15 +167,15 @@ export default {
         query: { id: id }
       });
     },
-    handleDel(id) {
-      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
+    handleDel(loginName) {
+      this.$confirm("此操作将删除该用户, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           //console.log(id)
-          $.remove({ partnerId:id }).then(response => {
+          $.remove({ loginName }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"
@@ -164,3 +193,8 @@ export default {
   }
 };
 </script>
+<style scoped>
+.button {
+  padding-left: 1rem;
+}
+</style>

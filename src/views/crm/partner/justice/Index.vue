@@ -2,7 +2,9 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value" ></el-input>
+        <el-form-item>
+          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-row>
             <el-col :span="24">
@@ -33,28 +35,27 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" width="80" >
+      <el-table-column label="伙伴姓名" align="center" >
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center" width="50">
+      <el-table-column label="性别" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.sex }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center" width="120">
+      <el-table-column label="手机号" align="center">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
     
-      <el-table-column label="单位名称">
+      <el-table-column label="单位名称" align="center">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
-      <el-table-column label="岗位" width="160">
+      <el-table-column label="岗位" align="center">
         <template slot-scope="scope">{{ scope.row.post }}</template>
       </el-table-column>
     
-      <el-table-column label="操作"  align="center" width="270">
+      <el-table-column label="操作"  align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="showMore(scope.row.partnerId)">查看</el-button>
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
         </template>
@@ -105,9 +106,6 @@ export default {
            console.log(response.data.list)
         }
       );
-    },
-    showMore(){
-
     },
     fetchData() {
       this.listLoading = true;

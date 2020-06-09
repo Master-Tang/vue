@@ -2,7 +2,9 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value" ></el-input>
+        <el-form-item>
+          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value"></el-input>
+        </el-form-item>
         <el-form-item>
           <el-row>
             <el-col :span="24">
