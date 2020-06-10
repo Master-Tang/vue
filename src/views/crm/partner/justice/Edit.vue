@@ -4,7 +4,7 @@
       <el-form-item label="伙伴名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-       <el-form-item label="性别">
+      <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
         <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
@@ -31,7 +31,14 @@
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
-        <el-input v-model="form.source"></el-input>
+        <el-select v-model="form.source" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in sourceList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
         <el-input v-model="form.item"></el-input>
@@ -66,8 +73,8 @@
         ></el-cascader>
       </el-form-item>
 
-      <!-- 动态增加项目 -->
-      <div v-for="(item, index) in form.justiceResume" :key="index">
+
+      <div v-for="(item, index) in form.justiceInfo.resumeList" :key="index">
         <el-form-item label="机构类型">
           <el-select v-model="item.resumeType" placeholder="请选择" style="width:100%">
             <el-option
@@ -105,7 +112,6 @@
         <el-button @click="addItem()" type>添加履历</el-button>
       </el-form-item>
 
-
       <el-form-item label="关系人姓名">
         <el-input v-model="form.justiceInfo.name"></el-input>
       </el-form-item>
@@ -122,10 +128,10 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="备注">
+      <el-form-item label="关系备注">
         <el-input v-model="form.justiceInfo.relativeRemark"></el-input>
       </el-form-item>
-      <el-form-item label="机构类型">
+      <el-form-item label="关系人机构类型">
         <el-select v-model="form.justiceInfo.orgType" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in orgTypeList"
@@ -135,24 +141,24 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构" v-if="form.justiceInfo.orgType==='26'">
+      <el-form-item label="关系人机构类型备注" v-if="form.justiceInfo.orgType==='26'">
         <el-input v-model="form.justiceInfo.orgRemark"></el-input>
       </el-form-item>
       <el-form-item label="所在机构名称">
-        <el-input v-model="form.justiceInfo.relativeOrg"></el-input>
+        <el-input v-model="form.justiceInfo.orgName"></el-input>
       </el-form-item>
       <el-form-item label="管辖区域">
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
-          v-model="form.justiceInfo.relativeOver"
+          v-model="form.justiceInfo.area"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
       <el-form-item label="岗位职务">
-        <el-input v-model="form.justiceInfo.relativePos"></el-input>
+        <el-input v-model="form.justiceInfo.pos"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -195,16 +201,17 @@ export default {
           relativeRemark: "",
           orgType: "",
           orgRemark: "",
-          relativeOrg: "",
-          relativeOver: [],
-          relativePos: ""
+          orgName:"",
+          area: [],
+          pos: "",
+          resumeList:[]
         },
-        justiceResume: []
       },
       assetAttrList: [],
       provinceList: [],
       orgTypeList: [],
       relativeList: [],
+      sourceList:[],
       sexList: [
         { label: "男", value: "男" },
         { label: "女", value: "女" }
@@ -215,6 +222,7 @@ export default {
  $.editInit({partnerId:this.$route.query.id}).then(res => {
       if (res.success) {
         // console.log(res.data)
+          this.sourceList = res.data.source;
         this.assetAttrList = res.data.source;
         this.provinceList = res.data.province;
         this.orgTypeList = res.data.orgTypeList;
@@ -227,16 +235,16 @@ export default {
   },
   methods: {
     addItem() {
-      this.form.justiceResume.push({
-            resumeType: "",
-            resumeRemark: "",
-            resumeOrg: "",
-            resumeOver: [],
-            resumePos: ""
+      this.form.justiceInfo.resumeList.push({
+        resumeType: "",
+        resumeRemark: "",
+        resumeOrg: "",
+        resumeOver: [],
+        resumePos: ""
       });
     },
     deleteItem(item, index) {
-      this.form.justiceResume.splice(index, 1);
+      this.form.justiceInfo.resumeList.splice(index, 1);
     },
      updateData() {
       $.update(this.form).then(response => {

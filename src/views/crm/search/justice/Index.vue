@@ -38,12 +38,12 @@
       <el-table-column label="伙伴姓名" align="center" >
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center" >
+      <el-table-column label="性别" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.sex }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center" >
+      <el-table-column label="手机号" align="center">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
     
@@ -54,7 +54,7 @@
         <template slot-scope="scope">{{ scope.row.post }}</template>
       </el-table-column>
     
-      <el-table-column label="操作"  align="center" >
+      <el-table-column label="操作"  align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
@@ -97,7 +97,7 @@ export default {
     find(){
       this.listLoading = true;
       this.list=null
-      $.findByNameTel({ partnerType: 2, name:this.value,telephone:"",pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findByNameTel({ partnerType: 4, name:this.value,telephone:"",pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           console.log(response.data)
             this.list = response.data.list;
@@ -107,12 +107,9 @@ export default {
         }
       );
     },
-    showMore(){
-
-    },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: 2, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findAll({ partnerType: 4, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           console.log(response.data)
             this.list = response.data.list;
@@ -152,7 +149,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          //console.log(id)
+          console.log(id)
           $.remove({ partnerId:id }).then(response => {
             this.$message({
               type: "success",

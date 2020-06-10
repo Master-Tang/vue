@@ -5,7 +5,10 @@ export default
             return request({
                 url: '/user/partner/findByCity',
                 method: 'post',
-                params
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
             })
         },
         findByNameTel(params) {
@@ -17,7 +20,7 @@ export default
         }, 
         findAll(params) {
             return request({
-                url: '/user/partner/findAll',
+                url: '/user/partner/findByPartType',
                 method: 'post',
                 params
             })

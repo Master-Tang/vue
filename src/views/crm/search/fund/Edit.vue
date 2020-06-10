@@ -49,7 +49,6 @@
       <el-form-item label="伙伴对应债权">
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
-
       <el-form-item label="机构类型">
         <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
           <el-option
@@ -63,37 +62,96 @@
       <el-form-item label="其他机构" v-if="form.orgType==='26'">
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
-      <el-form-item label="债权属性">
-        <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in assetAttrList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
 
-      <div v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
-        <el-form-item label="业务类型">
-          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
+      <div v-for="(item, index) in form.fundInfo" :key="'travel'+index">
+        <el-form-item label="资产类型">
+          <el-select v-model="item.preferences" placeholder="请选择" style="width:100%">
             <el-option
-              v-for="item in bizTypeList"
+              v-for="item in assetsTypeList"
               :key="item.dicValue"
               :label="item.dicKey"
               :value="item.dicValue"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他业务类型" v-if="item.typeId==='09'">
-          <el-input v-model="item.typeName"></el-input>
+        <el-form-item label="资产类型其它" v-if="item.preferences==='20'">
+          <el-input v-model="item.preferenceMark"></el-input>
+        </el-form-item>
+        <el-form-item label="收益类型">
+          <el-select v-model="item.incomesType" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in incomeTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="收益率">
+          <el-input v-model="item.incomeRate"></el-input>
+        </el-form-item>
+        <el-form-item label="其他要求">
+          <el-input v-model="item.otherMark"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem1(item, index)">删除</el-button>
+        </el-form-item>
+      </div>
+      <el-form-item label="资产信息">
+        <el-button @click="addItem1()" type>资产信息</el-button>
+      </el-form-item>
+
+      <div v-for="(item,index) in form.fundStruct" :key="index">
+        <el-form-item label="资金类型">
+          <el-select v-model="item.currency" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in currencyList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="投资结构">
+          <el-select v-model="item.struct" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in structList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="投资比例">
+          <el-input v-model="item.min"></el-input>
+          <el-input v-model="item.max"></el-input>
+        </el-form-item>
+        <el-form-item label="投资规模">
+          <el-select v-model="item.scale" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in abilityList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="投资期限">
+          <el-select v-model="item.deadline" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in deadlineList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
       </div>
-      <el-form-item label="业务类型">
-        <el-button @click="addItem()" type>业务类型</el-button>
+      <el-form-item label="投资结构偏好">
+        <el-button @click="addItem()" type>投资结构偏好</el-button>
       </el-form-item>
 
       <el-form-item label="覆盖地区">
@@ -121,9 +179,9 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 1,
+        partnerType: 2,
         name: "",
-        sex: "男",
+        sex: "",
         telephone: "",
         weixin: "",
         email: "",
@@ -132,21 +190,27 @@ export default {
         post: "",
         source: "",
         item: "",
+        orgType: "",
+        orgRemark: "",
         debt: "",
         address: "",
         overArea: [],
-        orgType: "01",
-        orgRemark: "",
-        assetInfo: {
-          belong: "",
-          businessTypes: []
-        }
+        fundInfo: [],
+        fundStruct: []
       },
       assetAttrList: [],
       provinceList: [],
       sourceList: [],
       bizTypeList: [],
       orgTypeList: [],
+      exitTypeList: [],
+      usageList: [],
+      abilityList: [],
+      assetsTypeList: [],
+      incomeTypeList: [],
+      currencyList: [],
+      structList: [],
+      deadlineList: [],
       sexList: [
         { label: "男", value: "男" },
         { label: "女", value: "女" }
@@ -154,37 +218,62 @@ export default {
     };
   },
   created() {
-    $.editInit({ partnerId: this.$route.query.id }).then(res => {
-      console.log(res.data.partner);
+    $.editInit({partnerId:this.$route.query.id}).then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
-        let partner = res.data.partner;
-        this.form = partner;
+        this.exitTypeList = res.data.exitTypeList;
+        this.usageList = res.data.usageList;
+        this.abilityList = res.data.abilityList;
+        this.assetsTypeList = res.data.assetsTypeList;
+        this.incomeTypeList = res.data.incomeTypeList;
+        this.currencyList = res.data.currencyList;
+        this.structList = res.data.structList;
+        this.deadlineList = res.data.deadlineList;
+        let partner= res.data.partner;
+        this.form=partner
       }
     });
   },
   methods: {
-    addItem() {
-      this.form.assetInfo.businessTypes.push({
-        typeId: "",
-        typeName: ""
+    addItem1() {
+      this.form.fundInfo.push({
+        preferences: "",
+        preferenceMark:"",
+        incomesType: "",
+        incomeRate: "",
+        otherMark: ""
       });
     },
-    deleteItem(item, index) {
-      this.form.assetInfo.businessTypes.splice(index, 1);
+     deleteItem1(item, index) {
+      this.form.fundInfo.splice(index, 1);
     },
-    updateData() {
-      console.log(this.form)
+
+    addItem() {
+      this.form.fundStruct.push({
+        currency: "",
+        struct: "",
+        min: "",
+        max: "",
+        scale: "",
+        deadline: ""
+      });
+    },
+     deleteItem(item, index) {
+      this.form.orgResume.splice(index, 1);
+    },
+
+     updateData() {
       $.update(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
         }
       });
     }
+    
   }
 };
 </script>

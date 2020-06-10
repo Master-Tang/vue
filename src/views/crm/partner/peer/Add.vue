@@ -64,9 +64,9 @@
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
 
-      <div v-for="(item, index) in form.peerInfo" :key="index">
+      <div v-for="(item, index) in form.peerInfo.bizList" :key="'travel'+index">
         <el-form-item label="同业业务类型">
-          <el-select v-model="item.peerType" placeholder="请选择" style="width:100%">
+          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in peerTypeList"
               :key="item.dicValue"
@@ -75,11 +75,20 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他业务类型" v-if="item.peerType==='11'">
-          <el-input v-model="item.peerRemark"></el-input>
+        <el-form-item label="其他业务类型" v-if="item.typeId==='11'">
+          <el-input v-model="item.typeName"></el-input>
         </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem1(item, index)">删除</el-button>
+        </el-form-item>
+      </div>
+      <el-form-item label="同业业务类型">
+        <el-button @click="addItem1()" type>同业业务类型</el-button>
+      </el-form-item>
+
+      <div v-for="(item, index) in form.peerInfo.coopList" :key="index">
         <el-form-item label="同业合作方式">
-          <el-select v-model="item.peerBiz" placeholder="请选择" style="width:100%">
+          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in peerBizList"
               :key="item.dicValue"
@@ -88,15 +97,15 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他合作方式" v-if="item.peerBiz==='13'">
-          <el-input v-model="item.peerCoop"></el-input>
+        <el-form-item label="其他合作方式" v-if="item.typeId==='13'">
+          <el-input v-model="item.typeName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
       </div>
-      <el-form-item label="同业业务类型">
-        <el-button @click="addItem()" type>同业业务类型</el-button>
+      <el-form-item label="同业合作方式">
+        <el-button @click="addItem()" type>同业合作方式</el-button>
       </el-form-item>
 
       <el-form-item label="覆盖地区">
@@ -125,22 +134,25 @@ export default {
     return {
       form: {
         partnerType: 5,
-        name: "",
-        sex: "",
-        telephone: "",
-        weixin: "",
-        email: "",
-        company: "",
-        department: "",
+        name: "同业伙伴",
+        sex: "男",
+        telephone: "33333333333",
+        weixin: "wechat",
+        email: "ee@333.com",
+        company: "XXX公司",
+        department: "XX部门",
         post: "",
         source: "",
         item: "",
         debt: "",
-        address: "",
-        orgType:"",
-        orgRemark:"",
+        address: "XXX地址",
+        orgType: "",
+        orgRemark: "",
         overArea: [],
-        peerInfo: []
+        peerInfo: {
+          bizList: [],
+          coopList: []
+        }
       },
       assetAttrList: [],
       provinceList: [],
@@ -169,16 +181,23 @@ export default {
     });
   },
   methods: {
-    addItem() {
-      this.form.peerInfo.push({
-        peerType: "01",
-          peerRemark: "01",
-          peerBiz: "",
-          peerCoop: ""
+    addItem1() {
+      this.form.peerInfo.bizList.push({
+        typeId: "",
+        typeName: ""
       });
     },
-     deleteItem(item, index) {
-      this.form.peerInfo.splice(index, 1);
+    deleteItem1(item, index) {
+      this.form.peerInfo.bizList.splice(index, 1);
+    },
+    addItem() {
+      this.form.peerInfo.coopList.push({
+        typeId: "",
+        typeName: ""
+      });
+    },
+    deleteItem(item, index) {
+      this.form.peerInfo.coopList.splice(index, 1);
     },
 
     addData() {

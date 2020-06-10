@@ -4,7 +4,7 @@
       <el-form-item label="伙伴名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="性别">
+       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
         <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
@@ -54,14 +54,15 @@
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
-          v-model="form.overArea"
+          v-model="form.orgInfo.relativeOver"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
 
-      <div class="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
+      <!-- 动态增加项目 -->
+      <div class="aaa" v-for="(item, index) in form.orgResume" :key="index" >
         <el-form-item label="机构名称">
           <el-input v-model="item.resumeOrg"></el-input>
         </el-form-item>
@@ -132,7 +133,7 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item label="岗位职务">
-        <el-input v-model="form.orgInfo.pos"></el-input>
+        <el-input v-model="form.orgInfo.relativePos"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -150,22 +151,21 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 6,
-        name: "政府伙伴",
-        sex: "男",
-        telephone: "22222222222",
-        weixin: "wechat",
-        email: "XXX@333.com",
-        company: "XXX局",
+        partnerType:6,
+        name: "",
+        sex: "",
+        telephone: "",
+        weixin: "",
+        email: "",
+        company: "",
         department: "",
-        post: "副主任",
+        post: "",
         source: "",
         item: "",
         debt: "",
-        address: "地址",
+        address: "",
         partnerRemark: "",
         assetAttr: "",
-        overArea:[],
         orgInfo: {
           name: "",
           telephone: "",
@@ -175,9 +175,9 @@ export default {
           orgRemark: "",
           relativeOrg: "",
           relativeOver: [],
-          pos: "",
-          resumeList: []
-        }
+          relativePos: ""
+        },
+        orgResume: []
       },
 
       provinceList: [],
@@ -198,14 +198,14 @@ export default {
   },
   methods: {
     addItem() {
-      this.form.orgInfo.resumeList.push({
+      this.form.orgResume.push({
         resumeOrg: "",
-        resumePos: "",
-        resumeOver: []
+        resumeOver: [],
+        resumePos: ""
       });
     },
     deleteItem(item, index) {
-      this.form.orgInfo.resumeList.splice(index, 1);
+      this.form.orgResume.splice(index, 1);
     },
     addData() {
       // console.log(this.orgResumeList);
@@ -242,8 +242,8 @@ export default {
   vertical-align: middle;
 }
 
-.aaa {
-  padding-top: 1rem;
-  border: 1px solid #ddd;
+.aaa{
+    padding-top: 1rem;
+    border:1px solid #ddd;
 }
 </style>

@@ -63,20 +63,20 @@
       <el-form-item label="其他机构" v-if="form.orgType==='26'">
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
-      <el-form-item label="债权属性">
-        <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in assetAttrList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
 
-      <div v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
+      <div v-for="(item, index) in form.assetInfo" :key="index">
+        <el-form-item label="债权属性">
+          <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in assetAttrList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
+          <el-select v-model="form.assetInfo.bizType" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in bizTypeList"
               :key="item.dicValue"
@@ -85,12 +85,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他业务类型" v-if="item.typeId==='09'">
-          <el-input v-model="item.typeName"></el-input>
+        <el-form-item label="其他业务类型" v-if="form.assetInfo.bizType==='09'">
+          <el-input v-model="form.assetInfo.bizRemark"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
+
       </div>
       <el-form-item label="业务类型">
         <el-button @click="addItem()" type>业务类型</el-button>
@@ -107,7 +108,7 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="updateData()">保存</el-button>
+        <el-button type="primary" @click="addData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
@@ -122,25 +123,22 @@ export default {
     return {
       form: {
         partnerType: 1,
-        name: "",
+        name: "某某某",
         sex: "男",
-        telephone: "",
-        weixin: "",
-        email: "",
-        company: "",
-        department: "",
-        post: "",
-        source: "",
-        item: "",
-        debt: "",
+        telephone: "100000000",
+        weixin: "dd",
+        email: "dd",
+        company: "dd",
+        department: "ddd",
+        post: "d",
+        source: "d",
+        item: "d",
+        debt: "d",
         address: "",
-        overArea: [],
         orgType: "01",
         orgRemark: "",
-        assetInfo: {
-          belong: "",
-          businessTypes: []
-        }
+        overArea: [],
+        assetInfo: []
       },
       assetAttrList: [],
       provinceList: [],
@@ -154,36 +152,49 @@ export default {
     };
   },
   created() {
-    $.editInit({ partnerId: this.$route.query.id }).then(res => {
-      console.log(res.data.partner);
+    $.addInit().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
-        let partner = res.data.partner;
-        this.form = partner;
       }
     });
   },
   methods: {
     addItem() {
-      this.form.assetInfo.businessTypes.push({
-        typeId: "",
-        typeName: ""
+      this.form.assetInfo.push({
+        belong: "01",
+        bizType: "01",
+        bizRemark: ""
       });
     },
-    deleteItem(item, index) {
-      this.form.assetInfo.businessTypes.splice(index, 1);
+     deleteItem(item, index) {
+      this.form.assetInfo.splice(index, 1);
     },
-    updateData() {
-      console.log(this.form)
-      $.update(this.form).then(response => {
+    addData() {
+      if (!this.validate()) return;
+      $.add(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
         }
       });
+    },
+    validate() {
+      let error = "";
+      if (this.form.name.length <= 1) {
+        error = "姓名至少两位\n";
+      }
+
+      if (error) {
+        this.$message({
+          message: error,
+          type: "error"
+        });
+        return false;
+      }
+      return true;
     }
   }
 };

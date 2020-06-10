@@ -63,9 +63,7 @@
       <el-form-item label="其他机构" v-if="form.orgType==='26'">
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
-
-      <div v-for="(item, index) in form.assetInfo" :key="index">
-        <el-form-item label="债权属性">
+      <el-form-item label="债权属性">
           <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in assetAttrList"
@@ -75,8 +73,11 @@
             ></el-option>
           </el-select>
         </el-form-item>
+
+      <div v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
+        
         <el-form-item label="业务类型">
-          <el-select v-model="form.assetInfo.bizType" placeholder="请选择" style="width:100%">
+          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in bizTypeList"
               :key="item.dicValue"
@@ -85,8 +86,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他业务类型" v-if="form.assetInfo.bizType==='09'">
-          <el-input v-model="form.assetInfo.bizRemark"></el-input>
+        <el-form-item label="其他业务类型" v-if="item.typeId==='09'">
+          <el-input v-model="item.typeName"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
@@ -123,9 +124,9 @@ export default {
     return {
       form: {
         partnerType: 1,
-        name: "ddd",
-        sex: "",
-        telephone: "dd",
+        name: "某某某",
+        sex: "男",
+        telephone: "100000000",
         weixin: "dd",
         email: "dd",
         company: "dd",
@@ -138,7 +139,10 @@ export default {
         orgType: "01",
         orgRemark: "",
         overArea: [],
-        assetInfo: []
+        assetInfo: {
+          belong:"01",
+          businessTypes:[]
+        }
       },
       assetAttrList: [],
       provinceList: [],
@@ -164,14 +168,13 @@ export default {
   },
   methods: {
     addItem() {
-      this.form.assetInfo.push({
-        belong: "01",
-        bizType: "01",
-        bizRemark: ""
+      this.form.assetInfo.businessTypes.push({
+        typeId: "01",
+        typeName: ""
       });
     },
      deleteItem(item, index) {
-      this.form.assetInfo.splice(index, 1);
+      this.form.assetInfo.businessTypes.splice(index, 1);
     },
     addData() {
       if (!this.validate()) return;

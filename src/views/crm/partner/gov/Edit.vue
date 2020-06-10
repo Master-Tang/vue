@@ -4,7 +4,7 @@
       <el-form-item label="伙伴名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-       <el-form-item label="性别">
+      <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
         <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
@@ -31,7 +31,7 @@
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
-         <el-select v-model="form.source" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.source" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in sourceList"
             :key="item.dicValue"
@@ -54,15 +54,14 @@
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
-          v-model="form.orgInfo.relativeOver"
+          v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
 
-      <!-- 动态增加项目 -->
-      <div v-for="(item, index) in form.orgResume" :key="index">
+      <div class="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
         <el-form-item label="机构名称">
           <el-input v-model="item.resumeOrg"></el-input>
         </el-form-item>
@@ -133,7 +132,7 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item label="岗位职务">
-        <el-input v-model="form.orgInfo.relativePos"></el-input>
+        <el-input v-model="form.orgInfo.pos"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -143,7 +142,7 @@
     </el-form>
   </div>
 </template>
-  
+ 
 <script>
 import $ from "@/api/assets";
 
@@ -166,6 +165,7 @@ export default {
         address: "",
         partnerRemark: "",
         assetAttr: "",
+       overArea:[],
         orgInfo: {
           name: "",
           telephone: "",
@@ -175,9 +175,9 @@ export default {
           orgRemark: "",
           relativeOrg: "",
           relativeOver: [],
-          relativePos: ""
-        },
-        orgResume: []
+          pos: "",
+          resumeList: []
+        }
       },
       sourceList:[],
       provinceList: [],
@@ -201,14 +201,14 @@ export default {
   },
   methods: {
     addItem() {
-      this.form.orgResume.push({
+      this.form.orgInfo.resumeList.push({
         resumeOrg: "",
-        resumeOver: [],
-        resumePos: ""
+        resumePos: "",
+        resumeOver: []
       });
     },
     deleteItem(item, index) {
-      this.form.orgResume.splice(index, 1);
+      this.form.orgInfo.resumeList.splice(index, 1);
     },
      updateData() {
       $.update(this.form).then(response => {

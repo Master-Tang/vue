@@ -49,24 +49,10 @@
       <el-form-item label="伙伴对应债权">
         <el-input v-model="form.debt"></el-input>
       </el-form-item>
-
-      <el-form-item label="机构类型">
+      <el-form-item label="退出类型">
         <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
           <el-option
-            v-for="item in orgTypeList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="其他机构" v-if="form.orgType==='26'">
-        <el-input v-model="form.orgRemark"></el-input>
-      </el-form-item>
-      <el-form-item label="债权属性">
-        <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in assetAttrList"
+            v-for="item in exitTypeList"
             :key="item.dicValue"
             :label="item.dicKey"
             :value="item.dicValue"
@@ -74,27 +60,48 @@
         </el-select>
       </el-form-item>
 
-      <div v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
-        <el-form-item label="业务类型">
-          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in bizTypeList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="其他业务类型" v-if="item.typeId==='09'">
-          <el-input v-model="item.typeName"></el-input>
-        </el-form-item>
-        <el-form-item>
+ <div v-for="(item, index) in form.exitInfo" :key="index">
+      <el-form-item label="用途偏好">
+        <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in usageList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="投资规模">
+        <el-select v-model="item.ability" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in abilityList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="资产类型">
+        <el-select v-model="item.preferences" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in assetsTypeList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="资产类型其它" v-if="item.preferences==='20'">
+        <el-input v-model="item.bizPrefer"></el-input>
+      </el-form-item>
+      <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
       </div>
-      <el-form-item label="业务类型">
-        <el-button @click="addItem()" type>业务类型</el-button>
+      <el-form-item label="偏好">
+        <el-button @click="addItem()" type>偏好</el-button>
       </el-form-item>
+
 
       <el-form-item label="覆盖地区">
         <el-cascader
@@ -107,7 +114,7 @@
         ></el-cascader>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="updateData()">保存</el-button>
+        <el-button type="primary" @click="addData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
@@ -121,32 +128,32 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 1,
+        partnerType: 3,
         name: "",
-        sex: "男",
+        sex: "",
         telephone: "",
         weixin: "",
         email: "",
         company: "",
         department: "",
         post: "",
+        orgType:"",
         source: "",
         item: "",
         debt: "",
         address: "",
         overArea: [],
-        orgType: "01",
-        orgRemark: "",
-        assetInfo: {
-          belong: "",
-          businessTypes: []
-        }
+        exitInfo:[]
       },
       assetAttrList: [],
       provinceList: [],
       sourceList: [],
       bizTypeList: [],
       orgTypeList: [],
+      exitTypeList: [],
+      usageList:[],
+      abilityList:[],
+      assetsTypeList:[],
       sexList: [
         { label: "男", value: "男" },
         { label: "女", value: "女" }
@@ -154,36 +161,57 @@ export default {
     };
   },
   created() {
-    $.editInit({ partnerId: this.$route.query.id }).then(res => {
-      console.log(res.data.partner);
+    $.addInit().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
-        let partner = res.data.partner;
-        this.form = partner;
+        this.exitTypeList=res.data.exitTypeList;
+        this.usageList=res.data.usageList;
+        this.abilityList=res.data.abilityList;
+        this.assetsTypeList=res.data.assetsTypeList;
+        
       }
     });
   },
   methods: {
     addItem() {
-      this.form.assetInfo.businessTypes.push({
-        typeId: "",
-        typeName: ""
+      this.form.exitInfo.push({
+          exitType:"",
+          usage:"",
+          ability:"",
+          preferences:"",
+          bizPrefer:''
       });
     },
-    deleteItem(item, index) {
-      this.form.assetInfo.businessTypes.splice(index, 1);
+     deleteItem(item, index) {
+      this.form.exitInfo.splice(index, 1);
     },
-    updateData() {
-      console.log(this.form)
-      $.update(this.form).then(response => {
+
+    addData() {
+      if (!this.validate()) return;
+      $.add(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
         }
       });
+    },
+    validate() {
+      let error = "";
+      if (this.form.name.length <= 1) {
+        error = "姓名至少两位\n";
+      }
+
+      if (error) {
+        this.$message({
+          message: error,
+          type: "error"
+        });
+        return false;
+      }
+      return true;
     }
   }
 };

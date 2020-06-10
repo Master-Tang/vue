@@ -60,19 +60,27 @@
         </el-select>
       </el-form-item>
 
- <div v-for="(item, index) in form.exitInfo" :key="index">
+      <div v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
+        <el-form-item label="用途偏好">
+          <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in usageList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem1(item, index)">删除</el-button>
+        </el-form-item>
+      </div>
       <el-form-item label="用途偏好">
-        <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in usageList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
+        <el-button @click="addItem1()" type>用途偏好</el-button>
       </el-form-item>
+
       <el-form-item label="投资规模">
-        <el-select v-model="item.ability" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.exitInfo.ability" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in abilityList"
             :key="item.dicValue"
@@ -81,27 +89,6 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="资产类型">
-        <el-select v-model="item.preferences" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in assetsTypeList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="资产类型其它" v-if="item.preferences==='20'">
-        <el-input v-model="item.bizPrefer"></el-input>
-      </el-form-item>
-      <el-form-item>
-          <el-button type @click="deleteItem(item, index)">删除</el-button>
-        </el-form-item>
-      </div>
-      <el-form-item label="偏好">
-        <el-button @click="addItem()" type>偏好</el-button>
-      </el-form-item>
-
 
       <el-form-item label="覆盖地区">
         <el-cascader
@@ -113,6 +100,29 @@
           filterable
         ></el-cascader>
       </el-form-item>
+
+      <div v-for="(item, index) in form.exitInfo.fancyList" :key="index">
+        <el-form-item label="资产类型">
+          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in assetsTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="资产类型其它" v-if="item.typeId==='20'">
+          <el-input v-model="item.typeName"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type @click="deleteItem(item, index)">删除</el-button>
+        </el-form-item>
+      </div>
+      <el-form-item label="资产偏好">
+        <el-button @click="addItem()" type>资产偏好</el-button>
+      </el-form-item>
+
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
@@ -120,7 +130,7 @@
     </el-form>
   </div>
 </template>
-  
+
 <script>
 import $ from "@/api/assets";
 
@@ -143,7 +153,11 @@ export default {
         debt: "",
         address: "",
         overArea: [],
-        exitInfo:[]
+        exitInfo: {
+          usage:[],
+          ability:"",
+          fancyList:[]
+        }
       },
       assetAttrList: [],
       provinceList: [],
@@ -178,17 +192,22 @@ export default {
     });
   },
   methods: {
-    addItem() {
-      this.form.exitInfo.push({
-          exitType:"",
-          usage:"",
-          ability:"",
-          preferences:"",
-          bizPrefer:''
+    addItem1() {
+      this.form.exitInfo.usage.push({
+        usage:""
       });
     },
-     deleteItem(item, index) {
-      this.form.exitInfo.splice(index, 1);
+    deleteItem1(item, index) {
+      this.form.exitInfo.usage.splice(index, 1);
+    },
+    addItem() {
+      this.form.exitInfo.fancyList.push({
+        typeId:"",
+        typeName:""
+      });
+    },
+    deleteItem(item, index) {
+      this.form.exitInfo.fancyList.splice(index, 1);
     },
     updateData() {
       $.update(this.form).then(response => {

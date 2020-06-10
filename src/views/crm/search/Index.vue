@@ -17,7 +17,7 @@
             style="width:100%"
             placeholder="试试搜索：无锡"
             v-model="cities"
-            :options="provinceList"
+            :options="provinceList" collapse-tags="true"
             :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
             filterable
           ></el-cascader>
@@ -26,7 +26,7 @@
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary">查找</el-button>
+                <el-button type="primary" @click="find()">查找</el-button>
               </div>
             </el-col>
           </el-row>
@@ -60,7 +60,7 @@
       </el-table-column>
 
       <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
+        <template>
           <el-button type="primary" size="small" >查看</el-button>
         </template>
       </el-table-column>
@@ -122,20 +122,22 @@ export default {
       this.list = null;
       console.log(this.cities)
       this.pushcities=[]
-      // for(let i in this.cities)
-      // {
-      //   this.pushcities.push(this.cities[i][1])
+      for(let i in this.cities)
+      {
+        this.pushcities.push(this.cities[i][1])
 
-      // }
-      // qs.stringify(this.cities)
+      }
+
+      let params=qs.stringify({
+        partnerType: 2,
+        "cities[]":this.pushcities,
+        pageSize:this.pageSize,
+        pageIndex:this.currentPage
+        });
+      console.log(params)
       
-      console.log(this.pushcities)
-      $.findByCity(qs.stringify({
-        cities: this.cities,
-        partnerType: 1,
-        pageIndex: this.currentPage,
-        pageSize: this.pageSize
-      })).then(response => {
+      //console.log(this.pushcities)
+      $.findByCity(params).then(response => {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;

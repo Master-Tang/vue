@@ -4,7 +4,7 @@
       <el-form-item label="伙伴名称">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
-      <el-form-item label="性别">
+       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
         <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
@@ -31,14 +31,7 @@
         <el-input v-model="form.post"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
-        <el-select v-model="form.source" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in sourceList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
+        <el-input v-model="form.source"></el-input>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
         <el-input v-model="form.item"></el-input>
@@ -49,7 +42,19 @@
       <el-form-item label="伙伴备注">
         <el-input v-model="form.partnerRemark"></el-input>
       </el-form-item>
-
+      <el-form-item label="机构类型">
+        <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in orgTypeList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="其他机构" v-if="form.orgType==='26'">
+        <el-input v-model="form.orgRemark"></el-input>
+      </el-form-item>
       <el-form-item label="管辖区域">
         <el-cascader
           style="width:100%"
@@ -61,7 +66,21 @@
         ></el-cascader>
       </el-form-item>
 
-      <div class="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
+      <!-- 动态增加项目 -->
+      <div v-for="(item, index) in form.justiceResume" :key="index">
+        <el-form-item label="机构类型">
+          <el-select v-model="item.resumeType" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in orgTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="其他机构" v-if="item.resumeType==='26'">
+          <el-input v-model="item.resumeRemark"></el-input>
+        </el-form-item>
         <el-form-item label="机构名称">
           <el-input v-model="item.resumeOrg"></el-input>
         </el-form-item>
@@ -86,14 +105,15 @@
         <el-button @click="addItem()" type>添加履历</el-button>
       </el-form-item>
 
+
       <el-form-item label="关系人姓名">
-        <el-input v-model="form.orgInfo.name"></el-input>
+        <el-input v-model="form.justiceInfo.name"></el-input>
       </el-form-item>
       <el-form-item label="关系人联系方式">
-        <el-input v-model="form.orgInfo.telephone"></el-input>
+        <el-input v-model="form.justiceInfo.telephone"></el-input>
       </el-form-item>
       <el-form-item label="与其关系">
-        <el-select v-model="form.orgInfo.relative" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.justiceInfo.relative" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in relativeList"
             :key="item.dicValue"
@@ -103,10 +123,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="备注">
-        <el-input v-model="form.orgInfo.relativeRemark"></el-input>
+        <el-input v-model="form.justiceInfo.relativeRemark"></el-input>
       </el-form-item>
       <el-form-item label="机构类型">
-        <el-select v-model="form.orgInfo.orgType" placeholder="请选择" style="width:100%">
+        <el-select v-model="form.justiceInfo.orgType" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
@@ -115,28 +135,28 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构" v-if="form.orgInfo.orgType==='26'">
-        <el-input v-model="form.orgInfo.orgRemark"></el-input>
+      <el-form-item label="其他机构" v-if="form.justiceInfo.orgType==='26'">
+        <el-input v-model="form.justiceInfo.orgRemark"></el-input>
       </el-form-item>
       <el-form-item label="所在机构名称">
-        <el-input v-model="form.orgInfo.relativeOrg"></el-input>
+        <el-input v-model="form.justiceInfo.relativeOrg"></el-input>
       </el-form-item>
       <el-form-item label="管辖区域">
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
-          v-model="form.orgInfo.relativeOver"
+          v-model="form.justiceInfo.relativeOver"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
       <el-form-item label="岗位职务">
-        <el-input v-model="form.orgInfo.pos"></el-input>
+        <el-input v-model="form.justiceInfo.relativePos"></el-input>
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="addData()">立即创建</el-button>
+        <el-button type="primary" @click="updateData()">立即创建</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
@@ -150,23 +170,25 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 6,
-        name: "政府伙伴",
-        sex: "男",
-        telephone: "22222222222",
-        weixin: "wechat",
-        email: "XXX@333.com",
-        company: "XXX局",
+        partnerType: 4,
+        name: "",
+        sex: "",
+        telephone: "",
+        weixin: "",
+        email: "",
+        company: "",
         department: "",
-        post: "副主任",
+        post: "",
         source: "",
         item: "",
         debt: "",
-        address: "地址",
+        orgType:"",
+        orgRemark:"",
+        address: "",
         partnerRemark: "",
         assetAttr: "",
-        overArea:[],
-        orgInfo: {
+        overArea: [],
+        justiceInfo: {
           name: "",
           telephone: "",
           relative: "",
@@ -175,61 +197,53 @@ export default {
           orgRemark: "",
           relativeOrg: "",
           relativeOver: [],
-          pos: "",
-          resumeList: []
-        }
+          relativePos: ""
+        },
+        justiceResume: []
       },
-
+      assetAttrList: [],
       provinceList: [],
       orgTypeList: [],
-      sourceList: [],
-      relativeList: []
+      relativeList: [],
+      sexList: [
+        { label: "男", value: "男" },
+        { label: "女", value: "女" }
+      ]
     };
   },
   created() {
-    $.addInit().then(res => {
+ $.editInit({partnerId:this.$route.query.id}).then(res => {
       if (res.success) {
-        this.sourceList = res.data.source;
+        // console.log(res.data)
+        this.assetAttrList = res.data.source;
         this.provinceList = res.data.province;
         this.orgTypeList = res.data.orgTypeList;
         this.relativeList = res.data.relativeList;
+        let partner= res.data.partner;
+        this.form=partner
+        // console.log(this.provinceList);
       }
     });
   },
   methods: {
     addItem() {
-      this.form.orgInfo.resumeList.push({
-        resumeOrg: "",
-        resumePos: "",
-        resumeOver: []
+      this.form.justiceResume.push({
+            resumeType: "",
+            resumeRemark: "",
+            resumeOrg: "",
+            resumeOver: [],
+            resumePos: ""
       });
     },
     deleteItem(item, index) {
-      this.form.orgInfo.resumeList.splice(index, 1);
+      this.form.justiceResume.splice(index, 1);
     },
-    addData() {
-      // console.log(this.orgResumeList);
-      if (!this.validate()) return;
-      $.add(this.form).then(response => {
+     updateData() {
+      $.update(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
         }
       });
-    },
-    validate() {
-      let error = "";
-      if (this.form.name.length <= 1) {
-        error = "姓名至少两位\n";
-      }
-
-      if (error) {
-        this.$message({
-          message: error,
-          type: "error"
-        });
-        return false;
-      }
-      return true;
     }
   }
 };
@@ -240,10 +254,5 @@ export default {
   font-size: 1.5rem;
 
   vertical-align: middle;
-}
-
-.aaa {
-  padding-top: 1rem;
-  border: 1px solid #ddd;
 }
 </style>

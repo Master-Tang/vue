@@ -63,20 +63,20 @@
       <el-form-item label="其他机构" v-if="form.orgType==='26'">
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
-      <el-form-item label="债权属性">
-        <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in assetAttrList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
 
-      <div v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
+      <div v-for="(item, index) in form.assetInfo" :key="index">
+        <el-form-item label="债权属性">
+          <el-select v-model="item.belong" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in assetAttrList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="业务类型">
-          <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
+          <el-select v-model="item.bizType" placeholder="请选择" style="width:100%">
             <el-option
               v-for="item in bizTypeList"
               :key="item.dicValue"
@@ -85,12 +85,13 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他业务类型" v-if="item.typeId==='09'">
-          <el-input v-model="item.typeName"></el-input>
+        <el-form-item label="其他业务类型" v-if="item.bizType==='09'">
+          <el-input v-model="item.bizRemark"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
+
       </div>
       <el-form-item label="业务类型">
         <el-button @click="addItem()" type>业务类型</el-button>
@@ -121,64 +122,56 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 1,
-        name: "",
+        partnerType:1,
+        name: "1",
         sex: "男",
-        telephone: "",
-        weixin: "",
-        email: "",
-        company: "",
-        department: "",
-        post: "",
-        source: "",
-        item: "",
-        debt: "",
-        address: "",
+        telephone: "1",
+        weixin: "1",
+        email: "1",
+        company: "1",
+        department: "1",
+        post: "1",
+        source: "1",
+        item: "1",
+        debt: "1",
+        address: "1",
         overArea: [],
-        orgType: "01",
-        orgRemark: "",
-        assetInfo: {
-          belong: "",
-          businessTypes: []
-        }
+        assetInfo:[]
       },
       assetAttrList: [],
       provinceList: [],
-      sourceList: [],
-      bizTypeList: [],
-      orgTypeList: [],
-      sexList: [
-        { label: "男", value: "男" },
-        { label: "女", value: "女" }
-      ]
+      sourceList:[],
+       bizTypeList:[],
+       orgTypeList:[],
+       sexList:[{label:'男',value:'男'},{label:'女',value:'女'}],
     };
   },
   created() {
-    $.editInit({ partnerId: this.$route.query.id }).then(res => {
-      console.log(res.data.partner);
+    $.editInit({partnerId:this.$route.query.id}).then(res => {
+      console.log(res.data.partner)
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
-        this.assetAttrList = res.data.attr;
-        this.bizTypeList = res.data.bizTypeList;
-        this.orgTypeList = res.data.orgTypeList;
-        let partner = res.data.partner;
-        this.form = partner;
+        this.assetAttrList=res.data.attr;
+        this.bizTypeList=res.data.bizTypeList;
+        this.orgTypeList=res.data.orgTypeList;
+        let partner= res.data.partner;
+        this.form=partner
       }
     });
   },
   methods: {
-    addItem() {
-      this.form.assetInfo.businessTypes.push({
-        typeId: "",
-        typeName: ""
+     addItem() {
+      this.form.assetInfo.push({
+        belong: "",
+        bizType: "",
+        bizRemark: ""
       });
     },
-    deleteItem(item, index) {
-      this.form.assetInfo.businessTypes.splice(index, 1);
+     deleteItem(item, index) {
+      this.form.assetInfo.splice(index, 1);
     },
     updateData() {
-      console.log(this.form)
       $.update(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
@@ -189,6 +182,7 @@ export default {
 };
 </script>
 <style scoped>
+
 .red {
   color: red;
   font-size: 1.5rem;
