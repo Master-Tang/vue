@@ -99,10 +99,9 @@ export default {
     find() {
       this.listLoading = true;
       this.list = null;
-      $.findByNameTel({
+      $.findByBlurry({
         partnerType: 1,
-        name: this.value,
-        telephone: "",
+        value:this.value,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {

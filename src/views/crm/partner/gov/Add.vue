@@ -1,8 +1,17 @@
 <template>
   <div class="add">
     <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="伙伴名称">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item>
+        <span slot="label">
+          伙伴姓名
+          <span class="red">*</span>
+        </span>
+        <el-input
+          v-model="form.name"
+          type="text"
+          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
@@ -13,9 +22,17 @@
           手机号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.telephone"></el-input>
+        <el-input
+          v-model="form.telephone"
+          onkeyup="value=value.replace(/\D/g,'')"
+          onchange="value=value.replace(/\D/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="微信号">
+        <span slot="label">
+          微信号
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.weixin"></el-input>
       </el-form-item>
       <el-form-item label="电子邮件">
@@ -51,6 +68,10 @@
       </el-form-item>
 
       <el-form-item label="管辖区域">
+        <span slot="label">
+          管辖区域
+          <span class="red">*</span>
+        </span>
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
@@ -61,11 +82,15 @@
         ></el-cascader>
       </el-form-item>
 
-      <div class="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
+      <div id="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
         <el-form-item label="机构名称">
           <el-input v-model="item.resumeOrg"></el-input>
         </el-form-item>
         <el-form-item label="管辖区域">
+          <span slot="label">
+          管辖区域
+          <span class="red">*</span>
+        </span>
           <el-cascader
             style="width:100%"
             placeholder="试试搜索：无锡"
@@ -159,12 +184,12 @@ export default {
         company: "XXX局",
         department: "",
         post: "副主任",
-        source: "",
+        source: "01",
         item: "",
         debt: "",
         address: "地址",
         partnerRemark: "",
-        assetAttr: "",
+        assetAttr: "01",
         overArea:[],
         orgInfo: {
           name: "",
@@ -211,8 +236,16 @@ export default {
       // console.log(this.orgResumeList);
       if (!this.validate()) return;
       $.add(this.form).then(response => {
-        if (response.success) {
-          this.$router.replace("index");
+         if (response.success) {
+          //console.log(response.data);
+          if (response.data === 0) {
+            this.$message({
+              message: "手机号,邮箱号或微信号重复"
+            });
+            this.$router.push("add");
+          } else {
+            this.$router.replace("index");
+          }
         }
       });
     },
@@ -220,6 +253,12 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
+      } else if (this.form.telephone.length != 11) {
+        error = "手机号码不正确\n";
+      } else if (this.form.weixin.length == 0) {
+        error = "微信不能为空\n";
+      } else if (this.form.overArea.length==0){
+        error = "请选择区域\n";
       }
 
       if (error) {
@@ -242,8 +281,5 @@ export default {
   vertical-align: middle;
 }
 
-.aaa {
-  padding-top: 1rem;
-  border: 1px solid #ddd;
-}
+
 </style>

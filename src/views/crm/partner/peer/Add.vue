@@ -1,8 +1,17 @@
 <template>
   <div class="my-padding">
     <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="伙伴名称">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item>
+        <span slot="label">
+          伙伴姓名
+          <span class="red">*</span>
+        </span>
+        <el-input
+          v-model="form.name"
+          type="text"
+          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
@@ -13,9 +22,17 @@
           手机号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.telephone"></el-input>
+        <el-input
+          v-model="form.telephone"
+          onkeyup="value=value.replace(/\D/g,'')"
+          onchange="value=value.replace(/\D/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="微信号">
+        <span slot="label">
+          微信号
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.weixin"></el-input>
       </el-form-item>
       <el-form-item label="电子邮件">
@@ -64,7 +81,7 @@
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
 
-      <div v-for="(item, index) in form.peerInfo.bizList" :key="'travel'+index">
+      <div id="aaa" v-for="(item, index) in form.peerInfo.bizList" :key="'travel'+index">
         <el-form-item label="同业业务类型">
           <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
@@ -86,7 +103,7 @@
         <el-button @click="addItem1()" type>同业业务类型</el-button>
       </el-form-item>
 
-      <div v-for="(item, index) in form.peerInfo.coopList" :key="index">
+      <div id="aaa" v-for="(item, index) in form.peerInfo.coopList" :key="index">
         <el-form-item label="同业合作方式">
           <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
@@ -109,6 +126,10 @@
       </el-form-item>
 
       <el-form-item label="覆盖地区">
+        <span slot="label">
+          覆盖地区
+          <span class="red">*</span>
+        </span>
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
@@ -142,11 +163,11 @@ export default {
         company: "XXX公司",
         department: "XX部门",
         post: "",
-        source: "",
+        source: "01",
         item: "",
         debt: "",
         address: "XXX地址",
-        orgType: "",
+        orgType: "01",
         orgRemark: "",
         overArea: [],
         peerInfo: {
@@ -183,7 +204,7 @@ export default {
   methods: {
     addItem1() {
       this.form.peerInfo.bizList.push({
-        typeId: "",
+        typeId: "01",
         typeName: ""
       });
     },
@@ -192,7 +213,7 @@ export default {
     },
     addItem() {
       this.form.peerInfo.coopList.push({
-        typeId: "",
+        typeId: "01",
         typeName: ""
       });
     },
@@ -202,9 +223,18 @@ export default {
 
     addData() {
       if (!this.validate()) return;
+      console.log(this.form);
       $.add(this.form).then(response => {
         if (response.success) {
-          this.$router.replace("index");
+          //console.log(response.data);
+          if (response.data === 0) {
+            this.$message({
+              message: "手机号,邮箱号或微信号重复"
+            });
+            this.$router.push("add");
+          } else {
+            this.$router.replace("index");
+          }
         }
       });
     },
@@ -212,6 +242,12 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
+      } else if (this.form.telephone.length != 11) {
+        error = "手机号码不正确\n";
+      } else if (this.form.weixin.length == 0) {
+        error = "微信不能为空\n";
+      } else if (this.form.overArea.length==0){
+        error = "请选择区域\n";
       }
 
       if (error) {

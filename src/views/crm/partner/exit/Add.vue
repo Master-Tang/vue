@@ -1,8 +1,17 @@
 <template>
   <div class="my-padding">
     <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="伙伴名称">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item>
+        <span slot="label">
+          伙伴姓名
+          <span class="red">*</span>
+        </span>
+        <el-input
+          v-model="form.name"
+          type="text"
+          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
@@ -13,9 +22,17 @@
           手机号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.telephone"></el-input>
+        <el-input
+          v-model="form.telephone"
+          onkeyup="value=value.replace(/\D/g,'')"
+          onchange="value=value.replace(/\D/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="微信号">
+        <span slot="label">
+          微信号
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.weixin"></el-input>
       </el-form-item>
       <el-form-item label="电子邮件">
@@ -60,7 +77,7 @@
         </el-select>
       </el-form-item>
 
-      <div v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
+      <div id="aaa" v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
         <el-form-item label="用途偏好">
           <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
             <el-option
@@ -90,7 +107,11 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="覆盖地区">
+      <el-form-item>
+        <span slot="label">
+          覆盖地区
+          <span class="red">*</span>
+        </span>
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
@@ -101,7 +122,7 @@
         ></el-cascader>
       </el-form-item>
 
-      <div v-for="(item, index) in form.exitInfo.fancyList" :key="index">
+      <div id="aaa" v-for="(item, index) in form.exitInfo.fancyList" :key="index">
         <el-form-item label="资产类型">
           <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
@@ -147,16 +168,16 @@ export default {
         company: "XXX公司",
         department: "XX部门",
         post: "XX岗位",
-        orgType: "",
+        orgType: "01",
         orgRemark:"",
-        source: "",
+        source: "01",
         item: "XX项目",
         debt: "债权",
         address: "联系地址",
         overArea: [],
         exitInfo: {
           usage:[],
-          ability:"",
+          ability:"01",
           fancyList:[]
         }
       },
@@ -193,7 +214,7 @@ export default {
   methods: {
     addItem1() {
       this.form.exitInfo.usage.push({
-        usage:""
+        usage:"01"
       });
     },
     deleteItem1(item, index) {
@@ -201,7 +222,7 @@ export default {
     },
     addItem() {
       this.form.exitInfo.fancyList.push({
-        typeId:"",
+        typeId:"01",
         typeName:""
       });
     },
@@ -209,11 +230,19 @@ export default {
       this.form.exitInfo.fancyList.splice(index, 1);
     },
 
-    addData() {
+   addData() {
       if (!this.validate()) return;
       $.add(this.form).then(response => {
         if (response.success) {
-          this.$router.replace("index");
+          //console.log(response.data);
+          if (response.data === 0) {
+            this.$message({
+              message: "手机号,邮箱号或微信号重复"
+            });
+            this.$router.push("add");
+          } else {
+            this.$router.replace("index");
+          }
         }
       });
     },
@@ -221,6 +250,12 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
+      } else if (this.form.telephone.length != 11) {
+        error = "手机号码不正确\n";
+      } else if (this.form.weixin.length == 0) {
+        error = "微信不能为空\n";
+      } else if (this.form.overArea.length==0){
+        error = "请选择区域\n";
       }
 
       if (error) {

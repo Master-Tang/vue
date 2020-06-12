@@ -1,8 +1,17 @@
 <template>
   <div class="my-padding">
     <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="伙伴名称">
-        <el-input v-model="form.name"></el-input>
+      <el-form-item>
+        <span slot="label">
+          伙伴姓名
+          <span class="red">*</span>
+        </span>
+        <el-input
+          v-model="form.name"
+          type="text"
+          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
@@ -13,9 +22,17 @@
           手机号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.telephone"></el-input>
+        <el-input
+          v-model="form.telephone"
+          onkeyup="value=value.replace(/\D/g,'')"
+          onchange="value=value.replace(/\D/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="微信号">
+        <span slot="label">
+          微信号
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.weixin"></el-input>
       </el-form-item>
       <el-form-item label="电子邮件">
@@ -64,18 +81,18 @@
         <el-input v-model="form.orgRemark"></el-input>
       </el-form-item>
       <el-form-item label="债权属性">
-          <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in assetAttrList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+        <el-select v-model="form.assetInfo.belong" placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in assetAttrList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
 
-      <div v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
-        
+      <div id="aaa" v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
+
         <el-form-item label="业务类型">
           <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
@@ -98,7 +115,11 @@
         <el-button @click="addItem()" type>业务类型</el-button>
       </el-form-item>
 
-      <el-form-item label="覆盖地区">
+      <el-form-item>
+        <span slot="label">
+          覆盖地区
+          <span class="red">*</span>
+        </span>
         <el-cascader
           style="width:100%"
           placeholder="试试搜索：无锡"
@@ -124,24 +145,26 @@ export default {
     return {
       form: {
         partnerType: 1,
-        name: "某某某",
+        name: "资产伙伴",
         sex: "男",
-        telephone: "100000000",
-        weixin: "dd",
-        email: "dd",
-        company: "dd",
-        department: "ddd",
-        post: "d",
-        source: "d",
-        item: "d",
-        debt: "d",
-        address: "",
+        telephone: "11111111111",
+        weixin: "wechat",
+        email: "email@111.com",
+        company: "XXX公司",
+        department: "XX部门",
+        post: "XX岗位",
+        orgType: "01",
+        orgRemark: "",
+        source: "01",
+        item: "XX项目",
+        debt: "债权",
+        address: "联系地址",
         orgType: "01",
         orgRemark: "",
         overArea: [],
         assetInfo: {
-          belong:"01",
-          businessTypes:[]
+          belong: "01",
+          businessTypes: []
         }
       },
       assetAttrList: [],
@@ -173,14 +196,22 @@ export default {
         typeName: ""
       });
     },
-     deleteItem(item, index) {
+    deleteItem(item, index) {
       this.form.assetInfo.businessTypes.splice(index, 1);
     },
     addData() {
       if (!this.validate()) return;
       $.add(this.form).then(response => {
         if (response.success) {
-          this.$router.replace("index");
+          //console.log(response.data);
+          if (response.data === 0) {
+            this.$message({
+              message: "手机号,邮箱号或微信号重复"
+            });
+            this.$router.push("add");
+          } else {
+            this.$router.replace("index");
+          }
         }
       });
     },
@@ -188,6 +219,12 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
+      } else if (this.form.telephone.length != 11) {
+        error = "手机号码不正确\n";
+      } else if (this.form.weixin.length == 0) {
+        error = "微信不能为空\n";
+      } else if (this.form.overArea.length==0){
+        error = "请选择区域\n";
       }
 
       if (error) {

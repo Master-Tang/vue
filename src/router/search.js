@@ -5,7 +5,7 @@ export default[
         component: Layout,
         name: 'search',
         redirect:"index",
-        meta: { title: '我的伙伴', icon: 'example' },
+        meta: { title: '伙伴查询', icon: 'example' },
         children:[
           {
             path: 'assets/index',

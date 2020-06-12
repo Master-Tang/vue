@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 export default
     {
+        findByBlurry(params) {
+            return request({
+                url: '/user/select/findByBlurry',
+                method: 'post',
+                params
+            })
+        }, 
         findByCity(params){
             return request({
                 url: '/user/partner/findByCity',
@@ -25,9 +32,9 @@ export default
                 params
             })
         },
-        findchaxun(params) {
+        findByPartType(params) {
             return request({
-                url: '/user/partner/findchaxun',
+                url: '/user/partner/findByPartType',
                 method: 'post',
                 params
             })
