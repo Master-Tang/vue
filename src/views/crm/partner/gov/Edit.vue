@@ -247,7 +247,7 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
-      } else if (this.form.telephone.length != 11) {
+      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
         error = "手机号码不正确\n";
       } else if (this.form.weixin.length == 0) {
         error = "微信不能为空\n";

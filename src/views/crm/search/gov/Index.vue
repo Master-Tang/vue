@@ -80,23 +80,37 @@ export default {
     this.fetchData();
   },
   methods: {
-    // find() {
-    //   this.listLoading = true;
-    //   this.list = null;
-    //   $.findByNameTel({
-    //     partnerType: 1,
-    //     name: this.value,
-    //     telephone: "",
-    //     pageIndex: this.currentPage,
-    //     pageSize: this.pageSize
-    //   }).then(response => {
-    //     console.log(response.data);
-    //     this.list = response.data.list;
-    //     this.total = response.data.total;
-    //     this.listLoading = false;
-    //     console.log(response.data.list);
-    //   });
-    // },
+    find() {
+      this.listLoading = true;
+      this.list = null;
+      // console.log(this.overArea)
+      this.pushcities=[]
+      for(let i in this.cities)
+      {
+        this.pushcities.push(this.cities[i][1])
+
+      }
+      let params=qs.stringify({
+        partnerType: 1,
+        "cities[]":this.pushcities,
+        orgType:this.orgType,
+        orgRemark:this.orgRemark,
+        typeId:this.typeId,
+        typeName:this.typeName,
+        belong:this.belong,
+        pageSize:this.pageSize,
+        pageIndex:this.currentPage
+        });
+        console.log(params)
+      $.findAssetInf(params).then(response => {
+        console.log(response.data);
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        console.log(response.data.list);
+      });
+    },
+
     fetchData() {
       this.listLoading = true;
       $.findByNameTel({

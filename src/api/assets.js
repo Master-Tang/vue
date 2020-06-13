@@ -18,6 +18,46 @@ export default
                  }
             })
         },
+        findAssetInf(params){
+            return request({
+                url: '/user/partner/findAssetInf',
+                method: 'post',
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+            })
+        },
+        findPeerInfo(params){
+            return request({
+                url: '/user/select/findPeerInfo',
+                method: 'post',
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+            })
+        },
+        findFundInfo(params){
+            return request({
+                url: '/user/partner/findFundInfo',
+                method: 'post',
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+            })
+        },
+        findExitInfo(params){
+            return request({
+                url: '/user/select/findExitInfo',
+                method: 'post',
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+            })
+        },
         findByNameTel(params) {
             return request({
                 url: '/user/select/findByNameTel',

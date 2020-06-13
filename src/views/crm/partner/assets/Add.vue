@@ -24,6 +24,7 @@
         </span>
         <el-input
           v-model="form.telephone"
+          placeholder="11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
@@ -92,7 +93,6 @@
       </el-form-item>
 
       <div id="aaa" v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
-
         <el-form-item label="业务类型">
           <el-select v-model="item.typeId" placeholder="请选择" style="width:100%">
             <el-option
@@ -109,7 +109,6 @@
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
         </el-form-item>
-
       </div>
       <el-form-item label="业务类型">
         <el-button @click="addItem()" type>业务类型</el-button>
@@ -219,11 +218,11 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
-      } else if (this.form.telephone.length != 11) {
+      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
         error = "手机号码不正确\n";
       } else if (this.form.weixin.length == 0) {
         error = "微信不能为空\n";
-      } else if (this.form.overArea.length==0){
+      } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
       }
 

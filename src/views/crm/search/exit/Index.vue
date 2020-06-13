@@ -1,24 +1,80 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <el-form :inline="true">
-        <el-form-item>
-          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-row>
-            <el-col :span="24">
-              <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="find()">查找</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      
-      </el-form>
+      <el-collapse>
+        <el-collapse-item title="退出伙伴查询" name="1">
+          <el-form :inline="true">
+            <el-form-item label="退出类型">
+              <el-select v-model="orgType" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in exitTypeList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="其他机构" v-if="orgType==='26'">
+              <el-input v-model="orgRemark"></el-input>
+            </el-form-item>
+            <el-form-item label="用途偏好">
+              <el-select v-model="usage" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in usageList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="投资规模">
+              <el-select v-model="ability" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="资产类型">
+              <el-select v-model="typeId" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in assetsTypeList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-form-item>
+            <el-form-item label="其他资产类型" v-if="typeId==='09'">
+              <el-input v-model="typeName"></el-input>
+            </el-form-item>
+            <el-form-item label="覆盖地区">
+              <el-cascader
+                style="width:100%"
+                placeholder="试试搜索：无锡"
+                v-model="cities"
+                :options="provinceList"
+                :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+                collapse-tags
+                filterable
+              ></el-cascader>
+            </el-form-item>
+            <el-form-item>
+              <el-row>
+                <el-col :span="24">
+                  <div class="grid-content bg-purple-dark">
+                    <el-button type="primary" @click="find()">查找</el-button>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+      </el-collapse>
     </div>
 
-    
     <el-table
       id="myform"
       v-loading="listLoading"
@@ -61,7 +117,7 @@
 
 <script>
 import $ from "@/api/assets";
-
+import qs from "querystring"
 export default {
   data() {
     return {
@@ -73,30 +129,67 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      options: []
+      orgType: "",
+      orgRemark: "",
+      usage: "",
+      ability: "",
+      typeId: "",
+      typeName: "",
+      cities: [],
+      options: [],
+      usageList: [],
+      assetsTypeList: [],
+      abilityList: [],
+      provinceList:[],
+      exitTypeList:[]
     };
   },
   created() {
     this.fetchData();
+    $.addInit().then(res => {
+      if (res.success) {
+        this.sourceList = res.data.source;
+        this.provinceList = res.data.province;
+        this.assetAttrList = res.data.attr;
+        this.bizTypeList = res.data.bizTypeList;
+        this.exitTypeList = res.data.exitTypeList;
+        this.usageList = res.data.usageList;
+        this.abilityList = res.data.abilityList;
+        this.assetsTypeList = res.data.assetsTypeList;
+      }
+    });
   },
   methods: {
-    // find() {
-    //   this.listLoading = true;
-    //   this.list = null;
-    //   $.findByNameTel({
-    //     partnerType: 1,
-    //     name: this.value,
-    //     telephone: "",
-    //     pageIndex: this.currentPage,
-    //     pageSize: this.pageSize
-    //   }).then(response => {
-    //     console.log(response.data);
-    //     this.list = response.data.list;
-    //     this.total = response.data.total;
-    //     this.listLoading = false;
-    //     console.log(response.data.list);
-    //   });
-    // },
+    find() {
+      this.listLoading = true;
+      this.list = null;
+      // console.log(this.overArea)
+      this.pushcities = [];
+      for (let i in this.cities) {
+        this.pushcities.push(this.cities[i][1]);
+      }
+      let params = qs.stringify({
+        partnerType: 3,
+        "cities[]": this.pushcities,
+        orgType: this.orgType,
+        orgRemark: this.orgRemark,
+        usage: this.usage,
+        ability: this.ability,
+        typeId: this.typeId,
+        typeName: this.typeName,
+        pageSize: this.pageSize,
+        pageIndex: this.currentPage
+      });
+      console.log(params);
+      $.findExitInfo(params).then(response => {
+        console.log(response.data);
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        console.log(response.data.list);
+      });
+    },
+
     fetchData() {
       this.listLoading = true;
       $.findByNameTel({
@@ -126,9 +219,7 @@ export default {
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
-    },
-
-
+    }
   }
 };
 </script>

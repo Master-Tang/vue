@@ -7,7 +7,7 @@ export default[
         name: 'Nested',
         meta: {
           title: '系统设置',
-          icon: 'nested'
+          icon: 'user'
         },
         children: [
             {
