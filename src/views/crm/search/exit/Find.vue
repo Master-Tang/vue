@@ -22,23 +22,10 @@
       </el-form-item>
       <el-form-item label="伙伴对应项目:">{{form.item}}</el-form-item>
       <el-form-item label="伙伴对应债权:">{{form.debt}}</el-form-item>
-      <el-form-item label="机构类型:">
+      <el-form-item label="退出类型:">
         <el-select v-model="form.orgType" placeholder style="width:100%" disabled>
           <el-option
-            v-for="item in orgTypeList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="其他机构:" v-if="form.orgType==='26'">
-        <el-input v-model="form.orgRemark" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="债权属性:">
-        <el-select v-model="form.assetInfo.belong" placeholder style="width:100%" disabled>
-          <el-option
-            v-for="item in assetAttrList"
+            v-for="item in exitTypeList"
             :key="item.dicValue"
             :label="item.dicKey"
             :value="item.dicValue"
@@ -46,26 +33,34 @@
         </el-select>
       </el-form-item>
 
-      <div id="aaa" v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
-        <el-form-item label="业务类型:">
-          <el-select v-model="item.typeId" placeholder="" style="width:100%" disabled>
+      <div id="aaa" v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
+        <el-form-item label="用途偏好:">
+          <el-select v-model="item.usage" placeholder style="width:100%" disabled>
             <el-option
-              v-for="item in bizTypeList"
+              v-for="item in usageList"
               :key="item.dicValue"
               :label="item.dicKey"
               :value="item.dicValue"
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="其他业务类型:" v-if="item.typeId==='09'">
-          <el-input v-model="item.typeName" disabled></el-input>
-        </el-form-item>
       </div>
 
-      <el-form-item label="覆盖区域:">
+      <el-form-item label="投资规模:">
+        <el-select v-model="form.exitInfo.ability" placeholder style="width:100%" disabled>
+          <el-option
+            v-for="item in abilityList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+
+      <el-form-item label="覆盖地区:">
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
+          placeholder
           v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
@@ -73,6 +68,23 @@
           disabled
         ></el-cascader>
       </el-form-item>
+
+      <div id="aaa" v-for="(item, index) in form.exitInfo.fancyList" :key="index">
+        <el-form-item label="资产类型:">
+          <el-select v-model="item.typeId" placeholder style="width:100%" disabled>
+            <el-option
+              v-for="item in assetsTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="资产类型其它:" v-if="item.typeId==='20'">
+          <el-input v-model="item.typeName" disabled></el-input>
+        </el-form-item>
+      </div>
+
       <el-form-item>
         <el-button @click="$router.push('index')">退出</el-button>
       </el-form-item>
@@ -87,25 +99,25 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 1,
+        partnerType: 3,
         name: "",
-        sex: "男",
+        sex: "",
         telephone: "",
         weixin: "",
         email: "",
         company: "",
         department: "",
         post: "",
+        orgType: "",
         source: "",
         item: "",
         debt: "",
         address: "",
         overArea: [],
-        orgType: "01",
-        orgRemark: "",
-        assetInfo: {
-          belong: "",
-          businessTypes: []
+        exitInfo: {
+          usage: [],
+          ability: "",
+          fancyList: []
         }
       },
       assetAttrList: [],
@@ -113,6 +125,10 @@ export default {
       sourceList: [],
       bizTypeList: [],
       orgTypeList: [],
+      exitTypeList: [],
+      usageList: [],
+      abilityList: [],
+      assetsTypeList: [],
       sexList: [
         { label: "男", value: "男" },
         { label: "女", value: "女" }
@@ -121,27 +137,38 @@ export default {
   },
   created() {
     $.findInit({ partnerId: this.$route.query.id }).then(res => {
-      //   console.log(res.data.partner);
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
+        this.exitTypeList = res.data.exitTypeList;
+        this.usageList = res.data.usageList;
+        this.abilityList = res.data.abilityList;
+        this.assetsTypeList = res.data.assetsTypeList;
         let partner = res.data.partner;
         this.form = partner;
       }
     });
   },
   methods: {
+    addItem1() {
+      this.form.exitInfo.usage.push({
+        usage: ""
+      });
+    },
+    deleteItem1(item, index) {
+      this.form.exitInfo.usage.splice(index, 1);
+    },
     addItem() {
-      this.form.assetInfo.businessTypes.push({
+      this.form.exitInfo.fancyList.push({
         typeId: "",
         typeName: ""
       });
     },
     deleteItem(item, index) {
-      this.form.assetInfo.businessTypes.splice(index, 1);
+      this.form.exitInfo.fancyList.splice(index, 1);
     },
     updateData() {
       if (!this.validate()) return;

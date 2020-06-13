@@ -1,15 +1,14 @@
 <template>
-  <div class="my-padding">
+  <div class="add">
     <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item label="伙伴姓名:">{{form.name}}</el-form-item>
       <el-form-item label="性别:">{{form.sex}}</el-form-item>
       <el-form-item label="手机号:">{{form.telephone}}</el-form-item>
       <el-form-item label="微信号:">{{form.weixin}}</el-form-item>
       <el-form-item label="电子邮件:">{{form.email}}</el-form-item>
-      <el-form-item label="单位名称:">{{form.company}}</el-form-item>
+      <el-form-item label="机构名称:">{{form.company}}</el-form-item>
       <el-form-item label="联系地址:">{{form.address}}</el-form-item>
-      <el-form-item label="工作部门:">{{form.department}}</el-form-item>
-      <el-form-item label="工作岗位:">{{form.post}}</el-form-item>
+      <el-form-item label="岗位职务:">{{form.post}}</el-form-item>
       <el-form-item label="伙伴来源:">
         <el-select v-model="form.source" placeholder style="width:100%" disabled>
           <el-option
@@ -22,8 +21,57 @@
       </el-form-item>
       <el-form-item label="伙伴对应项目:">{{form.item}}</el-form-item>
       <el-form-item label="伙伴对应债权:">{{form.debt}}</el-form-item>
-      <el-form-item label="机构类型:">
-        <el-select v-model="form.orgType" placeholder style="width:100%" disabled>
+      <el-form-item label="伙伴备注">{{form.partnerRemark}}</el-form-item>
+
+      <el-form-item label="管辖区域:">
+        <el-cascader
+          style="width:100%"
+          placeholder
+          v-model="form.overArea"
+          :options="provinceList"
+          :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+          filterable
+          disabled
+        ></el-cascader>
+      </el-form-item>
+
+      <div id="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
+        <el-form-item label="曾任机构名称:">{{item.resumeOrg}}</el-form-item>
+        <el-form-item label="曾任管辖区域:">
+          <el-cascader
+            style="width:100%"
+            placeholder
+            v-model="item.resumeOver"
+            :options="provinceList"
+            :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+            filterable
+            disabled
+          ></el-cascader>
+        </el-form-item>
+        <el-form-item label="曾任岗位职务:">{{item.resumePos}}</el-form-item>
+      </div>
+
+      <el-form-item label="关系人姓名:">
+        {{form.orgInfo.name}}
+      </el-form-item>
+      <el-form-item label="关系人联系方式:">
+        {{form.orgInfo.telephone}}
+      </el-form-item>
+      <el-form-item label="与其关系:">
+        <el-select v-model="form.orgInfo.relative" placeholder="" style="width:100%" disabled="">
+          <el-option
+            v-for="item in relativeList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item label="备注:">
+       {{form.orgInfo.relativeRemark}}
+      </el-form-item>
+      <el-form-item label="关系人机构类型">
+        <el-select v-model="form.orgInfo.orgType" placeholder="" style="width:100%" disabled="">
           <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
@@ -32,49 +80,30 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="其他机构:" v-if="form.orgType==='26'">
-        <el-input v-model="form.orgRemark" disabled></el-input>
+      <el-form-item label="其他机构:" v-if="form.orgInfo.orgType==='26'">
+        <el-input v-model="form.orgInfo.orgRemark" disabled=""></el-input>
       </el-form-item>
-      <el-form-item label="债权属性:">
-        <el-select v-model="form.assetInfo.belong" placeholder style="width:100%" disabled>
-          <el-option
-            v-for="item in assetAttrList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
+      <el-form-item label="所在机构名称:">
+        {{form.orgInfo.relativeOrg}}
       </el-form-item>
-
-      <div id="aaa" v-for="(item, index) in form.assetInfo.businessTypes" :key="index">
-        <el-form-item label="业务类型:">
-          <el-select v-model="item.typeId" placeholder="" style="width:100%" disabled>
-            <el-option
-              v-for="item in bizTypeList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="其他业务类型:" v-if="item.typeId==='09'">
-          <el-input v-model="item.typeName" disabled></el-input>
-        </el-form-item>
-      </div>
-
-      <el-form-item label="覆盖区域:">
+      <el-form-item label="关系人管辖区域:">
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
-          v-model="form.overArea"
+          placeholder=""
+          v-model="form.orgInfo.relativeOver"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
-          disabled
+          disabled=""
         ></el-cascader>
       </el-form-item>
+      <el-form-item label="关系人岗位职务:">
+        {{form.orgInfo.pos}}
+      </el-form-item>
+
       <el-form-item>
-        <el-button @click="$router.push('index')">退出</el-button>
+        <el-button type="primary" @click="updateData()">立即创建</el-button>
+        <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -87,9 +116,9 @@ export default {
   data() {
     return {
       form: {
-        partnerType: 1,
+        partnerType: 6,
         name: "",
-        sex: "男",
+        sex: "",
         telephone: "",
         weixin: "",
         email: "",
@@ -100,52 +129,55 @@ export default {
         item: "",
         debt: "",
         address: "",
+        partnerRemark: "",
+        assetAttr: "",
         overArea: [],
-        orgType: "01",
-        orgRemark: "",
-        assetInfo: {
-          belong: "",
-          businessTypes: []
+        orgInfo: {
+          name: "",
+          telephone: "",
+          relative: "",
+          relativeRemark: "",
+          orgType: "",
+          orgRemark: "",
+          relativeOrg: "",
+          relativeOver: [],
+          pos: "",
+          resumeList: []
         }
       },
-      assetAttrList: [],
-      provinceList: [],
       sourceList: [],
-      bizTypeList: [],
+      provinceList: [],
       orgTypeList: [],
-      sexList: [
-        { label: "男", value: "男" },
-        { label: "女", value: "女" }
-      ]
+      relativeList: []
     };
   },
   created() {
     $.findInit({ partnerId: this.$route.query.id }).then(res => {
-      //   console.log(res.data.partner);
       if (res.success) {
+        // console.log(res.data)
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
-        this.assetAttrList = res.data.attr;
-        this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
+        this.relativeList = res.data.relativeList;
         let partner = res.data.partner;
         this.form = partner;
+        // console.log(this.provinceList);
       }
     });
   },
   methods: {
     addItem() {
-      this.form.assetInfo.businessTypes.push({
-        typeId: "",
-        typeName: ""
+      this.form.orgInfo.resumeList.push({
+        resumeOrg: "",
+        resumePos: "",
+        resumeOver: []
       });
     },
     deleteItem(item, index) {
-      this.form.assetInfo.businessTypes.splice(index, 1);
+      this.form.orgInfo.resumeList.splice(index, 1);
     },
     updateData() {
       if (!this.validate()) return;
-      // console.log(this.form)
       $.update(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");

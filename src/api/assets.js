@@ -58,6 +58,16 @@ export default
                  }
             })
         },
+        findJusticeInfo(params){
+            return request({
+                url: '/user/select/findJusticeInfo',
+                method: 'post',
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+            })
+        },
         findByNameTel(params) {
             return request({
                 url: '/user/select/findByNameTel',

@@ -59,7 +59,7 @@
 
       <el-table-column label="查看信息" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">查看</el-button>
+          <el-button type="primary" size="small" @click="handleFind(scope.row.partnerId)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -125,10 +125,11 @@ export default {
         partnerType: 4,
         "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
         company: this.company,
-        post: this.post
+        post: this.post,
+        name:""
       });
       console.log(params);
-      $.findAssetInf(params).then(response => {
+      $.findJusticeInfo(params).then(response => {
         console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
@@ -166,7 +167,13 @@ export default {
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
-    }
+    },
+     handleFind(id) {
+      this.$router.push({
+        path: "find",
+        query: { id: id }
+      });
+    },
   }
 };
 </script>
