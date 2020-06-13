@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <el-collapse>
-        <el-collapse-item title="退出伙伴查询" name="1">
+      <el-collapse v-model="activeName" accordion>
+        <el-collapse-item title="同业伙伴查询" name="1">
           <el-form :inline="true">
             <el-form-item label="机构类型">
               <el-select v-model="orgType" placeholder="请选择" style="width:100%">
@@ -116,6 +116,7 @@ import qs from "querystring";
 export default {
   data() {
     return {
+      activeName: "1",
       value: "",
       state: 0,
       list: null,
@@ -186,7 +187,7 @@ export default {
 
     fetchData() {
       this.listLoading = true;
-      $.findByNameTel({
+      $.findByNameTelHide({
         partnerType: 5,
         pageIndex: this.currentPage,
         pageSize: this.pageSize

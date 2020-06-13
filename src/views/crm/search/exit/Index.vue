@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <el-collapse>
+      <el-collapse v-model="activeName" accordion >
         <el-collapse-item title="退出伙伴查询" name="1">
           <el-form :inline="true">
             <el-form-item label="退出类型">
@@ -121,6 +121,7 @@ import qs from "querystring"
 export default {
   data() {
     return {
+      activeName: '1',
       value: "",
       state: 0,
       list: null,
@@ -192,7 +193,7 @@ export default {
 
     fetchData() {
       this.listLoading = true;
-      $.findByNameTel({
+      $.findByNameTelHide({
         partnerType: 3,
         pageIndex: this.currentPage,
         pageSize: this.pageSize

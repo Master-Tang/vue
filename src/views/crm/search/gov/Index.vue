@@ -1,24 +1,40 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <el-form :inline="true">
-        <el-form-item>
-          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-row>
-            <el-col :span="24">
-              <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="find()">查找</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form-item>
-      
-      </el-form>
+      <el-collapse v-model="activeName" accordion>
+        <el-collapse-item title="政府伙伴查询" name="1">
+          <el-form :inline="true">
+            <el-form-item label="机构名称">
+              <el-input v-model="company"></el-input>
+            </el-form-item>
+            <el-form-item label="职务">
+              <el-input v-model="post"></el-input>
+            </el-form-item>
+            <el-form-item label="覆盖地区">
+              <el-cascader
+                style="width:100%"
+                placeholder="试试搜索：无锡"
+                v-model="cities"
+                :options="provinceList"
+                :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+                collapse-tags
+                filterable
+              ></el-cascader>
+            </el-form-item>
+            <el-form-item>
+              <el-row>
+                <el-col :span="24">
+                  <div class="grid-content bg-purple-dark">
+                    <el-button type="primary" @click="find()">查找</el-button>
+                  </div>
+                </el-col>
+              </el-row>
+            </el-form-item>
+          </el-form>
+        </el-collapse-item>
+      </el-collapse>
     </div>
 
-    
     <el-table
       id="myform"
       v-loading="listLoading"
@@ -61,10 +77,12 @@
 
 <script>
 import $ from "@/api/assets";
+import qs from "querystring";
 
 export default {
   data() {
     return {
+      activeName: "1",
       value: "",
       state: 0,
       list: null,
@@ -73,35 +91,43 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      options: []
+      company: "",
+      post: "",
+      cities: [],
+      options: [],
+      provinceList: [],
+      orgTypeList: [],
+      sourceList: [],
+      relativeList: []
     };
   },
   created() {
     this.fetchData();
+    $.addInit().then(res => {
+      if (res.success) {
+        this.sourceList = res.data.source;
+        this.provinceList = res.data.province;
+        this.orgTypeList = res.data.orgTypeList;
+        this.relativeList = res.data.relativeList;
+      }
+    });
   },
   methods: {
     find() {
       this.listLoading = true;
       this.list = null;
       // console.log(this.overArea)
-      this.pushcities=[]
-      for(let i in this.cities)
-      {
-        this.pushcities.push(this.cities[i][1])
-
+      this.pushcities = [];
+      for (let i in this.cities) {
+        this.pushcities.push(this.cities[i][1]);
       }
-      let params=qs.stringify({
-        partnerType: 1,
-        "cities[]":this.pushcities.length>0?this.pushcities:null,
-        orgType:this.orgType,
-        orgRemark:this.orgRemark,
-        typeId:this.typeId,
-        typeName:this.typeName,
-        belong:this.belong,
-        pageSize:this.pageSize,
-        pageIndex:this.currentPage
-        });
-        console.log(params)
+      let params = qs.stringify({
+        partnerType: 6,
+        "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
+        company: this.company,
+        post: this.post
+      });
+      console.log(params);
       $.findAssetInf(params).then(response => {
         console.log(response.data);
         this.list = response.data.list;
@@ -113,7 +139,7 @@ export default {
 
     fetchData() {
       this.listLoading = true;
-      $.findByNameTel({
+      $.findByNameTelHide({
         partnerType: 6,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
@@ -140,9 +166,7 @@ export default {
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
-    },
-
-    
+    }
   }
 };
 </script>

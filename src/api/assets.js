@@ -65,6 +65,13 @@ export default
                 params
             })
         }, 
+        findByNameTelHide(params) {
+            return request({
+                url: '/user/select/findByNameTelHide',
+                method: 'post',
+                params
+            })
+        }, 
         findAll(params) {
             return request({
                 url: '/user/partner/findByPartType',
@@ -106,6 +113,14 @@ export default
         {
             return request({
                 url: '/user/partner/editInit',
+                method: 'get',
+                params
+            })
+        },
+        findInit(params)
+        {
+            return request({
+                url: '/user/partner/findInit',
                 method: 'get',
                 params
             })

@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="button" align="center">
-      <el-collapse>
-        <el-collapse-item title="资产伙伴查询" name="1">
+      <el-collapse v-model="activeName" accordion >
+        <el-collapse-item title="资产伙伴查询" name="1" >
           <el-form :inline="true">
             <el-form-item label="机构类型">
               <el-select v-model="orgType" placeholder="请选择" style="width:100%">
@@ -89,7 +89,7 @@
 
       <el-table-column label="查看信息" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">查看</el-button>
+          <el-button type="primary" size="small" @click="handleFind(scope.row.partnerId)">查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -112,6 +112,7 @@ import qs from "querystring";
 export default {
   data() {
     return {
+      activeName: '1',
       value: "",
       state: 0,
       list: null,
@@ -180,7 +181,7 @@ export default {
 
     fetchData() {
       this.listLoading = true;
-      $.findByNameTel({
+      $.findByNameTelHide({
         partnerType: 1,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
@@ -207,7 +208,13 @@ export default {
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
-    }
+    },
+    handleFind(id) {
+      this.$router.push({
+        path: "find",
+        query: { id: id }
+      });
+    },
   }
 };
 </script>

@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <el-collapse>
+      <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="资金伙伴查询" name="1">
           <el-form :inline="true">
             <el-form-item label="机构类型">
@@ -152,6 +152,7 @@ import qs from "querystring";
 export default {
   data() {
     return {
+      activeName: "1",
       value: "",
       state: 0,
       list: null,
@@ -164,12 +165,12 @@ export default {
       cities: [],
       orgType: "",
       orgRemark: "",
-      currency: "01",
-      struct: "01",
-      scale: "01",
-      deadline: "01",
-      incomeType: "01",
-      typeId: "01",
+      currency: "",
+      struct: "",
+      scale: "",
+      deadline: "",
+      incomeType: "",
+      typeId: "",
       typeName: "",
       assetAttrList: [],
       provinceList: [],
@@ -217,7 +218,7 @@ export default {
       }
       let params = qs.stringify({
         partnerType: 2,
-        "cities[]": this.pushcities.length>0?this.pushcities:null,
+        "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
         orgType: this.orgType,
         orgRemark: this.orgRemark,
         currency: this.currency,
@@ -242,7 +243,7 @@ export default {
 
     fetchData() {
       this.listLoading = true;
-      $.findByNameTel({
+      $.findByNameTelHide({
         partnerType: 2,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
