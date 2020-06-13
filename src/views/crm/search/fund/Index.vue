@@ -217,7 +217,7 @@ export default {
       }
       let params = qs.stringify({
         partnerType: 2,
-        "cities[]": this.pushcities,
+        "cities[]": this.pushcities.length>0?this.pushcities:null,
         orgType: this.orgType,
         orgRemark: this.orgRemark,
         currency: this.currency,

@@ -124,13 +124,13 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      orgType:"",
-      orgRemark:"",
-      bizListId:"",
-      bizListName:"",
-      coopListId:"",
-      coopListName:"",
-      cities:[],
+      orgType: "",
+      orgRemark: "",
+      bizListId: "",
+      bizListName: "",
+      coopListId: "",
+      coopListName: "",
+      cities: [],
       options: [],
       assetAttrList: [],
       provinceList: [],
@@ -138,7 +138,7 @@ export default {
       bizTypeList: [],
       orgTypeList: [],
       peerTypeList: [],
-      peerBizList: [],
+      peerBizList: []
     };
   },
   created() {
@@ -166,14 +166,13 @@ export default {
       }
       let params = qs.stringify({
         partnerType: 5,
-        "cities[]": this.pushcities,
-        orgType:this.orgType,
-      orgRemark:this.orgRemark,
-      bizListId:this.bizListId,
-      bizListName:this.bizListName,
-      coopListId:this.coopListId,
-      coopListName:this.coopListName,
-        
+        "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
+        orgType: this.orgType,
+        orgRemark: this.orgRemark,
+        bizListId: this.bizListId,
+        bizListName: this.bizListName,
+        coopListId: this.coopListId,
+        coopListName: this.coopListName
       });
       console.log(params);
       $.findPeerInfo(params).then(response => {
