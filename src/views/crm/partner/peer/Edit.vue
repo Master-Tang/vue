@@ -9,6 +9,7 @@
         <el-input
           v-model="form.name"
           type="text"
+          placeholder="请输入中文名"
           onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
           onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
         ></el-input>
@@ -24,6 +25,7 @@
         </span>
         <el-input
           v-model="form.telephone"
+          placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
@@ -33,22 +35,22 @@
           微信号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.weixin"></el-input>
+        <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
-      <el-form-item label="电子邮件">
-        <el-input v-model="form.email"></el-input>
+      <el-form-item label="电子邮箱">
+        <el-input v-model="form.email"  placeholder="电子邮箱"></el-input>
       </el-form-item>
       <el-form-item label="单位名称">
-        <el-input v-model="form.company"></el-input>
+        <el-input v-model="form.company" placeholder="单位名称"></el-input>
       </el-form-item>
       <el-form-item label="联系地址">
-        <el-input v-model="form.address"></el-input>
+        <el-input v-model="form.address" placeholder="联系地址"></el-input>
       </el-form-item>
       <el-form-item label="工作部门">
-        <el-input v-model="form.department"></el-input>
+        <el-input v-model="form.department" placeholder="工作部门"></el-input>
       </el-form-item>
       <el-form-item label="工作岗位">
-        <el-input v-model="form.post"></el-input>
+        <el-input v-model="form.post" placeholder="工作岗位"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
         <el-select v-model="form.source" placeholder="请选择" style="width:100%">
@@ -61,10 +63,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
-        <el-input v-model="form.item"></el-input>
+        <el-input v-model="form.item" placeholder="伙伴对应项目"></el-input>
       </el-form-item>
       <el-form-item label="伙伴对应债权">
-        <el-input v-model="form.debt"></el-input>
+        <el-input v-model="form.debt" placeholder="伙伴对应债权"></el-input>
       </el-form-item>
 
       <el-form-item label="机构类型">
@@ -78,7 +80,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="其他机构" v-if="form.orgType==='26'">
-        <el-input v-model="form.orgRemark"></el-input>
+        <el-input v-model="form.orgRemark" placeholder="其他机构"></el-input>
       </el-form-item>
 
       <div id="aaa" v-for="(item, index) in form.peerInfo.bizList" :key="'travel'+index">
@@ -93,7 +95,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="其他业务类型" v-if="item.typeId==='11'">
-          <el-input v-model="item.typeName"></el-input>
+          <el-input v-model="item.typeName" placeholder="其他业务类型"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem1(item, index)">删除</el-button>
@@ -115,7 +117,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="其他合作方式" v-if="item.typeId==='13'">
-          <el-input v-model="item.typeName"></el-input>
+          <el-input v-model="item.typeName" placeholder="其他合作方式"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
@@ -132,13 +134,14 @@
         </span>
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
+          placeholder="试试搜索:江苏"
           v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
+      
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
@@ -240,6 +243,10 @@ export default {
         error = "微信不能为空\n";
       } else if (this.form.overArea.length==0){
         error = "请选择区域\n";
+      }else if (
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      ) {
+        error = "邮箱不正确\n";
       }
 
       if (error) {

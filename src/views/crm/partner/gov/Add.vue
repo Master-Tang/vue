@@ -9,6 +9,7 @@
         <el-input
           v-model="form.name"
           type="text"
+          placeholder="请输入中文名"
           onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
           onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
         ></el-input>
@@ -24,6 +25,7 @@
         </span>
         <el-input
           v-model="form.telephone"
+          placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
@@ -33,19 +35,19 @@
           微信号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.weixin"></el-input>
+        <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
-      <el-form-item label="电子邮件">
-        <el-input v-model="form.email"></el-input>
+      <el-form-item label="电子邮箱">
+        <el-input v-model="form.email" placeholder="电子邮箱"></el-input>
       </el-form-item>
       <el-form-item label="机构名称">
-        <el-input v-model="form.company"></el-input>
+        <el-input v-model="form.company" placeholder="机构名称"></el-input>
       </el-form-item>
       <el-form-item label="联系地址">
-        <el-input v-model="form.address"></el-input>
+        <el-input v-model="form.address" placeholder="联系地址"></el-input>
       </el-form-item>
       <el-form-item label="岗位职务">
-        <el-input v-model="form.post"></el-input>
+        <el-input v-model="form.post" placeholder="岗位职务"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
         <el-select v-model="form.source" placeholder="请选择" style="width:100%">
@@ -58,13 +60,13 @@
         </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
-        <el-input v-model="form.item"></el-input>
+        <el-input v-model="form.item" placeholder="伙伴对应项目"></el-input>
       </el-form-item>
       <el-form-item label="伙伴对应债权">
-        <el-input v-model="form.debt"></el-input>
+        <el-input v-model="form.debt" placeholder="伙伴对应债权"></el-input>
       </el-form-item>
       <el-form-item label="伙伴备注">
-        <el-input v-model="form.partnerRemark"></el-input>
+        <el-input v-model="form.partnerRemark" placeholder="伙伴备注"></el-input>
       </el-form-item>
 
       <el-form-item label="管辖区域">
@@ -74,7 +76,7 @@
         </span>
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
+          placeholder="试试搜索:江苏"
           v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
@@ -84,7 +86,7 @@
 
       <div id="aaa" v-for="(item, index) in form.orgInfo.resumeList" :key="index">
         <el-form-item label="机构名称">
-          <el-input v-model="item.resumeOrg"></el-input>
+          <el-input v-model="item.resumeOrg" placeholder="机构名称"></el-input>
         </el-form-item>
         <el-form-item label="管辖区域">
           <span slot="label">
@@ -93,7 +95,7 @@
         </span>
           <el-cascader
             style="width:100%"
-            placeholder="试试搜索：无锡"
+            placeholder="试试搜索:江苏"
             v-model="item.resumeOver"
             :options="provinceList"
             :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
@@ -101,7 +103,7 @@
           ></el-cascader>
         </el-form-item>
         <el-form-item label="岗位职务">
-          <el-input v-model="item.resumePos"></el-input>
+          <el-input v-model="item.resumePos" placeholder="岗位职务"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
@@ -112,10 +114,15 @@
       </el-form-item>
 
       <el-form-item label="关系人姓名">
-        <el-input v-model="form.orgInfo.name"></el-input>
+        <el-input v-model="form.orgInfo.name" placeholder="请输入中文名"></el-input>
       </el-form-item>
       <el-form-item label="关系人联系方式">
-        <el-input v-model="form.orgInfo.telephone"></el-input>
+        <el-input 
+        v-model="form.orgInfo.telephone" 
+        placeholder="请输入11位数字"
+        onkeyup="value=value.replace(/\D/g,'')"
+          onchange="value=value.replace(/\D/g,'')"
+        ></el-input>
       </el-form-item>
       <el-form-item label="与其关系">
         <el-select v-model="form.orgInfo.relative" placeholder="请选择" style="width:100%">
@@ -127,10 +134,10 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="备注">
-        <el-input v-model="form.orgInfo.relativeRemark"></el-input>
+      <el-form-item label="关系备注">
+        <el-input v-model="form.orgInfo.relativeRemark" placeholder="关系备注"></el-input>
       </el-form-item>
-      <el-form-item label="机构类型">
+      <el-form-item label="关系人机构类型">
         <el-select v-model="form.orgInfo.orgType" placeholder="请选择" style="width:100%">
           <el-option
             v-for="item in orgTypeList"
@@ -141,23 +148,23 @@
         </el-select>
       </el-form-item>
       <el-form-item label="其他机构" v-if="form.orgInfo.orgType==='26'">
-        <el-input v-model="form.orgInfo.orgRemark"></el-input>
+        <el-input v-model="form.orgInfo.orgRemark" placeholder="其他机构"></el-input>
       </el-form-item>
-      <el-form-item label="所在机构名称">
-        <el-input v-model="form.orgInfo.relativeOrg"></el-input>
+      <el-form-item label="关系人所在机构名称">
+        <el-input v-model="form.orgInfo.relativeOrg" placeholder="关系人所在机构名称"></el-input>
       </el-form-item>
-      <el-form-item label="管辖区域">
+      <el-form-item label="关系人管辖区域">
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
+          placeholder="试试搜索:江苏"
           v-model="form.orgInfo.relativeOver"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="岗位职务">
-        <el-input v-model="form.orgInfo.pos"></el-input>
+      <el-form-item label="关系人岗位职务">
+        <el-input v-model="form.orgInfo.pos" placeholder="关系人岗位职务"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -178,8 +185,8 @@ export default {
         partnerType: 6,
         name: "政府伙伴",
         sex: "男",
-        telephone: "22222222222",
-        weixin: "wechat",
+        telephone: "",
+        weixin: "",
         email: "XXX@333.com",
         company: "XXX局",
         department: "",
@@ -259,6 +266,10 @@ export default {
         error = "微信不能为空\n";
       } else if (this.form.overArea.length==0){
         error = "请选择区域\n";
+      }else if (
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      ) {
+        error = "邮箱不正确\n";
       }
 
       if (error) {

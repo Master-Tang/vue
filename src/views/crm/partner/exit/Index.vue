@@ -35,10 +35,10 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" width="80" >
+      <el-table-column label="伙伴姓名"  align="center" >
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center" width="50">
+      <el-table-column label="性别" align="center" >
         <template slot-scope="scope">
           <span>{{ scope.row.sex }}</span>
         </template>
@@ -99,11 +99,11 @@ export default {
       this.list=null
       $.findByBlurry({ partnerType: 3, value:this.value,pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
-          console.log(response.data)
+          // console.log(response.data)
             this.list = response.data.list;
             this.total = response.data.total;
             this.listLoading = false;
-           console.log(response.data.list)
+          //  console.log(response.data.list)
         }
       );
     },
@@ -114,11 +114,11 @@ export default {
       this.listLoading = true;
       $.findAll({ partnerType: 3, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
-          console.log(response.data)
+          // console.log(response.data)
             this.list = response.data.list;
             this.total = response.data.total;
             this.listLoading = false;
-           console.log(response.data.list)
+          //  console.log(response.data.list)
         }
       );
     },

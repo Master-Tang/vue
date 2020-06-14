@@ -9,6 +9,7 @@
         <el-input
           v-model="form.name"
           type="text"
+          placeholder="请输入中文名"
           onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
           onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
         ></el-input>
@@ -24,6 +25,7 @@
         </span>
         <el-input
           v-model="form.telephone"
+          placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
@@ -33,22 +35,22 @@
           微信号
           <span class="red">*</span>
         </span>
-        <el-input v-model="form.weixin"></el-input>
+        <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
-      <el-form-item label="电子邮件">
-        <el-input v-model="form.email"></el-input>
+      <el-form-item label="电子邮箱">
+        <el-input v-model="form.email" placeholder="电子邮箱"></el-input>
       </el-form-item>
       <el-form-item label="单位名称">
-        <el-input v-model="form.company"></el-input>
+        <el-input v-model="form.company" placeholder="单位名称"></el-input>
       </el-form-item>
       <el-form-item label="联系地址">
-        <el-input v-model="form.address"></el-input>
+        <el-input v-model="form.address" placeholder="联系地址"></el-input>
       </el-form-item>
       <el-form-item label="工作部门">
-        <el-input v-model="form.department"></el-input>
+        <el-input v-model="form.department" placeholder="工作部门"></el-input>
       </el-form-item>
       <el-form-item label="工作岗位">
-        <el-input v-model="form.post"></el-input>
+        <el-input v-model="form.post" placeholder="工作岗位"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
         <el-select v-model="form.source" placeholder="请选择" style="width:100%">
@@ -61,10 +63,10 @@
         </el-select>
       </el-form-item>
       <el-form-item label="伙伴对应项目">
-        <el-input v-model="form.item"></el-input>
+        <el-input v-model="form.item" placeholder="伙伴对应项目"></el-input>
       </el-form-item>
       <el-form-item label="伙伴对应债权">
-        <el-input v-model="form.debt"></el-input>
+        <el-input v-model="form.debt" placeholder="伙伴对应债权"></el-input>
       </el-form-item>
       <el-form-item label="机构类型">
         <el-select v-model="form.orgType" placeholder="请选择" style="width:100%">
@@ -77,7 +79,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="其他机构" v-if="form.orgType==='26'">
-        <el-input v-model="form.orgRemark"></el-input>
+        <el-input v-model="form.orgRemark" placeholder="其他机构"></el-input>
       </el-form-item>
 
       <div id="aaa" v-for="(item, index) in form.fundInfo.structList" :key="'travel'+index">
@@ -105,16 +107,26 @@
         <el-form-item label="投资比例" width="80px">
           <el-row>
             <el-col :span="4">
-              <el-input v-model="item.min"></el-input>
+              <el-input
+                v-model="item.min"
+                placeholder="请输入数字"
+                onkeyup="value=value.replace(/\D/g,'')"
+                onchange="value=value.replace(/\D/g,'')"
+              ></el-input>
             </el-col>
             <el-col :span="1">
               <div>{{" % ~ "}}</div>
             </el-col>
             <el-col :span="4">
-              <el-input v-model="item.max"></el-input>
+              <el-input
+                v-model="item.max"
+                placeholder="请输入数字"
+                onkeyup="value=value.replace(/\D/g,'')"
+                onchange="value=value.replace(/\D/g,'')"
+              ></el-input>
             </el-col>
             <el-col :span="1">
-              <div>{{" %  "}}</div>
+              <div>{{" % "}}</div>
             </el-col>
           </el-row>
         </el-form-item>
@@ -150,7 +162,19 @@
           </el-select>
         </el-form-item>
         <el-form-item label="收益率">
-          <el-input v-model="item.incomeRate"></el-input>
+          <el-row>
+            <el-col :span="4">
+              <el-input
+                v-model="item.incomeRate"
+                placeholder="请输入数字"
+                onkeyup="value=value.replace(/\D/g,'')"
+                onchange="value=value.replace(/\D/g,'')"
+              ></el-input>
+            </el-col>
+            <el-col :span="1">
+              <div>{{" % "}}</div>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem1(item, index)">删除</el-button>
@@ -167,7 +191,7 @@
         </span>
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
+          placeholder="试试搜索:江苏"
           v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
@@ -186,8 +210,8 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="资产类型其它" v-if="item.typeId==='20'">
-          <el-input v-model="item.typeName"></el-input>
+        <el-form-item label="其他资产类型" v-if="item.typeId==='20'">
+          <el-input v-model="item.typeName" placeholder="其他资产类型"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type @click="deleteItem(item, index)">删除</el-button>
@@ -198,7 +222,7 @@
       </el-form-item>
 
       <el-form-item label="其他要求">
-        <el-input v-model="form.fundInfo.otherMark"></el-input>
+        <el-input v-model="form.fundInfo.otherMark" placeholder="其他要求"></el-input>
       </el-form-item>
 
       <el-form-item>
@@ -217,10 +241,10 @@ export default {
     return {
       form: {
         partnerType: 2,
-        name: "资金伙伴伙伴",
+        name: "资金伙伴",
         sex: "男",
-        telephone: "11111111111",
-        weixin: "wechat",
+        telephone: "",
+        weixin: "",
         email: "email@111.com",
         company: "XXX公司",
         department: "XX部门",
@@ -302,7 +326,7 @@ export default {
       this.form.fundInfo.fancyList.splice(index, 1);
     },
     addData() {
-      console.log(this.form);
+      // console.log(this.form);
       if (!this.validate()) return;
       $.add(this.form).then(response => {
         if (response.success) {
@@ -328,6 +352,10 @@ export default {
         error = "微信不能为空\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
+      } else if (
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      ) {
+        error = "邮箱不正确\n";
       }
 
       if (error) {

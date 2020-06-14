@@ -105,11 +105,11 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(response.data.list);
+        // console.log(response.data.list);
       });
     },
     fetchData() {
@@ -119,11 +119,11 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(response.data.list);
+        // console.log(response.data.list);
       });
     },
     handleSizeChange(val) {
@@ -156,7 +156,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          console.log(id);
+          // console.log(id);
           $.remove({ partnerId: id }).then(response => {
             this.$message({
               type: "success",
