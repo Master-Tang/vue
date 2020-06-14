@@ -28,6 +28,16 @@ export default
                  }
             })
         },
+        findOrgInfo(params){
+            return request({
+                url: '/user/select/findOrgInfo',
+                method: 'post',
+                data:params,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                 }
+            })
+        },
         findPeerInfo(params){
             return request({
                 url: '/user/select/findPeerInfo',

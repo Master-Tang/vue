@@ -128,7 +128,7 @@ export default {
         post: this.post
       });
       console.log(params);
-      $.findAssetInf(params).then(response => {
+      $.findOrgInfo(params).then(response => {
         console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;

@@ -126,7 +126,6 @@ export default {
         "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
         company: this.company,
         post: this.post,
-        name:""
       });
       console.log(params);
       $.findJusticeInfo(params).then(response => {
