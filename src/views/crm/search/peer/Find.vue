@@ -24,7 +24,7 @@
       <el-form-item label="伙伴对应债权:">{{form.debt}}</el-form-item>
 
       <el-form-item label="机构类型:">
-        <el-select v-model="form.orgType" placeholder="" style="width:100%" disabled="">
+        <el-select v-model="form.orgType" placeholder style="width:100%" disabled>
           <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
@@ -34,12 +34,12 @@
         </el-select>
       </el-form-item>
       <el-form-item label="其他机构:" v-if="form.orgType==='26'">
-        <el-input v-model="form.orgRemark" disabled=""></el-input>
+        <el-input v-model="form.orgRemark" disabled></el-input>
       </el-form-item>
 
       <div id="aaa" v-for="(item, index) in form.peerInfo.bizList" :key="'travel'+index">
         <el-form-item label="同业业务类型:">
-          <el-select v-model="item.typeId" placeholder="" style="width:100%" disabled="">
+          <el-select v-model="item.typeId" placeholder style="width:100%" disabled>
             <el-option
               v-for="item in peerTypeList"
               :key="item.dicValue"
@@ -49,13 +49,13 @@
           </el-select>
         </el-form-item>
         <el-form-item label="其他业务类型:" v-if="item.typeId==='11'">
-          <el-input v-model="item.typeName" disabled=""></el-input>
+          <el-input v-model="item.typeName" disabled></el-input>
         </el-form-item>
       </div>
 
       <div id="aaa" v-for="(item, index) in form.peerInfo.coopList" :key="index">
         <el-form-item label="同业合作方式:">
-          <el-select v-model="item.typeId" placeholder="" style="width:100%" disabled="">
+          <el-select v-model="item.typeId" placeholder style="width:100%" disabled>
             <el-option
               v-for="item in peerBizList"
               :key="item.dicValue"
@@ -65,32 +65,22 @@
           </el-select>
         </el-form-item>
         <el-form-item label="其他合作方式:" v-if="item.typeId==='13'">
-          <el-input v-model="item.typeName"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <el-button type @click="deleteItem(item, index)">删除</el-button>
+          <el-input v-model="item.typeName" disabled></el-input>
         </el-form-item>
       </div>
-      <el-form-item label="同业合作方式">
-        <el-button @click="addItem()" type>同业合作方式</el-button>
-      </el-form-item>
 
-      <el-form-item label="覆盖地区">
-        <span slot="label">
-          覆盖地区
-          <span class="red">*</span>
-        </span>
+      <el-form-item label="覆盖地区:">
         <el-cascader
           style="width:100%"
-          placeholder="试试搜索：无锡"
+          placeholder
           v-model="form.overArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
+          disabled
         ></el-cascader>
       </el-form-item>
       <el-form-item>
-        <el-button type="primary" @click="updateData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
@@ -117,10 +107,10 @@ export default {
         item: "",
         debt: "",
         address: "",
-        orgType:"",
-        orgRemark:"",
+        orgType: "",
+        orgRemark: "",
         overArea: [],
-         peerInfo: {
+        peerInfo: {
           bizList: [],
           coopList: []
         }
@@ -139,7 +129,7 @@ export default {
     };
   },
   created() {
-   $.editInit({partnerId:this.$route.query.id}).then(res => {
+    $.findInit({ partnerId: this.$route.query.id }).then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
@@ -148,8 +138,8 @@ export default {
         this.orgTypeList = res.data.orgTypeList;
         this.peerTypeList = res.data.peerTypeList;
         this.peerBizList = res.data.peerBizList;
-        let partner= res.data.partner;
-        this.form=partner
+        let partner = res.data.partner;
+        this.form = partner;
       }
     });
   },
@@ -172,8 +162,8 @@ export default {
     deleteItem(item, index) {
       this.form.peerInfo.coopList.splice(index, 1);
     },
-     updateData() {
-       if (!this.validate()) return;
+    updateData() {
+      if (!this.validate()) return;
       $.update(this.form).then(response => {
         if (response.success) {
           this.$router.replace("index");
@@ -188,7 +178,7 @@ export default {
         error = "手机号码不正确\n";
       } else if (this.form.weixin.length == 0) {
         error = "微信不能为空\n";
-      } else if (this.form.overArea.length==0){
+      } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
       }
 

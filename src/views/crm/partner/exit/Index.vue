@@ -43,18 +43,18 @@
           <span>{{ scope.row.sex }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center" width="120">
+      <el-table-column label="手机号" align="center">
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
     
-      <el-table-column label="单位名称">
+      <el-table-column label="单位名称" align="center">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
-      <el-table-column label="岗位" width="160">
+      <el-table-column label="岗位" align="center">
         <template slot-scope="scope">{{ scope.row.post }}</template>
       </el-table-column>
     
-      <el-table-column label="操作"  align="center" width="270">
+      <el-table-column label="操作"  align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>

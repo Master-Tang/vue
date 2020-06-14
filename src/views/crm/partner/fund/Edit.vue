@@ -101,9 +101,21 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="投资比例">
-          <el-input v-model="item.min"></el-input>
-          <el-input v-model="item.max"></el-input>
+        <el-form-item label="投资比例" width="80px">
+          <el-row>
+            <el-col :span="4">
+              <el-input v-model="item.min"></el-input>
+            </el-col>
+            <el-col :span="1">
+              <div>{{" % ~ "}}</div>
+            </el-col>
+            <el-col :span="4">
+              <el-input v-model="item.max"></el-input>
+            </el-col>
+            <el-col :span="1">
+              <div>{{" %  "}}</div>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="投资规模">
           <el-select v-model="item.scale" placeholder="请选择" style="width:100%">

@@ -101,10 +101,24 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="投资比例">
-          <el-input v-model="item.min"></el-input>
-          <el-input v-model="item.max"></el-input>
+
+        <el-form-item label="投资比例" width="80px">
+          <el-row>
+            <el-col :span="4">
+              <el-input v-model="item.min"></el-input>
+            </el-col>
+            <el-col :span="1">
+              <div>{{" % ~ "}}</div>
+            </el-col>
+            <el-col :span="4">
+              <el-input v-model="item.max"></el-input>
+            </el-col>
+            <el-col :span="1">
+              <div>{{" %  "}}</div>
+            </el-col>
+          </el-row>
         </el-form-item>
+
         <el-form-item label="投资规模">
           <el-select v-model="item.scale" placeholder="请选择" style="width:100%">
             <el-option
@@ -203,7 +217,7 @@ export default {
     return {
       form: {
         partnerType: 2,
-       name: "资金伙伴伙伴",
+        name: "资金伙伴伙伴",
         sex: "男",
         telephone: "11111111111",
         weixin: "wechat",
@@ -212,7 +226,7 @@ export default {
         department: "XX部门",
         post: "XX岗位",
         orgType: "01",
-        orgRemark:"",
+        orgRemark: "",
         source: "01",
         item: "XX项目",
         debt: "债权",
@@ -271,7 +285,7 @@ export default {
         max: "",
         scale: "01",
         deadline: "01",
-        incomeType: "0",
+        incomeType: "",
         incomeRate: ""
       });
     },
@@ -291,7 +305,7 @@ export default {
       console.log(this.form);
       if (!this.validate()) return;
       $.add(this.form).then(response => {
-       if (response.success) {
+        if (response.success) {
           //console.log(response.data);
           if (response.data === 0) {
             this.$message({
@@ -312,7 +326,7 @@ export default {
         error = "手机号码不正确\n";
       } else if (this.form.weixin.length == 0) {
         error = "微信不能为空\n";
-      } else if (this.form.overArea.length==0){
+      } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
       }
 
