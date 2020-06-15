@@ -24,6 +24,7 @@
           <span class="red">*</span>
         </span>
         <el-input
+        @change="selectNum()"
           v-model="form.telephone"
           placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
@@ -104,7 +105,7 @@
           </el-select>
         </el-form-item>
 
-        <el-form-item label="投资比例" width="80px">
+        <el-form-item label="投资比例">
           <el-row>
             <el-col :span="4">
               <el-input
@@ -301,6 +302,21 @@ export default {
     });
   },
   methods: {
+    selectNum(){
+      $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
+        if(res.success){
+          console.log(res.data)
+          this.form.name=res.data.name
+          this.form.sex=res.data.sex
+          this.form.weixin=res.data.weixin
+          this.form.email=res.data.email
+          this.form.company=res.data.company
+          this.form.department=res.data.department
+          this.form.post=res.data.post
+          this.form.orgType=res.data.orgType
+        }
+      });
+    },
     addItem1() {
       this.form.fundInfo.structList.push({
         currency: "01",

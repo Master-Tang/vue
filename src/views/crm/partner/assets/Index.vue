@@ -18,7 +18,7 @@
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="$router.push('add')">添加</el-button>
+                <el-button type="primary" @click="handleAdd(createUserId)">添加</el-button>
               </div>
             </el-col>
           </el-row>
@@ -81,6 +81,7 @@ import $ from "@/api/assets";
 export default {
   data() {
     return {
+      createUserId:"",
       value: "",
       state: 0,
       list: null,
@@ -122,8 +123,10 @@ export default {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
+        this.createUserId=response.data.list[0].createUserId;
         this.listLoading = false;
-        // console.log(response.data.list);
+        // console.log(response.data.list[0].createUserId)
+        console.log(response.data.list);
       });
     },
     handleSizeChange(val) {
@@ -142,7 +145,12 @@ export default {
         this.find();
       } else this.fetchData();
     },
-
+    handleAdd(id){
+        this.$router.push({
+        path: "add",
+        query: { id: id }
+      });
+  },
     handleEdit(id) {
       this.$router.push({
         path: "edit",

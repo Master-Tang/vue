@@ -92,7 +92,7 @@
           placeholder=""
           v-model="form.orgInfo.relativeOver"
           :options="provinceList"
-          :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+          :props="{ multiple: true }"
           filterable
           disabled=""
         ></el-cascader>

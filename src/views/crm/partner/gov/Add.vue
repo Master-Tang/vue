@@ -24,6 +24,7 @@
           <span class="red">*</span>
         </span>
         <el-input
+        @change="selectNum()"
           v-model="form.telephone"
           placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
@@ -114,7 +115,12 @@
       </el-form-item>
 
       <el-form-item label="关系人姓名">
-        <el-input v-model="form.orgInfo.name" placeholder="请输入中文名"></el-input>
+        <el-input
+         v-model="form.orgInfo.name"
+         placeholder="请输入中文名"
+         onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+         ></el-input>
       </el-form-item>
       <el-form-item label="关系人联系方式">
         <el-input 
@@ -219,7 +225,7 @@ export default {
     };
   },
   created() {
-    $.addInit().then(res => {
+    $.addInit1().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
@@ -229,6 +235,21 @@ export default {
     });
   },
   methods: {
+    selectNum(){
+      $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
+        if(res.data.name==null){
+          // console.log(res.data)
+          this.form.name=res.data.name
+          this.form.sex=res.data.sex
+          this.form.weixin=res.data.weixin
+          this.form.email=res.data.email
+          this.form.company=res.data.company
+          this.form.department=res.data.department
+          this.form.post=res.data.post
+          this.form.orgType=res.data.orgType
+        }
+      });
+    },
     addItem() {
       this.form.orgInfo.resumeList.push({
         resumeOrg: "",
@@ -240,7 +261,7 @@ export default {
       this.form.orgInfo.resumeList.splice(index, 1);
     },
     addData() {
-      // console.log(this.orgResumeList);
+      console.log(this.form.orgInfo.relativeOver);
       if (!this.validate()) return;
       $.add(this.form).then(response => {
          if (response.success) {

@@ -24,6 +24,7 @@
           <span class="red">*</span>
         </span>
         <el-input
+        @change="selectNum()"
           v-model="form.telephone"
           placeholder="请输入11位手机号"
           onkeyup="value=value.replace(/\D/g,'')"
@@ -263,6 +264,21 @@ export default {
     });
   },
   methods: {
+    selectNum(){
+      $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
+        if(res.success){
+          console.log(res.data)
+          this.form.name=res.data.name
+          this.form.sex=res.data.sex
+          this.form.weixin=res.data.weixin
+          this.form.email=res.data.email
+          this.form.company=res.data.company
+          this.form.department=res.data.department
+          this.form.post=res.data.post
+          this.form.orgType=res.data.orgType
+        }
+      });
+    },
     addItem() {
       this.form.justiceInfo.resumeList.push({
         resumeType: "01",

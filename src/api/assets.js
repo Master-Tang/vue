@@ -85,6 +85,13 @@ export default
                 params
             })
         }, 
+        matchNumber(params) {
+            return request({
+                url: '/user/select/matchNumber',
+                method: 'post',
+                params
+            })
+        },
         findByNameTelHide(params) {
             return request({
                 url: '/user/select/findByNameTelHide',
@@ -141,6 +148,29 @@ export default
         {
             return request({
                 url: '/user/partner/findInit',
+                method: 'get',
+                params
+            })
+        },
+        addInit1()
+        {
+            return request({
+                url: '/user/partner/addInit1',
+                method: 'get',
+            })
+        },
+        editInit1(params)
+        {
+            return request({
+                url: '/user/partner/editInit1',
+                method: 'get',
+                params
+            })
+        },
+        findInit1(params)
+        {
+            return request({
+                url: '/user/partner/findInit1',
                 method: 'get',
                 params
             })
