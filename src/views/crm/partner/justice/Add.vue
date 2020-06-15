@@ -251,7 +251,7 @@ export default {
     };
   },
   created() {
-    $.addInit().then(res => {
+    $.addInit1().then(res => {
       if (res.success) {
         // console.log(res.data)
         this.sourceList = res.data.source;

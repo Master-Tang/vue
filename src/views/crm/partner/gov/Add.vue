@@ -163,7 +163,7 @@
         <el-cascader
           style="width:100%"
           placeholder="试试搜索:江苏"
-          v-model="form.orgInfo.relativeOver"
+          v-model="form.orgInfo.relativeArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
@@ -212,7 +212,7 @@ export default {
           orgType: "",
           orgRemark: "",
           relativeOrg: "",
-          relativeOver: [],
+          relativeArea: [],
           pos: "",
           resumeList: []
         }

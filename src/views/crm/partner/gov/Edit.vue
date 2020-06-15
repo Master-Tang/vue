@@ -157,7 +157,7 @@
         <el-cascader
           style="width:100%"
           placeholder="试试搜索:江苏"
-          v-model="form.orgInfo.relativeOver"
+          v-model="form.orgInfo.relativeArea"
           :options="provinceList"
           :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
           filterable
@@ -168,7 +168,7 @@
       </el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="updateData()">立即创建</el-button>
+        <el-button type="primary" @click="updateData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
       </el-form-item>
     </el-form>
@@ -206,7 +206,7 @@ export default {
           orgType: "",
           orgRemark: "",
           relativeOrg: "",
-          relativeOver: [],
+          relativeArea: [],
           pos: "",
           resumeList: []
         }

@@ -152,7 +152,7 @@ export default {
     };
   },
   created() {
-    $.findInit({ partnerId: this.$route.query.id }).then(res => {
+    $.findInit1({ partnerId: this.$route.query.id }).then(res => {
       if (res.success) {
         // console.log(res.data)
         this.sourceList = res.data.source;

@@ -103,7 +103,7 @@ export default {
   },
   created() {
     this.fetchData();
-    $.addInit().then(res => {
+    $.addInit1().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;

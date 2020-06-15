@@ -250,7 +250,7 @@ export default {
     };
   },
   created() {
-    $.editInit({ partnerId: this.$route.query.id }).then(res => {
+    $.editInit1({ partnerId: this.$route.query.id }).then(res => {
       if (res.success) {
         // console.log(res.data)
         this.sourceList = res.data.source;
