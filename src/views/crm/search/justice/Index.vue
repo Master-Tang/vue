@@ -125,7 +125,7 @@ export default {
         partnerType: 4,
         "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
         company: this.company,
-        post: this.post,
+        post: this.post
       });
       console.log(params);
       $.findJusticeInfo(params).then(response => {
@@ -147,6 +147,7 @@ export default {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
+        console.log(this.total)
         this.listLoading = false;
         // console.log(response.data.list);
       });
@@ -162,17 +163,17 @@ export default {
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      //console.log(val)
-      // if (this.state == 1) {
-      //   this.find();
-      // } else this.fetchData();
+      console.log(val)
+      if (this.state == 1) {
+        this.find();
+      } else this.fetchData();
     },
-     handleFind(id) {
+    handleFind(id) {
       this.$router.push({
         path: "find",
         query: { id: id }
       });
-    },
+    }
   }
 };
 </script>

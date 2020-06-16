@@ -13,9 +13,10 @@ export default[
             meta: { title: '资产伙伴', icon: 'table' }
           },
           {
-            path: 'assets/find',
-            component: () => import('@/views/crm/admincheck/assets/Find'),
-            
+            path: 'assets/edit',
+            component: () => import('@/views/crm/admincheck/assets/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'fund/index',
@@ -23,9 +24,10 @@ export default[
             meta: { title: '资金伙伴', icon: 'table' }
           },
           {
-            path: 'fund/find',
-            component: () => import('@/views/crm/admincheck/fund/Find'),
-            
+            path: 'fund/edit',
+            component: () => import('@/views/crm/admincheck/fund/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'exit/index',
@@ -33,9 +35,10 @@ export default[
             meta: { title: '退出伙伴', icon: 'table' }
           },
           {
-            path: 'exit/find',
-            component: () => import('@/views/crm/admincheck/exit/Find'),
-            
+            path: 'exit/edit',
+            component: () => import('@/views/crm/admincheck/exit/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'justice/index',
@@ -43,9 +46,10 @@ export default[
             meta: { title: '司法伙伴', icon: 'table' }
           },
           {
-            path: 'justice/find',
-            component: () => import('@/views/crm/admincheck/justice/Find'),
-            
+            path: 'justice/edit',
+            component: () => import('@/views/crm/admincheck/justice/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'peer/index',
@@ -53,9 +57,10 @@ export default[
             meta: { title: '同业伙伴', icon: 'table' }
           },
           {
-            path: 'peer/find',
-            component: () => import('@/views/crm/admincheck/peer/Find'),
-            
+            path: 'peer/edit',
+            component: () => import('@/views/crm/admincheck/peer/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'gov/index',
@@ -63,9 +68,10 @@ export default[
             meta: { title: '政府伙伴', icon: 'table' }
           },
           {
-            path: 'gov/find',
-            component: () => import('@/views/crm/admincheck/gov/Find'),
-            
+            path: 'gov/edit',
+            component: () => import('@/views/crm/admincheck/gov/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
         ]
       }

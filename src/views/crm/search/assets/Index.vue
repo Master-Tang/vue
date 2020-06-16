@@ -113,6 +113,7 @@ export default {
   data() {
     return {
       activeName: '1',
+      roleId:"",
       value: "",
       state: 0,
       list: null,
@@ -169,18 +170,19 @@ export default {
         pageSize:this.pageSize,
         pageIndex:this.currentPage
         });
-        console.log(params)
+        // console.log(params)
       $.findAssetInf(params).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(response.data.list);
+        // console.log(response.data.list);
       });
     },
 
     fetchData() {
       this.listLoading = true;
+      console.log(this.roleId)
       $.findByNameTelHide({
         partnerType: 1,
         pageIndex: this.currentPage,

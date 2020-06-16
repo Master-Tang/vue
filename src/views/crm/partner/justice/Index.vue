@@ -120,14 +120,13 @@ export default {
       this.listLoading = true;
       $.findAll({
         partnerType: 4,
-        createId:this.createUserId,
+        createId: this.createUserId,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
-        this.createUserId = response.data.list[0].createUserId;
         this.listLoading = false;
         // console.log(response.data.list);
       });
