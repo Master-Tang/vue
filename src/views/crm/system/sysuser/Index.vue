@@ -104,36 +104,7 @@ export default {
     vvv() {
       this.currentPage = 1;
     },
-    // find() {
-    //   if (this.value==null) {
-    //     this.fetchData()
-    //   } else {
-    //     $.listByGroupName({
-    //       groupName: this.value,
-    //       pageIndex: this.currentPage,
-    //       pageSize: this.pageSize
-    //     }).then(response => {
-    //       this.list = null;
-    //       this.total = 0;
-    //       this.listLoading = true;
-    //       this.pageSize = 10;
-    //       this.state = 1;
-    //       this.list = response.data.list;
-    //       this.total = response.data.total;
-    //       this.listLoading = false;
-    //       //console.log(response.data)
-    //     });
-    //   }
-    // },
-    // findData() {
-    //   this.options.splice(0, this.options.length);
-    //   $.getGroupName().then(response => {
-    //     console.log(response.data);
-    //     for (let s of response.data) {
-    //       this.options.push({ label: s, value: s });
-    //     }
-    //   });
-    // },
+
     fetchData() {
       this.listLoading = true;
       $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(

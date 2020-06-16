@@ -8,6 +8,7 @@ import Layout from '@/layout'
 import system from './system'
 import partner from './partner'
 import search from './search'
+import admincheck from './admincheck'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -68,7 +69,9 @@ const createRouter = () => new Router({
     ...constantRoutes,
     ...partner,
     ...search,
-    ...system]
+    ...system,
+    ...admincheck
+  ]
 })
 
 const router = createRouter()

@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 export default
     {
+        getCreateUserId()
+        {
+            return request({
+                url: '/user/partner/createId',
+                method: 'get',
+            })
+        },
         findByBlurry(params) {
             return request({
                 url: '/user/select/findByBlurry',

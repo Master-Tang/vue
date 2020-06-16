@@ -26,6 +26,16 @@
       <el-form-item label="姓名">
         <el-input v-model="form.trueName"></el-input>
       </el-form-item>
+      <el-form-item label="权限">
+        <el-select v-model="form.roleId" placeholder="请选择">
+          <el-option
+            v-for="item in form.roleIdList"
+            :key="item.roleId"
+            :label="item.roleName"
+            :value="item.roleId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="addData()">创建新员工</el-button>
         <el-button @click="$router.back()">取消</el-button>
@@ -47,15 +57,23 @@ export default {
         telephone: "",
         dingDing: "",
         trueName: "",
+        roleId:"",
+        roleIdList:[],
         departmentList:[]
       },
       options: []
     };
   },
   created() {
+    $.getRoleList().then(response=>{
+      if(response.success){
+        // console.log(response.data)
+        this.form.roleIdList=response.data.list
+      }
+    });
     department.getList().then(response=>{
       if(response.success){
-        console.log(response.data.list)
+        // console.log(response.data.list)
         this.form.departmentList=response.data.list
       }
     });
@@ -70,7 +88,7 @@ export default {
           depId: this.form.depId,
           telephone: this.form.telephone,
           dingDing: this.form.dingDing,
-          roleId: "",
+          roleId: this.form.roleId,
           trueName: this.form.trueName
         }).then(response => {
           if(response.success)

@@ -182,7 +182,7 @@ export default {
   created() {
     $.addInit().then(res => {
       if (res.success) {
-        console.log(res.data)
+        // console.log(res.data)
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
         this.assetAttrList = res.data.attr;
@@ -192,18 +192,20 @@ export default {
     });
   },
   methods: {
-    selectNum(){
-      $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
-        if(res.success){
-          console.log(res.data)
-          this.form.name=res.data.name
-          this.form.sex=res.data.sex
-          this.form.weixin=res.data.weixin
-          this.form.email=res.data.email
-          this.form.company=res.data.company
-          this.form.department=res.data.department
-          this.form.post=res.data.post
-          this.form.orgType=res.data.orgType
+    selectNum() {
+      $.matchNumber({
+        telephone: this.form.telephone,
+        create_user_id: this.$route.query.id
+      }).then(res => {
+        if (res.data!=null) {
+          this.form.name = res.data.name;
+          this.form.sex = res.data.sex;
+          this.form.weixin = res.data.weixin;
+          this.form.email = res.data.email;
+          this.form.company = res.data.company;
+          this.form.department = res.data.department;
+          this.form.post = res.data.post;
+          this.form.orgType = res.data.orgType;
         }
       });
     },
@@ -242,8 +244,10 @@ export default {
         error = "微信不能为空\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      }else if(!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)){
-        error="邮箱不正确\n"
+      } else if (
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      ) {
+        error = "邮箱不正确\n";
       }
 
       if (error) {

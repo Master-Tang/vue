@@ -304,8 +304,8 @@ export default {
   methods: {
     selectNum(){
       $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
-        if(res.success){
-          console.log(res.data)
+         if (res.data!=null) {
+          // console.log(res.data)
           this.form.name=res.data.name
           this.form.sex=res.data.sex
           this.form.weixin=res.data.weixin

@@ -92,13 +92,17 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    $.getCreateUserId().then(response => {
+      this.createUserId = response.createId;
+      this.listLoading = false;
+      this.fetchData();
+    });
   },
   methods: {
     find(){
       this.listLoading = true;
       this.list=null
-      $.findByBlurry({ partnerType: 3, value:this.value,pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findByBlurry({ partnerType: 3,createId: this.createUserId, value:this.value,pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           // console.log(response.data)
             this.list = response.data.list;
@@ -113,7 +117,7 @@ export default {
     },
     fetchData() {
       this.listLoading = true;
-      $.findAll({ partnerType: 3, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.findAll({ partnerType: 3,createId:this.createUserId, pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           // console.log(response.data)
             this.list = response.data.list;

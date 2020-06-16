@@ -9,6 +9,13 @@ export default
         params
       })
    },
+   getRoleList(params){
+      return request({
+         url:'/user/role/list',
+         method:'post',
+         params
+      })
+   },
    add(data)
    {
       return request({

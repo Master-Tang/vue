@@ -92,7 +92,11 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    $.getCreateUserId().then(response => {
+      this.createUserId = response.createId;
+      this.listLoading = false;
+      this.fetchData();
+    });
   },
   methods: {
     find() {
@@ -101,6 +105,7 @@ export default {
       $.findByBlurry({
         partnerType: 2,
         value: this.value,
+        createId: this.createUserId,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
@@ -116,6 +121,7 @@ export default {
       this.listLoading = true;
       $.findAll({
         partnerType: 2,
+        createId:this.createUserId,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {

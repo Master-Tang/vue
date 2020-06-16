@@ -2,23 +2,31 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
+        <el-form-item label="伙伴类型">
+          <el-select v-model="type" @change="select()" placeholder="请选择" style="width:100%">
+            <el-option
+              v-for="item in partnerTypeList"
+              :key="item.dicValue"
+              :label="item.dicKey"
+              :value="item.dicValue"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
-          <el-input placeholder="请输入伙伴姓名或手机号" v-model="value"></el-input>
+          <el-cascader
+            style="width:100%"
+            placeholder="试试搜索：无锡"
+            v-model="cities"
+            :options="provinceList" collapse-tags="true"
+            :props="{value:'regionId',label:'regionName',children:'children', multiple: true }"
+            filterable
+          ></el-cascader>
         </el-form-item>
         <el-form-item>
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
                 <el-button type="primary" @click="find()">查找</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item style="float:right">
-          <el-row>
-            <el-col :span="24">
-              <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="handleAdd(createUserId)">添加</el-button>
               </div>
             </el-col>
           </el-row>
@@ -47,17 +55,13 @@
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
 
-      <el-table-column label="单位名称" align="center">
+      <el-table-column label="伙伴来源" align="center">
         <template slot-scope="scope">{{ scope.row.company }}</template>
-      </el-table-column>
-      <el-table-column label="岗位" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
       </el-table-column>
 
       <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
+        <template>
+          <el-button type="primary" size="small" >查看</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -75,59 +79,103 @@
 
 <script>
 import $ from "@/api/assets";
+import qs from 'querystring';
 
 export default {
   data() {
     return {
-      createUserId: "",
+      type: "资产伙伴",
       value: "",
       state: 0,
       list: null,
       val: "",
+      cities: [],
+      pushcities:[],
       listLoading: true,
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      options: []
+      options: [],
+      partnerTypeList: [],
+      provinceList: []
     };
   },
   created() {
-    $.getCreateUserId().then(response => {
-      this.createUserId = response.createId;
-      this.listLoading = false;
-      this.fetchData();
+    this.fetchData();
+
+    $.addInit().then(res => {
+      if (res.success) {
+        this.partnerTypeList = res.data.partnerTypeList;
+        this.provinceList = res.data.province;
+        // console.log(this.partnerTypeList);
+      }
     });
   },
   methods: {
+    select() {
+      console.log(this.type);
+      this.list = null;
+      this.findcha();
+    },
     find() {
       this.listLoading = true;
       this.list = null;
-      $.findByBlurry({
-        partnerType: 4,
-        value: this.value,
-        createId: this.createUserId,
-        pageIndex: this.currentPage,
-        pageSize: this.pageSize
-      }).then(response => {
+      console.log(this.cities)
+      this.pushcities=[]
+      for(let i in this.cities)
+      {
+        this.pushcities.push(this.cities[i][1])
+
+      }
+
+      let params=qs.stringify({
+        partnerType: 2,
+        "cities[]":this.pushcities,
+        pageSize:this.pageSize,
+        pageIndex:this.currentPage
+        });
+      console.log(params)
+      
+      //console.log(this.pushcities)
+      $.findByCity(params).then(response => {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
         // console.log(response.data.list);
       });
+     },
+    
+    showMore(id) {
+      this.$router.push({
+        path: "find",
+        query: { id: id }
+      });
+    },
+    findcha() {
+      this.listLoading = true;
+      $.findchaxun({
+        partnerType: this.type,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
+        console.log(response.data);
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        console.log(response.data.list);
+      });
     },
     fetchData() {
       this.listLoading = true;
-      $.findAll({
-        partnerType: 4,
-        createId:this.createUserId,
+      $.findchaxun({
+        partnerType: 1,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
-        this.createUserId = response.data.list[0].createUserId;
         this.listLoading = false;
         // console.log(response.data.list);
       });
@@ -147,41 +195,6 @@ export default {
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
-    },
-    handleAdd(id) {
-      this.$router.push({
-        path: "add",
-        query: { id: id }
-      });
-    },
-    handleEdit(id) {
-      this.$router.push({
-        path: "edit",
-        query: { id: id }
-      });
-    },
-    handleDel(id) {
-      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          // console.log(id);
-          $.remove({ partnerId: id }).then(response => {
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            this.fetchData();
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除"
-          });
-        });
     }
   }
 };

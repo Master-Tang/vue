@@ -26,7 +26,6 @@
       </el-form>
     </div>
 
-    
     <el-table
       id="myform"
       v-loading="listLoading"
@@ -81,7 +80,7 @@ import $ from "@/api/assets";
 export default {
   data() {
     return {
-      createUserId:"",
+      createUserId: "",
       value: "",
       state: 0,
       list: null,
@@ -94,7 +93,12 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    $.getCreateUserId().then(response => {
+      this.createUserId = response.createId;
+      this.listLoading = false;
+      this.fetchData();
+    });
+    
   },
   methods: {
     find() {
@@ -102,40 +106,34 @@ export default {
       this.list = null;
       $.findByBlurry({
         partnerType: 1,
-        value:this.value,
+        createId: this.createUserId,
+        value: this.value,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(response.data.list);
       });
     },
     fetchData() {
       this.listLoading = true;
       $.findAll({
         partnerType: 1,
+        createId:this.createUserId,
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
-        this.createUserId=response.data.list[0].createUserId;
         this.listLoading = false;
-        // console.log(response.data.list[0].createUserId)
-        console.log(response.data.list);
       });
     },
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
-      // console.log(this.currentPage)
       if (this.state == 1) {
         this.find();
-        //console.log(this.currentPage)
       } else this.fetchData();
     },
     handleCurrentChange(val) {
@@ -145,12 +143,12 @@ export default {
         this.find();
       } else this.fetchData();
     },
-    handleAdd(id){
-        this.$router.push({
+    handleAdd(id) {
+      this.$router.push({
         path: "add",
         query: { id: id }
       });
-  },
+    },
     handleEdit(id) {
       this.$router.push({
         path: "edit",
