@@ -51,14 +51,10 @@
         <el-form-item label="曾任岗位职务:">{{item.resumePos}}</el-form-item>
       </div>
 
-      <el-form-item label="关系人姓名:">
-        {{form.orgInfo.name}}
-      </el-form-item>
-      <el-form-item label="关系人联系方式:">
-        {{form.orgInfo.telephone}}
-      </el-form-item>
+      <el-form-item label="关系人姓名:">{{form.orgInfo.name}}</el-form-item>
+      <el-form-item label="关系人联系方式:">{{form.orgInfo.telephone}}</el-form-item>
       <el-form-item label="与其关系:">
-        <el-select v-model="form.orgInfo.relative" placeholder="" style="width:100%" disabled="">
+        <el-select v-model="form.orgInfo.relative" placeholder style="width:100%" disabled>
           <el-option
             v-for="item in relativeList"
             :key="item.dicValue"
@@ -67,11 +63,9 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="备注:">
-       {{form.orgInfo.relativeRemark}}
-      </el-form-item>
+      <el-form-item label="备注:">{{form.orgInfo.relativeRemark}}</el-form-item>
       <el-form-item label="关系人机构类型">
-        <el-select v-model="form.orgInfo.orgType" placeholder="" style="width:100%" disabled="">
+        <el-select v-model="form.orgInfo.orgType" placeholder style="width:100%" disabled>
           <el-option
             v-for="item in orgTypeList"
             :key="item.dicValue"
@@ -81,25 +75,21 @@
         </el-select>
       </el-form-item>
       <el-form-item label="其他机构:" v-if="form.orgInfo.orgType==='26'">
-        <el-input v-model="form.orgInfo.orgRemark" disabled=""></el-input>
+        <el-input v-model="form.orgInfo.orgRemark" disabled></el-input>
       </el-form-item>
-      <el-form-item label="所在机构名称:">
-        {{form.orgInfo.relativeOrg}}
-      </el-form-item>
+      <el-form-item label="所在机构名称:">{{form.orgInfo.relativeOrg}}</el-form-item>
       <el-form-item label="关系人管辖区域:">
         <el-cascader
           style="width:100%"
-          placeholder=""
-          v-model="form.orgInfo.relativeOver"
+          placeholder
+          v-model="form.orgInfo.relativeArea"
           :options="provinceList"
-          :props="{ multiple: true }"
+          :props="{ value:'regionId',label:'regionName',children:'children',multiple: true }"
           filterable
-          disabled=""
+          disabled
         ></el-cascader>
       </el-form-item>
-      <el-form-item label="关系人岗位职务:">
-        {{form.orgInfo.pos}}
-      </el-form-item>
+      <el-form-item label="关系人岗位职务:">{{form.orgInfo.pos}}</el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="updateData()">立即创建</el-button>
@@ -140,7 +130,7 @@ export default {
           orgType: "",
           orgRemark: "",
           relativeOrg: "",
-          relativeOver: [],
+          relativeArea: [],
           pos: "",
           resumeList: []
         }

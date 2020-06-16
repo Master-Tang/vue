@@ -119,7 +119,7 @@ export default {
       // console.log(this.overArea)
       this.pushcities = [];
       for (let i in this.cities) {
-        this.pushcities.push(this.cities[i][1]);
+        this.pushcities.push(this.cities[i][2]);
       }
       let params = qs.stringify({
         partnerType: 6,

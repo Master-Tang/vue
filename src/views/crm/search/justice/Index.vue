@@ -119,7 +119,7 @@ export default {
       // console.log(this.overArea)
       this.pushcities = [];
       for (let i in this.cities) {
-        this.pushcities.push(this.cities[i][1]);
+        this.pushcities.push(this.cities[i][2]);
       }
       let params = qs.stringify({
         partnerType: 4,
@@ -144,11 +144,11 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(response.data.list);
+        // console.log(response.data.list);
       });
     },
     handleSizeChange(val) {
@@ -163,9 +163,9 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       //console.log(val)
-      if (this.state == 1) {
-        this.find();
-      } else this.fetchData();
+      // if (this.state == 1) {
+      //   this.find();
+      // } else this.fetchData();
     },
      handleFind(id) {
       this.$router.push({

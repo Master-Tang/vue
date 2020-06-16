@@ -79,7 +79,7 @@ import $ from "@/api/assets";
 export default {
   data() {
     return {
-       createUserId:"",
+      createUserId: "",
       value: "",
       state: 0,
       list: null,
@@ -121,7 +121,7 @@ export default {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
-        this.createUserId=response.data.list[0].createUserId;
+        this.createUserId = response.data.list[0].createUserId;
         this.listLoading = false;
         // console.log(response.data.list);
       });
@@ -142,12 +142,12 @@ export default {
         this.find();
       } else this.fetchData();
     },
-handleAdd(id){
-        this.$router.push({
+    handleAdd(id) {
+      this.$router.push({
         path: "add",
         query: { id: id }
       });
-  },
+    },
     handleEdit(id) {
       this.$router.push({
         path: "edit",
