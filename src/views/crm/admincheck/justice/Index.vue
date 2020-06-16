@@ -171,9 +171,9 @@ export default {
     handleCurrentChange(val) {
       this.currentPage = val;
       //console.log(val)
-      // if (this.state == 1) {
-      //   this.find();
-      // } else this.fetchData();
+      if (this.state == 1) {
+        this.find();
+      } else this.fetchData();
     },
     handleEdit(id) {
       this.$router.push({
