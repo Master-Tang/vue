@@ -231,13 +231,13 @@ export default {
         pageSize: this.pageSize,
         pageIndex: this.currentPage
       });
-      console.log(params);
+      // console.log(params);
       $.findFundInfo(params).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(response.data.list);
+        // console.log(response.data.list);
       });
     },
 
@@ -248,11 +248,11 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(response.data.list);
+        // console.log(response.data.list);
       });
     },
     handleSizeChange(val) {

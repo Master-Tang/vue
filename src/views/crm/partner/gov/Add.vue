@@ -261,7 +261,7 @@ export default {
       this.form.orgInfo.resumeList.splice(index, 1);
     },
     addData() {
-      console.log(this.form.orgInfo.relativeOver);
+      // console.log(this.form.orgInfo.relativeOver);
       if (!this.validate()) return;
       $.add(this.form).then(response => {
          if (response.success) {

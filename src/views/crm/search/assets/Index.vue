@@ -182,7 +182,7 @@ export default {
 
     fetchData() {
       this.listLoading = true;
-      console.log(this.roleId)
+      // console.log(this.roleId)
       $.findByNameTelHide({
         partnerType: 1,
         pageIndex: this.currentPage,
