@@ -128,7 +128,6 @@ export default {
         // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
-        this.createUserId=response.data.list[0].createUserId;
         this.listLoading = false;
         // console.log(response.data.list);
       });

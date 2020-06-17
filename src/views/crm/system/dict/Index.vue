@@ -119,7 +119,7 @@ export default {
     findData() {
       this.options.splice(0, this.options.length);
       $.getGroupName().then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         for (let s of response.data) {
           this.options.push({ label: s, value: s });
         }
@@ -132,7 +132,7 @@ export default {
           this.list = response.data.list;
           this.total = response.data.total;
           this.listLoading = false;
-          console.log(response.data)
+          // console.log(response.data)
         }
       );
     },
