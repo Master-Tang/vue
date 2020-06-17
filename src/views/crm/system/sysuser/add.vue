@@ -7,6 +7,9 @@
       <el-form-item label="密码">
         <el-input v-model="form.loginPass"></el-input>
       </el-form-item>
+      <el-form-item label="确认密码">
+        <el-input v-model="form.confirmPass"></el-input>
+      </el-form-item>
       <el-form-item label="部门名称">
         <el-select v-model="form.depId" placeholder="请选择">
           <el-option
@@ -46,35 +49,36 @@
   
 <script>
 import $ from "@/api/sysuser";
-import department from '../../../../api/department';
+import department from "../../../../api/department";
 export default {
   data() {
     return {
       form: {
         loginName: "",
         loginPass: "",
+        confirmPass: "",
         depId: "",
         telephone: "",
         dingDing: "",
         trueName: "",
-        roleId:"",
-        roleIdList:[],
-        departmentList:[]
+        roleId: "",
+        roleIdList: [],
+        departmentList: []
       },
       options: []
     };
   },
   created() {
-    $.getRoleList().then(response=>{
-      if(response.success){
+    $.getRoleList().then(response => {
+      if (response.success) {
         // console.log(response.data)
-        this.form.roleIdList=response.data.list
+        this.form.roleIdList = response.data.list;
       }
     });
-    department.getList().then(response=>{
-      if(response.success){
+    department.getList().then(response => {
+      if (response.success) {
         // console.log(response.data.list)
-        this.form.departmentList=response.data.list
+        this.form.departmentList = response.data.list;
       }
     });
   },
@@ -82,22 +86,59 @@ export default {
     addData() {
       // console.log(this.departmentList)
       // console.log(this.form.depId);
-        $.add({
-          loginName: this.form.loginName,
-          loginPass: this.form.loginPass,
-          depId: this.form.depId,
-          telephone: this.form.telephone,
-          dingDing: this.form.dingDing,
-          roleId: this.form.roleId,
-          trueName: this.form.trueName
-        }).then(response => {
-          if(response.success)
-            {
-              this.$router.replace('index')
-            }
-        });
+      if (!this.validate()) return;
+      $.add({
+        loginName: this.form.loginName,
+        loginPass: this.form.loginPass,
+        depId: this.form.depId,
+        telephone: this.form.telephone,
+        dingDing: this.form.dingDing,
+        roleId: this.form.roleId,
+        trueName: this.form.trueName
+      }).then(response => {
+        if (response.success) {
+          if (response.data === 0) {
+            this.$message({
+              message: "用户名或手机号或钉钉号重复"
+            });
+            
+          } else {
+            this.$router.replace("index");
+          }
+        }
+      });
     },
+    validate() {
+      let error = "";
+      if (this.form.loginName.length == 0) {
+        error = "用户名不能为空\n";
+      } else if (this.form.loginPass.length == 0) {
+        error = "密码不能为空\n";
+      } else if (this.form.confirmPass.length == 0) {
+        error = "确认密码错误\n";
+      } else if (this.form.loginPass != this.form.confirmPass) {
+        error = "确认密码错误\n";
+      } else if (this.form.depId.length == 0) {
+        error = "请选择部门\n";
+      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
+        error = "请输入正确的手机号码\n";
+      } else if (this.form.dingDing.length == 0) {
+        error = "钉钉不能为空\n";
+      } else if (this.form.trueName.length <= 1) {
+        error = "姓名至少两位\n";
+      } else if (this.form.roleId.length == 0) {
+        error = "请赋予权限\n";
+      }
 
+      if (error) {
+        this.$message({
+          message: error,
+          type: "error"
+        });
+        return false;
+      }
+      return true;
+    }
   }
 };
 </script>

@@ -2,26 +2,8 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-        <el-form-item label="分组名称">
-          <el-select v-model="value" placeholder="请选择">
-            <el-option
-              v-for="item in options"
-              :key="item.value"
-              :label="item.label"
-              :value="item.label"
-            ></el-option>
-          </el-select>
-        </el-form-item>
+    
         <el-form-item>
-          <el-row>
-            <el-col :span="24">
-              <div class="grid-content bg-purple-dark">
-                <el-button type="primary" @click="vvv(),find()">查询</el-button>
-              </div>
-            </el-col>
-          </el-row>
-        </el-form-item>
-        <el-form-item style="float:right">
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">

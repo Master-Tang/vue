@@ -52,8 +52,8 @@ export default[
             component: () =>import('@/views/crm/system/sysuser/edit'),
           },
           {
-            path: 'user/total',
-            component: () => import('@/views/nested/menu2/index'),
+            path: 'statistics/index',
+            component: () => import('@/views/crm/system/statistics/index'),
             meta: { title: '绩效统计' }
           }
         ]

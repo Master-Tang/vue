@@ -54,7 +54,7 @@ export default {
       this.id = this.$route.query.id,
        department.getList().then(response=>{
       if(response.success){
-        console.log(response.data.list)
+        // console.log(response.data.list)
         this.form.departmentList=response.data.list
       }
     });
@@ -62,9 +62,9 @@ export default {
   },
   methods: {
     getData() {
-      console.log(this.id);
+      // console.log(this.id);
       $.getByUserId({ userId: this.id }).then(response => {
-        console.log(response.data);
+        // console.log(response.data);
         this.form.loginName = response.data.loginName
         this.form.depId = response.data.depId
         this.form.trueName = response.data.trueName
@@ -75,26 +75,38 @@ export default {
       });
     },
     updateData() {
-      if (this.form.depId.length > 0 && this.form.telephone.length > 0
-          && this.form.dingDing.length > 0) {
+      if (!this.validate()) return;
         $.update({
           loginName:this.form.loginName,
           depId: this.form.depId,
           telephone: this.form.telephone,
           dingDing: this.form.dingDing,
-          roleId: "11",
+          roleId: this.form.roleId,
           trueName: this.form.trueName,
         }).then(response => {
           if (response.success) {
             this.$router.replace("index");
           }
         });
-      } else {
+    },
+    validate() {
+      let error = "";
+      if (this.form.trueName.length <= 1) {
+        error = "姓名至少两位\n";
+      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
+        error = "请输入正确的手机号码\n";
+      } else if (this.form.dingDing.length == 0) {
+        error = "钉钉不能为空\n";
+      } 
+
+      if (error) {
         this.$message({
-          type: "fail",
-          message: "值不能为空!"
+          message: error,
+          type: "error"
         });
+        return false;
       }
+      return true;
     }
   }
 };
