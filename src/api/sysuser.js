@@ -9,6 +9,14 @@ export default
         params
       })
    },
+   getStatList(params)
+   {
+    return request({
+        url: '/admin/stat/list',
+        method: 'post',
+        params
+      })
+   },
    getRoleList(params){
       return request({
          url:'/user/role/list',
