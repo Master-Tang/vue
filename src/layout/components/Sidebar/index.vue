@@ -13,7 +13,7 @@
         mode="vertical"
       >
         <sidebar-item
-          v-for="route in routes"
+          v-for="route in rotes"
           :key="route.path"
           :item="route"
           :base-path="route.path"
@@ -34,6 +34,7 @@ export default {
   components: { SidebarItem, Logo },
   data() {
     return {
+      rotes:this.$router.options.routes,
       myRoutes: {
         partner:"",
         search:"",
@@ -43,33 +44,24 @@ export default {
     };
   },
   created() {
-    //request net  ==>myRoutes
-    //{‘/partner’:1,'/system':1}
     $.path().then(res => {
       this.myRoutes=res.data
-      console.log(this.myRoutes)
-      //   this.myRoutes=net
-      //   console.log(this.myRoutes);
-      
+      if(this.myRoutes.search=="/search"){
+          
+          this.$delete(this.$router.options.routes,7)
+          this.$delete(this.$router.options.routes,6)
+           return this.rotes;
+        }else{
+            this.$delete(this.rotes,5)
+           return this.rotes;
+          
+        }
     });
   },
   computed: {
     ...mapGetters(["sidebar"]),
     routes() {
-      //获取角色的菜单和路由比较
-      let menuList = [];
-      // console.log(this.$router.options.routes);
-      for(let s of this.$router.options.routes)
-      {
-        menuList.push(s.path)
-        //  if(myRoutes[s.path])
-        //  {
-        //    menuList.push(s)
-        //  }
-        // console.log(menuList)
-        // console.log(this.myRoutes[s.path])
-      }
-      return this.$router.options.routes;
+     
     },
     activeMenu() {
       const route = this.$route;
