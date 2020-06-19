@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 export default
     {
+        path()
+        {
+            return request({
+                url: '/user/partner/path',
+                method: 'post',
+            })
+        },
         getCreateUserId()
         {
             return request({
