@@ -80,6 +80,9 @@
             <el-form-item label="资产类型其它" v-if="typeId==='20'">
               <el-input v-model="typeName"></el-input>
             </el-form-item>
+            <el-form-item label="收益率">
+              <el-input v-model="incomeRate"></el-input>
+            </el-form-item>
             <el-form-item label="覆盖地区">
               <el-cascader
                 style="width:100%"
@@ -165,6 +168,7 @@ export default {
       state: 0,
       list: null,
       val: "",
+      
       listLoading: true,
       currentPage: 1,
       pageSize: 10,
@@ -179,6 +183,7 @@ export default {
       deadline: "",
       incomeType: "",
       typeId: "",
+      incomeRate:"",
       typeName: "",
       assetAttrList: [],
       provinceList: [],
@@ -235,6 +240,7 @@ export default {
         deadline: this.deadline,
         incomeType: this.incomeType,
         typeId: this.typeId,
+        incomeRate:this.incomeRate,
         typeName: this.typeName,
         pageSize: this.pageSize,
         pageIndex: this.currentPage

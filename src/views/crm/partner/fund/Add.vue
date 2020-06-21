@@ -39,6 +39,10 @@
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
       <el-form-item label="电子邮箱">
+        <span slot="label">
+          电子邮箱
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.email" placeholder="电子邮箱"></el-input>
       </el-form-item>
       <el-form-item label="单位名称">
@@ -242,20 +246,20 @@ export default {
     return {
       form: {
         partnerType: 2,
-        name: "资金伙伴",
-        sex: "男",
+        name: "",
+        sex: "",
         telephone: "",
         weixin: "",
-        email: "email@111.com",
-        company: "XXX公司",
-        department: "XX部门",
-        post: "XX岗位",
-        orgType: "01",
+        email: "",
+        company: "",
+        department: "",
+        post: "",
+        orgType: "",
         orgRemark: "",
-        source: "01",
-        item: "XX项目",
-        debt: "债权",
-        address: "联系地址",
+        source: "",
+        item: "",
+        debt: "",
+        address: "",
         overArea: [],
         fundInfo: {
           structList: [],
@@ -303,6 +307,9 @@ export default {
   },
   methods: {
     selectNum(){
+      if (!/^1\d{10}$/.test(this.form.telephone)) {
+      }
+      return;
       $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
          if (res.data!=null) {
           // console.log(res.data)
@@ -319,12 +326,12 @@ export default {
     },
     addItem1() {
       this.form.fundInfo.structList.push({
-        currency: "01",
-        struct: "01",
+        currency: "",
+        struct: "",
         min: "",
         max: "",
-        scale: "01",
-        deadline: "01",
+        scale: "",
+        deadline: "",
         incomeType: "",
         incomeRate: ""
       });
@@ -334,7 +341,7 @@ export default {
     },
     addItem() {
       this.form.fundInfo.fancyList.push({
-        typeId: "01",
+        typeId: "",
         typeName: ""
       });
     },

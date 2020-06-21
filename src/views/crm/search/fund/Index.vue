@@ -80,6 +80,9 @@
             <el-form-item label="资产类型其它" v-if="typeId==='20'">
               <el-input v-model="typeName"></el-input>
             </el-form-item>
+            <el-form-item label="收益率">
+              <el-input v-model="incomeRate"></el-input>
+            </el-form-item>
             <el-form-item label="覆盖地区">
               <el-cascader
                 style="width:100%"
@@ -157,6 +160,7 @@ export default {
       state: 0,
       list: null,
       val: "",
+      incomeRate:"",
       listLoading: true,
       currentPage: 1,
       pageSize: 10,
@@ -223,6 +227,7 @@ export default {
         orgRemark: this.orgRemark,
         currency: this.currency,
         struct: this.struct,
+        incomeRate:this.incomeRate,
         scale: this.scale,
         deadline: this.deadline,
         incomeType: this.incomeType,

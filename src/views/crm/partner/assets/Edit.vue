@@ -146,7 +146,7 @@ export default {
       form: {
         partnerType: 1,
         name: "",
-        sex: "男",
+        sex: "",
         telephone: "",
         weixin: "",
         email: "",
@@ -158,7 +158,7 @@ export default {
         debt: "",
         address: "",
         overArea: [],
-        orgType: "01",
+        orgType: "",
         orgRemark: "",
         assetInfo: {
           belong: "",

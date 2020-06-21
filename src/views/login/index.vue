@@ -137,6 +137,9 @@ $cursor: #fff;
 
 /* reset element-ui css */
 .login-container {
+  background: url('../../assets/images/2.jpg') repeat;
+  background-size:100% 100%;
+
   .el-input {
     display: inline-block;
     height: 47px;

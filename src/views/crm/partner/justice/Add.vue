@@ -39,6 +39,10 @@
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
       <el-form-item label="电子邮箱">
+        <span slot="label">
+          电子邮箱
+          <span class="red">*</span>
+        </span>
         <el-input v-model="form.email" placeholder="电子邮箱"></el-input>
       </el-form-item>
       <el-form-item label="机构名称">
@@ -209,22 +213,22 @@ export default {
     return {
       form: {
         partnerType: 4,
-        name: "司法伙伴",
-        sex: "男",
+        name: "",
+        sex: "",
         telephone: "",
         weixin: "",
-        email: "XXX@333.com",
-        company: "XXX局",
+        email: "",
+        company: "",
         department: "",
-        post: "副主任",
-        source: "01",
+        post: "",
+        source: "",
         item: "",
         debt: "",
-        address: "地址",
-        orgType: "01",
+        address: "",
+        orgType: "",
         orgRemark: "",
         partnerRemark: "",
-        assetAttr: "01",
+        assetAttr: "",
         overArea: [],
         justiceInfo: {
           name: "",
@@ -265,6 +269,9 @@ export default {
   },
   methods: {
     selectNum(){
+      if (!/^1\d{10}$/.test(this.form.telephone)) {
+      }
+      return;
       $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
          if (res.data!=null) {
           // console.log(res.data)
@@ -281,9 +288,9 @@ export default {
     },
     addItem() {
       this.form.justiceInfo.resumeList.push({
-        resumeType: "01",
+        resumeType: "",
         resumeRemark: "",
-        resumeOrg: "01",
+        resumeOrg: "",
         resumeOver: [],
         resumePos: ""
       });

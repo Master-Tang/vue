@@ -35,12 +35,6 @@ export default {
   data() {
     return {
       rotes:[],
-      // myRoutes: {
-      //   partner:"",
-      //   search:"",
-      //   system:"",
-      //   admincheck:""
-      // }
     };
   },
   created() {
@@ -52,6 +46,7 @@ export default {
             if(p.path===path)
             {
               this.rotes.push(p)
+              // console.log(this.rotes)
             }
          }
      }

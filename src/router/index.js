@@ -56,6 +56,13 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
+    // {
+    //   path: 'dashboard1',
+    //   name: 'Dashboard',
+    //   component: () => import('@/views/crm/dashboard/index1'),
+    //   meta: { title: '首页', icon: 'dashboard' },
+    //   // hidden
+    // }
   },
 
   // 404 page must be placed at the end !!!

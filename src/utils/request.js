@@ -54,7 +54,7 @@ service.interceptors.response.use(
     if (res.code !== 200) {
       Message({
         message: res.message || 'Error',
-        type: 'error',
+        type: '超时',
         duration: 5 * 1000
       })
   
@@ -77,7 +77,7 @@ service.interceptors.response.use(
       {
         Message({
           message: res.message || 'Error',
-          type: 'error',
+          type: '超时',
           duration: 5 * 1000
         })
       }
@@ -88,7 +88,7 @@ service.interceptors.response.use(
     console.log('err' + error) // for debug
     Message({
       message: error.message,
-      type: 'error',
+      type: '超时',
       duration: 5 * 1000
     })
     return Promise.reject(error)

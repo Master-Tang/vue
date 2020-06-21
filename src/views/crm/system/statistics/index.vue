@@ -88,7 +88,7 @@ export default {
       end: this.value2
     }).then(res => {
       if (res.success) {
-          console.log(res.data);
+          // console.log(res.data);
           this.list=res.data
           this.listLoading = false;
           for (var i = 1; i <= this.list.length; i++) {
