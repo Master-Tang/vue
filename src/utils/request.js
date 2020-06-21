@@ -14,7 +14,6 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -44,7 +43,13 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-
+    //console.log(decodeURIComponent(response.headers['content-disposition'].split("=")[1]))
+    if(res instanceof Blob && response.status===200)
+    {
+      //console.log(decodeURI(response.headers['content-disposition'].split("=")[1]))
+      //console.log(res)
+      return response //如果是文件下载
+    }
     // if the custom code is not 20000, it is judged as an error.
     if (res.code !== 200) {
       Message({

@@ -69,8 +69,9 @@ const createRouter = () => new Router({
     ...constantRoutes,
     ...partner,
     ...search,
+    ...admincheck,
     ...system,
-    ...admincheck
+
   ]
 })
 

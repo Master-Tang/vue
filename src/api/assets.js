@@ -1,6 +1,24 @@
 import request from '@/utils/request'
 export default
     {
+        findDepName(){
+            return request({
+                url: '/admin/sysUser/findDepName',
+                method: 'post',
+            })
+        },
+        findFromUserID(){
+            return request({
+                url: '/admin/sysUser/findFromUserID',
+                method: 'post',
+            })
+        },
+        countCreateId(){
+            return request({
+                url: '/user/select/countCreateId',
+                method: 'post',
+            })
+        },
         path()
         {
             return request({

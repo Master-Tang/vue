@@ -1,19 +1,43 @@
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-text">name: {{ name }}</div>
+    <div class="dashboard-text">姓名: {{ trueName }}</div>
+    <div class="dashboard-text">手机号码: {{ telephone }}</div>
+    <div class="dashboard-text">用户名: {{ loginName }}</div>
+    <div class="dashboard-text">部门: {{ depName }}</div>
+    <div class="dashboard-text">共录入伙伴数: {{ countPartner }}</div>
+
   </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import $ from "@/api/assets";
 
 export default {
-  name: 'Dashboard',
-  computed: {
-    ...mapGetters([
-      'name'
-    ])
-  }
+   data() {
+    return {
+      loginName:"",
+      countPartner:"",
+      trueName:"",
+      telephone:"",
+      dingDing:"",
+      depName:""
+    };
+  },
+   created() {
+    $.countCreateId().then(response => {
+      if(response.success){
+        this.countPartner=response.data
+      }
+    });
+    $.findFromUserID().then(response => {
+      if(response.success){
+        this.trueName=response.data.trueName
+        this.telephone=response.data.telephone
+        this.loginName=response.data.loginName
+        this.depName=response.data.depName
+      }
+    });
+  },
 }
 </script>
 

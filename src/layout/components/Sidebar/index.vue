@@ -34,28 +34,27 @@ export default {
   components: { SidebarItem, Logo },
   data() {
     return {
-      rotes:this.$router.options.routes,
-      myRoutes: {
-        partner:"",
-        search:"",
-        system:"",
-        admincheck:""
-      }
+      rotes:[],
+      // myRoutes: {
+      //   partner:"",
+      //   search:"",
+      //   system:"",
+      //   admincheck:""
+      // }
     };
   },
   created() {
     $.path().then(res => {
-      this.myRoutes=res.data
-      if(this.myRoutes.search=="/search"){
-          
-          this.$delete(this.$router.options.routes,7)
-          this.$delete(this.$router.options.routes,6)
-           return this.rotes;
-        }else{
-            this.$delete(this.rotes,5)
-           return this.rotes;
-          
-        }
+     for(let p of this.$router.options.routes)
+     {
+        for(let path of res.data)
+         {
+            if(p.path===path)
+            {
+              this.rotes.push(p)
+            }
+         }
+     }
     });
   },
   computed: {

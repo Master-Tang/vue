@@ -64,6 +64,15 @@ export default
         method: 'post',
         params
       })
+   },
+   export(params)
+   {
+      return request({
+         url:'/admin/stat/export',
+         method:'post',
+         params,
+         responseType: 'blob'
+      })
    }
   
 }

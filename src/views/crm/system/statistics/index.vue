@@ -18,7 +18,8 @@
         value-format="yyyy-MM-dd"
       ></el-date-picker>
 
-      <el-button type="primary" @click="handle()">查看</el-button>
+      <el-button type="primary" @click="handle()">统计</el-button>
+        <el-button type="primary" @click="handleExport()">导出excel</el-button>
     </div>
 
     <el-table
@@ -87,13 +88,8 @@ export default {
       end: this.value2
     }).then(res => {
       if (res.success) {
-          // console.log(res.data);
-          for (var i = 0; i < res.data.length; i++) {
-            for (var n = 0; n < res.data[i].length; n++) {
-              this.list.push(res.data[i][n])
-              // console.log(this.list)
-            }
-          }
+          console.log(res.data);
+          this.list=res.data
           this.listLoading = false;
           for (var i = 1; i <= this.list.length; i++) {
             this.$set(this.list[i-1], "a", i);
@@ -141,12 +137,7 @@ export default {
       }).then(res => {
         if (res.success) {
           // console.log(res.data);
-          for (var i = 0; i < res.data.length; i++) {
-            for (var n = 0; n < res.data[i].length; n++) {
-              this.list.push(res.data[i][n])
-              // console.log(this.list)
-            }
-          }
+          this.list=res.data
          
           this.listLoading = false;
           for (var i = 1; i <= this.list.length; i++) {
@@ -165,9 +156,39 @@ export default {
           }
         }
       });
+    },
+    handleExport()
+    {
+      $.export({
+        begin: this.value1,
+        end: this.value2
+      }).then(response => {
+       
+       // resolve(response.data)
+        let blob = new Blob([response.data], {
+          type: 'application/vnd.ms-excel'
+        })
+       
+        let fileName = decodeURI(response.headers['content-disposition'].split("=")[1])
+         if (window.navigator.msSaveOrOpenBlob) {
+          
+          navigator.msSaveBlob(blob, fileName)
+        } else {
+
+          var link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = fileName
+          link.click()
+          //释放内存
+          window.URL.revokeObjectURL(link.href)
+        }
+      },err=>{
+         // reject(err)
+         //console.log(err)
+        })
     }
   }
-};
+}
 </script>
 <style  scoped>
 .button {
