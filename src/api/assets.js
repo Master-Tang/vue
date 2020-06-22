@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 export default
     {
+        homeList(){
+            return request({
+                url: '/home/homeList',
+                method: 'post',
+            })
+        },
         findDepName(){
             return request({
                 url: '/admin/sysUser/findDepName',
