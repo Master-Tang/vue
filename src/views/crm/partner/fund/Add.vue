@@ -326,7 +326,7 @@ export default {
       }).then(res => {
         if (res.success) {
           if (res.data != null) {
-            console.log(res.data);
+            // console.log(res.data);
             this.form.name = res.data.name;
             this.form.sex = res.data.sex;
             this.form.weixin = res.data.weixin;
@@ -335,6 +335,7 @@ export default {
             this.form.department = res.data.department;
             this.form.post = res.data.post;
             this.form.orgType = res.data.orgType;
+            this.form.source=res.data.source;
           }
         }
       });

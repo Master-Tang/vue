@@ -244,6 +244,7 @@ export default {
           this.form.department=res.data.department
           this.form.post=res.data.post
           this.form.orgType=res.data.orgType
+          this.form.source=res.data.source;
         }
       });
     },
