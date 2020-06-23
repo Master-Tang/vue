@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div class="button">
+  <div class="button">
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="资金伙伴查询" name="1">
           <el-form :inline="true">
@@ -17,7 +17,7 @@
             <el-form-item label="其他机构" v-if="orgType==='26'">
               <el-input v-model="orgRemark"></el-input>
             </el-form-item>
-            <el-form-item label="资金类型">
+            <el-form-item label="资金类型" style="margin-left:5.2rem">
               <el-select v-model="currency" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in currencyList"
@@ -37,17 +37,37 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            </el-form>
+
+          <el-form :inline="true">
             <el-form-item label="投资规模">
-              <el-select v-model="scale" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in abilityList"
-                  :key="item.dicValue"
-                  :label="item.dicKey"
-                  :value="item.dicValue"
-                ></el-option>
-              </el-select>
+              <el-row>
+                <el-col :span="8">
+                  <el-select v-model="scaleMin" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in abilityList"
+                      :key="item.dicValue"
+                      :label="item.dicKey"
+                      :value="item.dicValue"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="1">
+                  <div align="center">{{" ~ "}}</div>
+                </el-col>
+                <el-col :span="8">
+                  <el-select v-model="scaleMax" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in abilityList"
+                      :key="item.dicValue"
+                      :label="item.dicKey"
+                      :value="item.dicValue"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
             </el-form-item>
-            <el-form-item label="投资期限">
+            <el-form-item label="投资期限" style="margin-left:-7.5rem">
               <el-select v-model="deadline" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in deadlineList"
@@ -67,6 +87,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            </el-form>
+          <el-form :inline="true">
             <el-form-item label="资产类型">
               <el-select v-model="typeId" placeholder="请选择" style="width:100%">
                 <el-option
@@ -80,10 +102,10 @@
             <el-form-item label="资产类型其它" v-if="typeId==='20'">
               <el-input v-model="typeName"></el-input>
             </el-form-item>
-            <el-form-item label="收益率">
-              <el-input v-model="incomeRate"></el-input>
+            <el-form-item label="收益率" style="margin-left:5.2rem">
+              <el-input v-model="incomeRate" placeholder="请输入收益率" style="margin-left:1rem"></el-input>
             </el-form-item>
-            <el-form-item label="覆盖地区">
+            <el-form-item label="覆盖地区" style="margin-left:1rem">
               <el-cascader
                 style="width:100%"
                 placeholder="试试搜索：无锡"
@@ -180,7 +202,8 @@ export default {
       orgRemark: "",
       currency: "",
       struct: "",
-      scale: "",
+      scaleMin: "",
+      scaleMax:"",
       deadline: "",
       incomeType: "",
       typeId: "",
@@ -251,7 +274,8 @@ export default {
         orgRemark: this.orgRemark,
         currency: this.currency,
         struct: this.struct,
-        scale: this.scale,
+        scaleMin: this.scaleMin,
+        scaleMax:this.scaleMax,
         deadline: this.deadline,
         incomeType: this.incomeType,
         typeId: this.typeId,

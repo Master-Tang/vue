@@ -24,7 +24,7 @@
           <span class="red">*</span>
         </span>
         <el-input
-        @change="selectNum()"
+          @change="selectNum()"
           v-model="form.telephone"
           placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
@@ -42,6 +42,9 @@
       </el-form-item>
       <el-form-item label="联系地址">
         <el-input v-model="form.address" placeholder="联系地址"></el-input>
+      </el-form-item>
+      <el-form-item label="工作部门">
+        <el-input v-model="form.department" placeholder="工作部门"></el-input>
       </el-form-item>
       <el-form-item label="岗位职务">
         <el-input v-model="form.post" placeholder="岗位职务"></el-input>
@@ -87,9 +90,9 @@
         </el-form-item>
         <el-form-item label="管辖区域">
           <span slot="label">
-          管辖区域
-          <span class="red">*</span>
-        </span>
+            管辖区域
+            <span class="red">*</span>
+          </span>
           <el-cascader
             style="width:100%"
             placeholder="试试搜索:江苏"
@@ -112,17 +115,17 @@
 
       <el-form-item label="关系人姓名">
         <el-input
-         v-model="form.orgInfo.name"
-         placeholder="请输入中文名"
-         onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          v-model="form.orgInfo.name"
+          placeholder="请输入中文名"
+          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
           onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
-         ></el-input>
+        ></el-input>
       </el-form-item>
       <el-form-item label="关系人联系方式">
-        <el-input 
-        v-model="form.orgInfo.telephone" 
-        placeholder="请输入11位数字"
-        onkeyup="value=value.replace(/\D/g,'')"
+        <el-input
+          v-model="form.orgInfo.telephone"
+          placeholder="请输入11位数字"
+          onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
       </el-form-item>
@@ -199,7 +202,7 @@ export default {
         address: "",
         partnerRemark: "",
         assetAttr: "",
-        overArea:[],
+        overArea: [],
         orgInfo: {
           name: "",
           telephone: "",
@@ -231,21 +234,24 @@ export default {
     });
   },
   methods: {
-    selectNum(){
+    selectNum() {
       if (!/^1\d{10}$/.test(this.form.telephone)) {
         return;
       }
-      $.matchNumber({telephone:this.form.telephone,create_user_id:this.$route.query.id}).then(res=>{
-     if (res.data!=null) {
+      $.matchNumber({
+        telephone: this.form.telephone,
+        create_user_id: this.$route.query.id
+      }).then(res => {
+        if (res.data != null) {
           // console.log(res.data)
-          this.form.name=res.data.name
-          this.form.sex=res.data.sex
-          this.form.weixin=res.data.weixin
-          this.form.email=res.data.email
-          this.form.company=res.data.company
-          this.form.department=res.data.department
-          this.form.post=res.data.post
-          this.form.orgType=res.data.orgType
+          this.form.name = res.data.name;
+          this.form.sex = res.data.sex;
+          this.form.weixin = res.data.weixin;
+          this.form.email = res.data.email;
+          this.form.company = res.data.company;
+          this.form.department = res.data.department;
+          this.form.post = res.data.post;
+          this.form.orgType = res.data.orgType;
         }
       });
     },
@@ -263,7 +269,7 @@ export default {
       // console.log(this.form.orgInfo.relativeOver);
       if (!this.validate()) return;
       $.add(this.form).then(response => {
-         if (response.success) {
+        if (response.success) {
           //console.log(response.data);
           if (response.data === 0) {
             this.$message({
@@ -282,9 +288,11 @@ export default {
         error = "姓名至少两位\n";
       } else if (!/^1\d{10}$/.test(this.form.telephone)) {
         error = "手机号码不正确\n";
-      } else if (this.form.overArea.length==0){
+      } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      }else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      } else if (
+        this.form.email.length != 0 &&
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }
@@ -308,6 +316,4 @@ export default {
 
   vertical-align: middle;
 }
-
-
 </style>

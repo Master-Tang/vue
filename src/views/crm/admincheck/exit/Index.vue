@@ -28,14 +28,31 @@
               </el-select>
             </el-form-item>
             <el-form-item label="投资规模">
-              <el-select v-model="ability" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in abilityList"
-                  :key="item.dicValue"
-                  :label="item.dicKey"
-                  :value="item.dicValue"
-                ></el-option>
-              </el-select>
+              <el-row>
+                <el-col :span="6">
+                  <el-select v-model="abilityMin" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in abilityList"
+                      :key="item.dicValue"
+                      :label="item.dicKey"
+                      :value="item.dicValue"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="1">
+                  <div align="center">{{" ~ "}}</div>
+                </el-col>
+                <el-col :span="6">
+                  <el-select v-model="abilityMax" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in abilityList"
+                      :key="item.dicValue"
+                      :label="item.dicKey"
+                      :value="item.dicValue"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
             </el-form-item>
             <el-form-item label="资产类型">
               <el-select v-model="typeId" placeholder="请选择" style="width:100%">
@@ -142,7 +159,8 @@ export default {
       orgType: "",
       orgRemark: "",
       usage: "",
-      ability: "",
+      abilityMin:"",
+      abilityMax: "",
       typeId: "",
       typeName: "",
       cities: [],
@@ -174,7 +192,8 @@ export default {
        this.orgType="",
       this.orgRemark="",
       this.usage="",
-      this.ability="",
+      this.abilityMin="",
+      this.abilityMax="",
       this.typeId="",
       this.typeName="",
       this.cities=[]
@@ -193,7 +212,8 @@ export default {
         orgType: this.orgType,
         orgRemark: this.orgRemark,
         usage: this.usage,
-        ability: this.ability,
+        abilityMin: this.abilityMin,
+        abilityMax:this.abilityMax,
         typeId: this.typeId,
         typeName: this.typeName,
         pageSize: this.pageSize,

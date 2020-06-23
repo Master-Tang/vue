@@ -95,15 +95,32 @@
       </el-form-item>
 
       <el-form-item label="投资规模">
-        <el-select v-model="form.exitInfo.ability" placeholder="请选择" style="width:100%">
-          <el-option
-            v-for="item in abilityList"
-            :key="item.dicValue"
-            :label="item.dicKey"
-            :value="item.dicValue"
-          ></el-option>
-        </el-select>
-      </el-form-item>
+          <el-row>
+            <el-col :span="4">
+              <el-select v-model="form.exitInfo.abilityMin" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1  ">
+              <div align="center">{{" ~ "}}</div>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="form.exitInfo.abilityMax" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-col>
+          </el-row>
+        </el-form-item>
 
       <el-form-item>
         <span slot="label">
@@ -174,7 +191,8 @@ export default {
         overArea: [],
         exitInfo: {
           usage: [],
-          ability: "",
+          abilityMin: "",
+          abilityMax:"",
           fancyList: []
         }
       },

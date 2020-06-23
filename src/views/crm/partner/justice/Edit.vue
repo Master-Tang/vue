@@ -42,6 +42,9 @@
       <el-form-item label="联系地址">
         <el-input v-model="form.address" placeholder="联系地址"></el-input>
       </el-form-item>
+      <el-form-item label="工作部门">
+        <el-input v-model="form.department" placeholder="工作部门"></el-input>
+      </el-form-item>
       <el-form-item label="岗位职务">
         <el-input v-model="form.post" placeholder="岗位职务"></el-input>
       </el-form-item>

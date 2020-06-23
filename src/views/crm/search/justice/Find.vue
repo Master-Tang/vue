@@ -10,6 +10,7 @@
       <el-form-item label="电子邮件:">{{form.email}}</el-form-item>
       <el-form-item label="机构名称:">{{form.company}}</el-form-item>
       <el-form-item label="联系地址:">{{form.address}}</el-form-item>
+      <el-form-item label="工作部门:">{{form.department}}</el-form-item>
       <el-form-item label="岗位职务:">{{form.post}}</el-form-item>
       </el-form>
       </el-collapse-item>

@@ -324,16 +324,18 @@ export default {
         telephone: this.form.telephone,
         create_user_id: this.$route.query.id
       }).then(res => {
-        if (res.data != null) {
-          // console.log(res.data)
-          this.form.name = res.data.name;
-          this.form.sex = res.data.sex;
-          this.form.weixin = res.data.weixin;
-          this.form.email = res.data.email;
-          this.form.company = res.data.company;
-          this.form.department = res.data.department;
-          this.form.post = res.data.post;
-          this.form.orgType = res.data.orgType;
+        if (res.success) {
+          if (res.data != null) {
+            console.log(res.data);
+            this.form.name = res.data.name;
+            this.form.sex = res.data.sex;
+            this.form.weixin = res.data.weixin;
+            this.form.email = res.data.email;
+            this.form.company = res.data.company;
+            this.form.department = res.data.department;
+            this.form.post = res.data.post;
+            this.form.orgType = res.data.orgType;
+          }
         }
       });
     },
@@ -387,7 +389,9 @@ export default {
         error = "手机号码不正确\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      } else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      } else if (
+        this.form.email.length != 0 &&
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }

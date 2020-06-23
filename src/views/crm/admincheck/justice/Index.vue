@@ -58,7 +58,7 @@
         <template slot-scope="scope">{{ scope.row.telephone }}</template>
       </el-table-column>
 
-      <el-table-column label="单位名称" align="center">
+      <el-table-column label="机构名称" align="center">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
       <el-table-column label="岗位" align="center">

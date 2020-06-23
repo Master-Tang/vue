@@ -17,7 +17,7 @@
             <el-form-item label="其他机构" v-if="orgType==='26'">
               <el-input v-model="orgRemark"></el-input>
             </el-form-item>
-            <el-form-item label="资金类型" style="margin-left:2rem">
+            <el-form-item label="资金类型" style="margin-left:5.2rem">
               <el-select v-model="currency" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in currencyList"
@@ -42,7 +42,7 @@
           <el-form :inline="true">
             <el-form-item label="投资规模">
               <el-row>
-                <el-col :span="6">
+                <el-col :span="8">
                   <el-select v-model="scaleMin" placeholder="请选择" style="width:100%">
                     <el-option
                       v-for="item in abilityList"
@@ -55,7 +55,7 @@
                 <el-col :span="1">
                   <div align="center">{{" ~ "}}</div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                   <el-select v-model="scaleMax" placeholder="请选择" style="width:100%">
                     <el-option
                       v-for="item in abilityList"
@@ -67,7 +67,7 @@
                 </el-col>
               </el-row>
             </el-form-item>
-            <el-form-item label="投资期限" style="margin-left:-11.2rem">
+            <el-form-item label="投资期限" style="margin-left:-8rem">
               <el-select v-model="deadline" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in deadlineList"
@@ -102,7 +102,7 @@
             <el-form-item label="资产类型其它" v-if="typeId==='20'">
               <el-input v-model="typeName"></el-input>
             </el-form-item>
-            <el-form-item label="收益率" style="margin-left:2rem">
+            <el-form-item label="收益率" style="margin-left:5.2rem">
               <el-input v-model="incomeRate" placeholder="请输入收益率" style="margin-left:1rem"></el-input>
             </el-form-item>
             <el-form-item label="覆盖地区" style="margin-left:1rem">
