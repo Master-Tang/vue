@@ -1,15 +1,22 @@
 <template>
   <div class="my-padding">
+    <el-collapse accordion>
+      <el-collapse-item title="伙伴基础信息" name="1">
+        <el-form ref="form" :model="form" label-width="8rem">
+          <el-form-item label="伙伴姓名:">{{form.name}}</el-form-item>
+          <el-form-item label="性别:">{{form.sex}}</el-form-item>
+          <el-form-item label="手机号:">{{form.telephone}}</el-form-item>
+          <el-form-item label="微信号:">{{form.weixin}}</el-form-item>
+          <el-form-item label="电子邮件:">{{form.email}}</el-form-item>
+          <el-form-item label="单位名称:">{{form.company}}</el-form-item>
+          <el-form-item label="联系地址:">{{form.address}}</el-form-item>
+          <el-form-item label="工作部门:">{{form.department}}</el-form-item>
+          <el-form-item label="工作岗位:">{{form.post}}</el-form-item>
+        </el-form>
+      </el-collapse-item>
+    </el-collapse>
+
     <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="伙伴姓名:">{{form.name}}</el-form-item>
-      <el-form-item label="性别:">{{form.sex}}</el-form-item>
-      <el-form-item label="手机号:">{{form.telephone}}</el-form-item>
-      <el-form-item label="微信号:">{{form.weixin}}</el-form-item>
-      <el-form-item label="电子邮件:">{{form.email}}</el-form-item>
-      <el-form-item label="单位名称:">{{form.company}}</el-form-item>
-      <el-form-item label="联系地址:">{{form.address}}</el-form-item>
-      <el-form-item label="工作部门:">{{form.department}}</el-form-item>
-      <el-form-item label="工作岗位:">{{form.post}}</el-form-item>
       <el-form-item label="伙伴来源:">
         <el-select v-model="form.source" placeholder style="width:100%" disabled>
           <el-option
@@ -22,6 +29,7 @@
       </el-form-item>
       <el-form-item label="伙伴对应项目:">{{form.item}}</el-form-item>
       <el-form-item label="伙伴对应债权:">{{form.debt}}</el-form-item>
+
       <el-form-item label="机构类型:">
         <el-select v-model="form.orgType" placeholder style="width:100%" disabled>
           <el-option
@@ -59,14 +67,31 @@
         </el-form-item>
         <el-form-item label="投资比例:">{{item.min+"%~"+item.max+"%"}}</el-form-item>
         <el-form-item label="投资规模:">
-          <el-select v-model="item.scale" placeholder style="width:100%" disabled>
-            <el-option
-              v-for="item in abilityList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
+          <el-row>
+            <el-col :span="4">
+              <el-select v-model="item.scaleMin" placeholder="请选择" style="width:100%" disabled>
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1  ">
+              <div align="center">{{" ~ "}}</div>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="item.scaleMax" placeholder="请选择" style="width:100%" disabled>
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="投资期限:">
           <el-select v-model="item.deadline" placeholder style="width:100%" disabled>
@@ -88,7 +113,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="收益率:">{{item.incomeRate}}</el-form-item>
+        <el-form-item label="收益率:">{{item.incomeRate+"%"}}</el-form-item>
       </div>
 
       <el-form-item label="覆盖地区:">
@@ -122,8 +147,7 @@
       <el-form-item label="其他要求:">{{form.fundInfo.otherMark}}</el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="updateData()">保存</el-button>
-        <el-button @click="$router.push('index')">取消</el-button>
+        <el-button @click="$router.push('index')">退出</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -195,6 +219,7 @@ export default {
         this.structList = res.data.structList;
         this.deadlineList = res.data.deadlineList;
         let partner = res.data.partner;
+        // console.log(partner);
         this.form = partner;
       }
     });
@@ -206,7 +231,8 @@ export default {
         struct: "",
         min: "",
         max: "",
-        scale: "",
+        scaleMin: "",
+        scaleMax: "",
         deadline: "",
         incomeType: "",
         incomeRate: ""
@@ -225,14 +251,6 @@ export default {
       this.form.fundInfo.fancyList.splice(index, 1);
     },
 
-    updateData() {
-      if (!this.validate()) return;
-      $.update(this.form).then(response => {
-        if (response.success) {
-          this.$router.replace("index");
-        }
-      });
-    },
     validate() {
       let error = "";
       if (this.form.name.length <= 1) {

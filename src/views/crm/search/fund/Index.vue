@@ -17,7 +17,7 @@
             <el-form-item label="其他机构" v-if="orgType==='26'">
               <el-input v-model="orgRemark"></el-input>
             </el-form-item>
-            <el-form-item label="资金类型">
+            <el-form-item label="资金类型" style="margin-left:2rem">
               <el-select v-model="currency" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in currencyList"
@@ -37,17 +37,37 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            </el-form>
+
+          <el-form :inline="true">
             <el-form-item label="投资规模">
-              <el-select v-model="scale" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in abilityList"
-                  :key="item.dicValue"
-                  :label="item.dicKey"
-                  :value="item.dicValue"
-                ></el-option>
-              </el-select>
+              <el-row>
+                <el-col :span="6">
+                  <el-select v-model="scaleMin" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in abilityList"
+                      :key="item.dicValue"
+                      :label="item.dicKey"
+                      :value="item.dicValue"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+                <el-col :span="1">
+                  <div align="center">{{" ~ "}}</div>
+                </el-col>
+                <el-col :span="6">
+                  <el-select v-model="scaleMax" placeholder="请选择" style="width:100%">
+                    <el-option
+                      v-for="item in abilityList"
+                      :key="item.dicValue"
+                      :label="item.dicKey"
+                      :value="item.dicValue"
+                    ></el-option>
+                  </el-select>
+                </el-col>
+              </el-row>
             </el-form-item>
-            <el-form-item label="投资期限">
+            <el-form-item label="投资期限" style="margin-left:-11.2rem">
               <el-select v-model="deadline" placeholder="请选择" style="width:100%">
                 <el-option
                   v-for="item in deadlineList"
@@ -67,6 +87,8 @@
                 ></el-option>
               </el-select>
             </el-form-item>
+            </el-form>
+          <el-form :inline="true">
             <el-form-item label="资产类型">
               <el-select v-model="typeId" placeholder="请选择" style="width:100%">
                 <el-option
@@ -80,10 +102,10 @@
             <el-form-item label="资产类型其它" v-if="typeId==='20'">
               <el-input v-model="typeName"></el-input>
             </el-form-item>
-            <el-form-item label="收益率">
-              <el-input v-model="incomeRate"></el-input>
+            <el-form-item label="收益率" style="margin-left:2rem">
+              <el-input v-model="incomeRate" placeholder="请输入收益率" style="margin-left:1rem"></el-input>
             </el-form-item>
-            <el-form-item label="覆盖地区">
+            <el-form-item label="覆盖地区" style="margin-left:1rem">
               <el-cascader
                 style="width:100%"
                 placeholder="试试搜索：无锡"
@@ -99,6 +121,7 @@
                 <el-col :span="24">
                   <div class="grid-content bg-purple-dark">
                     <el-button type="primary" @click="find()">查找</el-button>
+                    <el-button type="primary" @click="reset()">重置</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -160,7 +183,7 @@ export default {
       state: 0,
       list: null,
       val: "",
-      incomeRate:"",
+      incomeRate: "",
       listLoading: true,
       currentPage: 1,
       pageSize: 10,
@@ -171,7 +194,8 @@ export default {
       orgRemark: "",
       currency: "",
       struct: "",
-      scale: "",
+      scaleMin: "",
+      scaleMax: "",
       deadline: "",
       incomeType: "",
       typeId: "",
@@ -212,6 +236,20 @@ export default {
     });
   },
   methods: {
+    reset() {
+      (this.cities = []),
+        (this.orgType = ""),
+        (this.orgRemark = ""),
+        (this.currency = ""),
+        (this.struct = ""),
+        (this.scaleMin = ""),
+        (this.scaleMax = ""),
+        (this.deadline = ""),
+        (this.incomeType = ""),
+        (this.typeId = ""),
+        (this.incomeRate = ""),
+        (this.typeName = "");
+    },
     find() {
       this.listLoading = true;
       this.list = null;
@@ -227,8 +265,9 @@ export default {
         orgRemark: this.orgRemark,
         currency: this.currency,
         struct: this.struct,
-        incomeRate:this.incomeRate,
-        scale: this.scale,
+        incomeRate: this.incomeRate,
+        scaleMin: this.scaleMin,
+        scaleMax:this.scaleMax,
         deadline: this.deadline,
         incomeType: this.incomeType,
         typeId: this.typeId,
@@ -276,12 +315,12 @@ export default {
         this.find();
       } else this.fetchData();
     },
-     handleFind(id) {
+    handleFind(id) {
       this.$router.push({
         path: "find",
         query: { id: id }
       });
-    },
+    }
   }
 };
 </script>

@@ -26,6 +26,7 @@
                 <el-col :span="24">
                   <div class="grid-content bg-purple-dark">
                     <el-button type="primary" @click="find()">查找</el-button>
+                    <el-button type="primary" @click="reset()">重置</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -113,6 +114,11 @@ export default {
     });
   },
   methods: {
+    reset(){
+      this.company="",
+      this.post="",
+      this.cities=[]
+    },
     find() {
       this.listLoading = true;
       this.list = null;

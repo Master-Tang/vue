@@ -1,5 +1,7 @@
 <template>
   <div class="add">
+    <el-collapse  accordion>
+      <el-collapse-item title="伙伴基础信息" name="1">
     <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item label="伙伴姓名:">{{form.name}}</el-form-item>
       <el-form-item label="性别:">{{form.sex}}</el-form-item>
@@ -9,6 +11,11 @@
       <el-form-item label="机构名称:">{{form.company}}</el-form-item>
       <el-form-item label="联系地址:">{{form.address}}</el-form-item>
       <el-form-item label="岗位职务:">{{form.post}}</el-form-item>
+      </el-form>
+      </el-collapse-item>
+    </el-collapse>
+
+    <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item label="伙伴来源:">
         <el-select v-model="form.source" placeholder style="width:100%" disabled>
           <el-option
@@ -92,8 +99,7 @@
       <el-form-item label="关系人岗位职务:">{{form.orgInfo.pos}}</el-form-item>
 
       <el-form-item>
-        <el-button type="primary" @click="updateData()">立即创建</el-button>
-        <el-button @click="$router.push('index')">取消</el-button>
+        <el-button @click="$router.push('index')">退出</el-button>
       </el-form-item>
     </el-form>
   </div>
@@ -165,14 +171,6 @@ export default {
     },
     deleteItem(item, index) {
       this.form.orgInfo.resumeList.splice(index, 1);
-    },
-    updateData() {
-      if (!this.validate()) return;
-      $.update(this.form).then(response => {
-        if (response.success) {
-          this.$router.replace("index");
-        }
-      });
     },
     validate() {
       let error = "";

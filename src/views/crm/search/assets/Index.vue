@@ -56,6 +56,7 @@
                 <el-col :span="24">
                   <div class="grid-content bg-purple-dark">
                     <el-button type="primary" @click="find()">查找</el-button>
+                    <el-button type="primary" @click="reset()">重置</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -178,6 +179,14 @@ export default {
         this.listLoading = false;
         // console.log(response.data.list);
       });
+    },
+    reset(){
+       this.orgType="",
+      this.orgRemark="",
+      this.belong= "",
+      this.typeId="",
+      this.typeName="",
+      this.cities=[]
     },
 
     fetchData() {

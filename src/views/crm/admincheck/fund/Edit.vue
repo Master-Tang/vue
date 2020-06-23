@@ -31,10 +31,6 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="微信号">
-        <span slot="label">
-          微信号
-          <span class="red">*</span>
-        </span>
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
       <el-form-item label="电子邮箱">
@@ -106,38 +102,55 @@
         <el-form-item label="投资比例" width="80px">
           <el-row>
             <el-col :span="4">
-              <el-input 
-              v-model="item.min"
-              placeholder="请输入数字"
-              onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+              <el-input
+                v-model="item.min"
+                placeholder="请输入数字"
+                onkeyup="value=value.replace(/\D/g,'')"
+                onchange="value=value.replace(/\D/g,'')"
               ></el-input>
             </el-col>
             <el-col :span="1">
               <div>{{" % ~ "}}</div>
             </el-col>
             <el-col :span="4">
-              <el-input 
-              v-model="item.max"
-              placeholder="请输入数字"
-              onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+              <el-input
+                v-model="item.max"
+                placeholder="请输入数字"
+                onkeyup="value=value.replace(/\D/g,'')"
+                onchange="value=value.replace(/\D/g,'')"
               ></el-input>
             </el-col>
             <el-col :span="1">
-              <div>{{" %  "}}</div>
+              <div>{{" % "}}</div>
             </el-col>
           </el-row>
         </el-form-item>
-        <el-form-item label="投资规模">
-          <el-select v-model="item.scale" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in abilityList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
+        <el-form-item label="投资规模:">
+          <el-row>
+            <el-col :span="4">
+              <el-select v-model="item.scaleMin" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-col>
+            <el-col :span="1  ">
+              <div align="center">{{" ~ "}}</div>
+            </el-col>
+            <el-col :span="4">
+              <el-select v-model="item.scaleMax" placeholder="请选择" style="width:100%">
+                <el-option
+                  v-for="item in abilityList"
+                  :key="item.dicValue"
+                  :label="item.dicKey"
+                  :value="item.dicValue"
+                ></el-option>
+              </el-select>
+            </el-col>
+          </el-row>
         </el-form-item>
         <el-form-item label="投资期限">
           <el-select v-model="item.deadline" placeholder="请选择" style="width:100%">
@@ -308,7 +321,8 @@ export default {
         struct: "",
         min: "",
         max: "",
-        scale: "",
+        scaleMin: "",
+        scaleMax:"",
         deadline: "",
         incomeType: "",
         incomeRate: ""
@@ -341,12 +355,9 @@ export default {
         error = "姓名至少两位\n";
       } else if (!/^1\d{10}$/.test(this.form.telephone)) {
         error = "手机号码不正确\n";
-      } else if (this.form.weixin.length == 0) {
-        error = "微信不能为空\n";
-      } else if (this.form.overArea.length == 0) {
+      }else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      }else if (
-        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      } else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }

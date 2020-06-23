@@ -31,10 +31,6 @@
         ></el-input>
       </el-form-item>
       <el-form-item label="微信号">
-        <span slot="label">
-          微信号
-          <span class="red">*</span>
-        </span>
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
       <el-form-item label="电子邮箱">
@@ -247,12 +243,9 @@ export default {
         error = "姓名至少两位\n";
       } else if (!/^1\d{10}$/.test(this.form.telephone)) {
         error = "手机号码不正确\n";
-      } else if (this.form.weixin.length == 0) {
-        error = "微信不能为空\n";
-      } else if (this.form.overArea.length == 0) {
+      }else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      } else if (
-        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      } else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }
