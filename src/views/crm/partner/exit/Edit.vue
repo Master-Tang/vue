@@ -75,21 +75,16 @@
         </el-select>
       </el-form-item>
 
-      <div id="aaa" v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
-        <el-form-item label="用途偏好">
-          <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in usageList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type @click="deleteItem1(item, index)">删除</el-button>
-        </el-form-item>
-      </div>
+      <el-form-item label="用途偏好">
+        <el-select v-model="form.exitInfo.usage" multiple placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in usageList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="用途偏好">
         <el-button @click="addItem1()" type>用途偏好</el-button>
       </el-form-item>
@@ -229,14 +224,6 @@ export default {
     });
   },
   methods: {
-    addItem1() {
-      this.form.exitInfo.usage.push({
-        usage: ""
-      });
-    },
-    deleteItem1(item, index) {
-      this.form.exitInfo.usage.splice(index, 1);
-    },
     addItem() {
       this.form.exitInfo.fancyList.push({
         typeId: "",

@@ -32,11 +32,15 @@ export default[
           },
           {
             path: 'fund/add',
-            component: () => import('@/views/crm/partner/fund/Add')
+            component: () => import('@/views/crm/partner/fund/Add'),
+            meta:{title:'新增'},
+            hidden:true
           },
           {
             path: 'fund/edit',
-            component: () => import('@/views/crm/partner/fund/Edit')
+            component: () => import('@/views/crm/partner/fund/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
 
           {
@@ -46,11 +50,15 @@ export default[
           },
           {
             path: 'exit/add',
-            component: () => import('@/views/crm/partner/exit/Add')
+            component: () => import('@/views/crm/partner/exit/Add'),
+            meta:{title:'新增'},
+            hidden:true
           },
           {
             path: 'exit/edit',
-            component: () => import('@/views/crm/partner/exit/Edit')
+            component: () => import('@/views/crm/partner/exit/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'justice/index',
@@ -59,11 +67,15 @@ export default[
           },
           {
             path: 'justice/add',
-            component: () => import('@/views/crm/partner/justice/Add')
+            component: () => import('@/views/crm/partner/justice/Add'),
+            meta:{title:'新增'},
+            hidden:true
           },
           {
             path: 'justice/edit',
-            component: () => import('@/views/crm/partner/justice/Edit')
+            component: () => import('@/views/crm/partner/justice/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'peer/index',
@@ -72,11 +84,15 @@ export default[
           },
           {
             path: 'peer/add',
-            component: () => import('@/views/crm/partner/peer/Add')
+            component: () => import('@/views/crm/partner/peer/Add'),
+            meta:{title:'新增'},
+            hidden:true
           },
           {
             path: 'peer/edit',
-            component: () => import('@/views/crm/partner/peer/Edit')
+            component: () => import('@/views/crm/partner/peer/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
           {
             path: 'gov/index',
@@ -85,11 +101,15 @@ export default[
           },
           {
             path: 'gov/add',
-            component: () => import('@/views/crm/partner/gov/Add')
+            component: () => import('@/views/crm/partner/gov/Add'),
+            meta:{title:'新增'},
+            hidden:true
           },
           {
             path: 'gov/edit',
-            component: () => import('@/views/crm/partner/gov/Edit')
+            component: () => import('@/views/crm/partner/gov/Edit'),
+            meta:{title:'编辑'},
+            hidden:true
           },
         ]
       },

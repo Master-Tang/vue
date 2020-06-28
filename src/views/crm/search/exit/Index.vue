@@ -193,7 +193,7 @@ export default {
     find() {
       this.listLoading = true;
       this.list = null;
-      // console.log(this.overArea)
+      // console.log(this.usage)
       this.pushcities = [];
       for (let i in this.cities) {
         this.pushcities.push(this.cities[i][1]);
@@ -238,10 +238,8 @@ export default {
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
-      // console.log(this.currentPage)
       if (this.state == 1) {
         this.find();
-        //console.log(this.currentPage)
       } else this.fetchData();
     },
     handleCurrentChange(val) {

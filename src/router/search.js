@@ -15,7 +15,8 @@ export default[
           {
             path: 'assets/find',
             component: () => import('@/views/crm/search/assets/Find'),
-            
+            meta:{title:'查看'},
+            hidden:true
           },
           {
             path: 'fund/index',
@@ -25,7 +26,8 @@ export default[
           {
             path: 'fund/find',
             component: () => import('@/views/crm/search/fund/Find'),
-            
+            meta:{title:'查看'},
+            hidden:true
           },
           {
             path: 'exit/index',
@@ -35,7 +37,8 @@ export default[
           {
             path: 'exit/find',
             component: () => import('@/views/crm/search/exit/Find'),
-            
+            meta:{title:'查看'},
+            hidden:true
           },
           {
             path: 'justice/index',
@@ -45,7 +48,8 @@ export default[
           {
             path: 'justice/find',
             component: () => import('@/views/crm/search/justice/Find'),
-            
+            meta:{title:'查看'},
+            hidden:true
           },
           {
             path: 'peer/index',
@@ -55,7 +59,8 @@ export default[
           {
             path: 'peer/find',
             component: () => import('@/views/crm/search/peer/Find'),
-            
+            meta:{title:'查看'},
+            hidden:true
           },
           {
             path: 'gov/index',
@@ -65,7 +70,8 @@ export default[
           {
             path: 'gov/find',
             component: () => import('@/views/crm/search/gov/Find'),
-            
+            meta:{title:'查看'},
+            hidden:true
           },
         ]
       }
