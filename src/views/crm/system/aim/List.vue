@@ -1,25 +1,18 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <span class="demonstration">请选择日期</span>
-      <el-date-picker
-        v-model="value1"
-        type="date"
-        placeholder="选择日期"
-        format="yyyy"
-        value-format="yyyy"
-      ></el-date-picker>
-      {{"-"}}
-      <el-date-picker
-        v-model="value2"
-        type="date"
-        placeholder="选择日期"
-        format="yyyy"
-        value-format="yyyy"
-      ></el-date-picker>
+      <span class="demonstration">请选择年份</span>
+      <el-select v-model="value" placeholder="请选择">
+        <el-option
+          v-for="item in options"
+          :key="item.value1"
+          :label="item.label1"
+          :value="item.value1"
+        ></el-option>
+      </el-select>
 
       <el-button type="primary" @click="handle()">统计</el-button>
-        <el-button type="primary" @click="handleExport()">导出excel</el-button>
+      <el-button type="primary" @click="handleExport()">导出excel</el-button>
     </div>
 
     <el-table
@@ -33,28 +26,26 @@
       highlight-current-row
     >
       <el-table-column label="姓名" align="center">
-        <template slot-scope="scope">{{ scope.row.a }}</template>
+        <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
       <el-table-column label="部门" align="center">
-        <template slot-scope="scope">
-          <span>{{ scope.row.trueName }}</span>
-        </template>
+        <template slot-scope="scope">{{ scope.row.depName }}</template>
       </el-table-column>
       <el-table-column label="第一季度" align="center">
-        <template slot-scope="scope">{{ scope.row.depName }}</template>
+        <template slot-scope="scope">{{ scope.row.quarter1 }}</template>
       </el-table-column>
 
       <el-table-column label="第二季度" align="center">
-        <template slot-scope="scope">{{ scope.row.assetNum }}</template>
+        <template slot-scope="scope">{{ scope.row.quarter2 }}</template>
       </el-table-column>
       <el-table-column label="第三季度" align="center">
-        <template slot-scope="scope">{{ scope.row.fundNum }}</template>
+        <template slot-scope="scope">{{ scope.row.quarter3 }}</template>
       </el-table-column>
       <el-table-column label="第四季度" align="center">
-        <template slot-scope="scope">{{ scope.row.justiceNum }}</template>
+        <template slot-scope="scope">{{ scope.row.quarter4 }}</template>
       </el-table-column>
       <el-table-column label="年度" align="center">
-        <template slot-scope="scope">{{ scope.row.orgNum }}</template>
+        <template slot-scope="scope">{{ scope.row.yr }}</template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
@@ -67,127 +58,70 @@
 
 <script>
 import $ from "@/api/sysuser";
+import { options } from 'runjs';
 
 export default {
   data() {
     return {
       list: [],
       listLoading: true,
-      value1: "",
-      value2: "",
+      value:"",
+      options:[]
     };
   },
   created() {
-    this.getTime()
-    $.homeList1().then(res=>{
-      console.log(res)
-    })
-    // $.getStatList({
-    //   begin: this.value1,
-    //   end: this.value2
-    // }).then(res => {
-    //   if (res.success) {
-    //       // console.log(res.data);
-    //       this.list=res.data
-    //       this.listLoading = false;
-    //       for (var i = 1; i <= this.list.length; i++) {
-    //         this.$set(this.list[i-1], "a", i);
-    //       }
-    //       // var n=[]
-    //       for (var n = 0; n < this.list.length; n++) {
-    //         var sum =
-    //           this.list[n].justiceNum +
-    //           this.list[n].assetNum +
-    //           this.list[n].fundNum +
-    //           this.list[n].orgNum +
-    //           this.list[n].exitNum +
-    //           this.list[n].peerNum;
-    //         this.$set(this.list[n], "sum", sum);
-    //       }
-    //     }
-    // });
+    var nowDate = new Date();
+    // console.log(String(nowDate.getFullYear()))
+    this.value=String(nowDate.getFullYear())
+    $.homeList({time:String(nowDate.getFullYear())}).then(res => {
+      this.list = res.data;
+      for(let i=parseInt(this.list[0].minTime);i<=this.list[0].maxTime;i++){
+        this.options.push({value1:i,label1:i})
+      }
+      console.log(this.list)
+      this.listLoading = false;
+    });
   },
   methods: {
-    getTime(){
-      var date = new Date();
-      var seperator1 = "-";
-      var year = date.getFullYear();
-      var month = date.getMonth() + 1;
-      var strDate = date.getDate();
-      var yesterday=date.getDate()-7;
-      if (month >= 1 && month <= 9) {
-        month = "0" + month;
-      }
-      if (strDate >= 0 && strDate <= 9) {
-        strDate = "0" + strDate;
-      }
-      var currentdate = year + seperator1 + month + seperator1 + strDate;
-      var currentdate1 = year + seperator1 + month + seperator1 + yesterday;
-      this.value1=currentdate1
-      this.value2=currentdate
-      
-    },
-    handle() {
-      this.list = [];
-      // console.log(this.value2);
-      $.getStatList({
-        begin: this.value1,
-        end: this.value2
-      }).then(res => {
-        if (res.success) {
-          // console.log(res.data);
-          this.list=res.data
-         
-          this.listLoading = false;
-          for (var i = 1; i <= this.list.length; i++) {
-            this.$set(this.list[i-1], "a", i);
-          }
-          // var n=[]
-          for (var n = 0; n < this.list.length; n++) {
-            var sum =
-              this.list[n].justiceNum +
-              this.list[n].assetNum +
-              this.list[n].fundNum +
-              this.list[n].orgNum +
-              this.list[n].exitNum +
-              this.list[n].peerNum;
-            this.$set(this.list[n], "sum", sum);
-          }
-        }
+    handleEdit(id){
+      this.$router.push({
+        path: "edit",
+        query: { id: id }
       });
     },
-    handleExport()
-    {
+    handleExport() {
       $.export({
         begin: this.value1,
         end: this.value2
-      }).then(response => {
-       
-       // resolve(response.data)
-        let blob = new Blob([response.data], {
-          type: 'application/vnd.ms-excel'
-        })
-       
-        let fileName = decodeURI(response.headers['content-disposition'].split("=")[1])
-         if (window.navigator.msSaveOrOpenBlob) {
-          
-          navigator.msSaveBlob(blob, fileName)
-        } else {
+      }).then(
+        response => {
+          // resolve(response.data)
+          let blob = new Blob([response.data], {
+            type: "application/vnd.ms-excel"
+          });
 
-          var link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = fileName
-          link.click()
-          //释放内存
-          window.URL.revokeObjectURL(link.href)
+          let fileName = decodeURI(
+            response.headers["content-disposition"].split("=")[1]
+          );
+          if (window.navigator.msSaveOrOpenBlob) {
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            //释放内存
+            window.URL.revokeObjectURL(link.href);
+          }
+        },
+        err => {
+          // reject(err)
+          //console.log(err)
         }
-      },err=>{
-         // reject(err)
-         //console.log(err)
-        })
+      );
     }
   }
-}
+};
 </script>
 <style  scoped>
 .button {

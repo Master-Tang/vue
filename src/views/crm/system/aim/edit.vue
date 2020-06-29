@@ -58,10 +58,10 @@ export default {
   },
   created() {
     (this.id = this.$route.query.id),
-      department.getList().then(response => {
+      $.findAim({userId:this.id,time:"2020"}).then(response => {
         if (response.success) {
-          // console.log(response.data.list)
-          this.form.departmentList = response.data.list;
+          console.log(response)
+          // this.form.departmentList = response.data.list;
         }
       });
     this.getData();

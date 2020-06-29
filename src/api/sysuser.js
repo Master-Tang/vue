@@ -1,9 +1,16 @@
 import request from '@/utils/request'
 export default
 {
-   homeList1(params){
+   findAim(params){
       return request({
-         url: '/home/homeList',
+         url: '/home/findAim',
+         method: 'post',
+         params
+       })
+   },
+   homeList(params){
+      return request({
+         url: '/home/yearAim',
          method: 'post',
          params
        })
