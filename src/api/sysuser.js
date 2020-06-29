@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 export default
 {
+   homeList1(params){
+      return request({
+         url: '/home/homeList',
+         method: 'post',
+         params
+       })
+   },
    getList(params)
    {
     return request({

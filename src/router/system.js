@@ -31,7 +31,8 @@ export default [
       {
         path: 'dict/index',
         component: () => import('@/views/crm/system/dict/Index'),
-        meta: { title: '字典设置' }
+        meta: { title: '字典设置' },
+       
       },
       {
         path: 'dict/add',
@@ -66,7 +67,18 @@ export default [
         path: 'statistics/index',
         component: () => import('@/views/crm/system/statistics/index'),
         meta: { title: '绩效统计' }
-      }
+      },
+      {
+        path: 'aim/index',
+        component: () => import('@/views/crm/system/aim/index'),
+        meta: { title: '绩效目标' }
+      },
+      {
+        path: 'aim/edit',
+        component: () => import('@/views/crm/system/aim/edit'),
+        meta: { title: '更改目标' },
+        hidden: true
+      },
     ]
 
   }
