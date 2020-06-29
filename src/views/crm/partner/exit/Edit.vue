@@ -85,9 +85,6 @@
           ></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="用途偏好">
-        <el-button @click="addItem1()" type>用途偏好</el-button>
-      </el-form-item>
 
       <el-form-item label="投资规模">
           <el-row>

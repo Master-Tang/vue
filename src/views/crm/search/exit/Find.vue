@@ -1,18 +1,18 @@
 <template>
   <div class="my-padding">
-    <el-collapse  accordion>
+    <el-collapse accordion>
       <el-collapse-item title="伙伴基础信息" name="1">
-    <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="伙伴姓名:">{{form.name}}</el-form-item>
-      <el-form-item label="性别:">{{form.sex}}</el-form-item>
-      <el-form-item label="手机号:">{{form.telephone}}</el-form-item>
-      <el-form-item label="微信号:">{{form.weixin}}</el-form-item>
-      <el-form-item label="电子邮件:">{{form.email}}</el-form-item>
-      <el-form-item label="单位名称:">{{form.company}}</el-form-item>
-      <el-form-item label="联系地址:">{{form.address}}</el-form-item>
-      <el-form-item label="工作部门:">{{form.department}}</el-form-item>
-      <el-form-item label="工作岗位:">{{form.post}}</el-form-item>
-      </el-form>
+        <el-form ref="form" :model="form" label-width="8rem">
+          <el-form-item label="伙伴姓名:">{{form.name}}</el-form-item>
+          <el-form-item label="性别:">{{form.sex}}</el-form-item>
+          <el-form-item label="手机号:">{{form.telephone}}</el-form-item>
+          <el-form-item label="微信号:">{{form.weixin}}</el-form-item>
+          <el-form-item label="电子邮件:">{{form.email}}</el-form-item>
+          <el-form-item label="单位名称:">{{form.company}}</el-form-item>
+          <el-form-item label="联系地址:">{{form.address}}</el-form-item>
+          <el-form-item label="工作部门:">{{form.department}}</el-form-item>
+          <el-form-item label="工作岗位:">{{form.post}}</el-form-item>
+        </el-form>
       </el-collapse-item>
     </el-collapse>
 
@@ -29,7 +29,7 @@
       </el-form-item>
       <el-form-item label="伙伴对应项目:">{{form.item}}</el-form-item>
       <el-form-item label="伙伴对应债权:">{{form.debt}}</el-form-item>
-      
+
       <el-form-item label="退出类型:">
         <el-select v-model="form.orgType" placeholder style="width:100%" disabled>
           <el-option
@@ -41,18 +41,16 @@
         </el-select>
       </el-form-item>
 
-      <div id="aaa" v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
-        <el-form-item label="用途偏好:">
-          <el-select v-model="item.usage" placeholder style="width:100%" disabled>
-            <el-option
-              v-for="item in usageList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-      </div>
+      <el-form-item label="用途偏好">
+        <el-select v-model="form.exitInfo.usage" multiple placeholder style="width:100%" disabled="">
+          <el-option
+            v-for="item in usageList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
 
       <el-form-item label="投资规模:">
         <el-select v-model="form.exitInfo.ability" placeholder style="width:100%" disabled>
@@ -161,14 +159,6 @@ export default {
     });
   },
   methods: {
-    addItem1() {
-      this.form.exitInfo.usage.push({
-        usage: ""
-      });
-    },
-    deleteItem1(item, index) {
-      this.form.exitInfo.usage.splice(index, 1);
-    },
     addItem() {
       this.form.exitInfo.fancyList.push({
         typeId: "",

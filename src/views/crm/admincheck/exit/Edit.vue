@@ -75,52 +75,44 @@
         </el-select>
       </el-form-item>
 
-      <div id="aaa" v-for="(item, index) in form.exitInfo.usage" :key="'travel'+index">
-        <el-form-item label="用途偏好">
-          <el-select v-model="item.usage" placeholder="请选择" style="width:100%">
-            <el-option
-              v-for="item in usageList"
-              :key="item.dicValue"
-              :label="item.dicKey"
-              :value="item.dicValue"
-            ></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type @click="deleteItem1(item, index)">删除</el-button>
-        </el-form-item>
-      </div>
       <el-form-item label="用途偏好">
-        <el-button @click="addItem1()" type>用途偏好</el-button>
+        <el-select v-model="form.exitInfo.usage" multiple placeholder="请选择" style="width:100%">
+          <el-option
+            v-for="item in usageList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
       </el-form-item>
 
       <el-form-item label="投资规模">
-          <el-row>
-            <el-col :span="4">
-              <el-select v-model="form.exitInfo.abilityMin" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in abilityList"
-                  :key="item.dicValue"
-                  :label="item.dicKey"
-                  :value="item.dicValue"
-                ></el-option>
-              </el-select>
-            </el-col>
-            <el-col :span="1  ">
-              <div align="center">{{" ~ "}}</div>
-            </el-col>
-            <el-col :span="4">
-              <el-select v-model="form.exitInfo.abilityMax" placeholder="请选择" style="width:100%">
-                <el-option
-                  v-for="item in abilityList"
-                  :key="item.dicValue"
-                  :label="item.dicKey"
-                  :value="item.dicValue"
-                ></el-option>
-              </el-select>
-            </el-col>
-          </el-row>
-        </el-form-item>
+        <el-row>
+          <el-col :span="4">
+            <el-select v-model="form.exitInfo.abilityMin" placeholder="请选择" style="width:100%">
+              <el-option
+                v-for="item in abilityList"
+                :key="item.dicValue"
+                :label="item.dicKey"
+                :value="item.dicValue"
+              ></el-option>
+            </el-select>
+          </el-col>
+          <el-col :span="1  ">
+            <div align="center">{{" ~ "}}</div>
+          </el-col>
+          <el-col :span="4">
+            <el-select v-model="form.exitInfo.abilityMax" placeholder="请选择" style="width:100%">
+              <el-option
+                v-for="item in abilityList"
+                :key="item.dicValue"
+                :label="item.dicKey"
+                :value="item.dicValue"
+              ></el-option>
+            </el-select>
+          </el-col>
+        </el-row>
+      </el-form-item>
 
       <el-form-item>
         <span slot="label">
@@ -192,7 +184,7 @@ export default {
         exitInfo: {
           usage: [],
           abilityMin: "",
-          abilityMax:"",
+          abilityMax: "",
           fancyList: []
         }
       },
@@ -229,14 +221,6 @@ export default {
     });
   },
   methods: {
-    addItem1() {
-      this.form.exitInfo.usage.push({
-        usage: ""
-      });
-    },
-    deleteItem1(item, index) {
-      this.form.exitInfo.usage.splice(index, 1);
-    },
     addItem() {
       this.form.exitInfo.fancyList.push({
         typeId: "",
@@ -263,7 +247,9 @@ export default {
         error = "手机号码不正确\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      } else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      } else if (
+        this.form.email.length != 0 &&
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }
