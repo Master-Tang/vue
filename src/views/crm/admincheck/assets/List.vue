@@ -60,6 +60,7 @@
                   <div class="grid-content bg-purple-dark">
                     <el-button type="primary" @click="find()">查找</el-button>
                     <el-button type="primary" @click="reset()">重置</el-button>
+                    <el-button type="primary" @click="handleSelectionChange">交接</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -69,6 +70,7 @@
       </el-collapse>
     </div>
 
+    
     <el-table
       id="myform"
       v-loading="listLoading"
@@ -76,10 +78,12 @@
       element-loading-text="Loading"
       border
       fit
+      ref="table"
       style="width: 100%"
       highlight-current-row
+  
     >
-      <el-table-column type="selection" align="center"></el-table-column>
+      <el-table-column type="selection" align="center" ></el-table-column>
       <el-table-column label="录入人" align="center">
         <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
@@ -179,6 +183,10 @@ export default {
     });
   },
   methods: {
+    handleSelectionChange(){
+      console.log(this.$refs.table.selection)
+      // console.log("lllll")
+    },
     reset() {
       (this.orgType = ""),
         (this.orgRemark = ""),

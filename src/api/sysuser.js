@@ -101,6 +101,14 @@ export default
          params,
          responseType: 'blob'
       })
+   },
+   exportTimeList(params)
+   {
+      return request({
+         url:'/home/export',
+         method:'post',
+         params,
+         responseType: 'blob'
+      })
    }
-  
 }

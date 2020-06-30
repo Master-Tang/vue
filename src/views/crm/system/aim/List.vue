@@ -95,9 +95,8 @@ export default {
       })
     },
     handleExport() {
-      $.export({
-        begin: this.value1,
-        end: this.value2
+      $.exportTimeList({
+        time: this.value,
       }).then(
         response => {
           // resolve(response.data)
