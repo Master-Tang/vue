@@ -39,9 +39,9 @@
       <el-table-column label="伙伴姓名" align="center">
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center">
+      <el-table-column label="录入时间" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sex }}</span>
+          <span>{{ scope.row.createTime.substring(0,10) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" align="center">
@@ -96,7 +96,6 @@ export default {
     // console.log('index.......')
     $.getCreateUserId().then(response => {
       this.createUserId = response.data.userId;
-      // console.log(response.data)
       this.listLoading = false;
       this.fetchData();
     });
@@ -129,6 +128,7 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
+        // console.log(this.list)
       });
     },
     handleSizeChange(val) {

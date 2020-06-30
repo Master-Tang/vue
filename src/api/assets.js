@@ -1,6 +1,12 @@
 import request from '@/utils/request'
 export default
     {
+        workersList(){
+            return request({
+                url: '/user/select/workes',
+                method: 'post',
+            })
+        },
         homeList(){
             return request({
                 url: '/home/homeList',

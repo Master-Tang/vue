@@ -60,16 +60,12 @@ export default {
     (this.id = this.$route.query.id)
     department.getList().then(response => {
         if (response.success) {
-          // console.log(response.data.list)
           this.form.departmentList = response.data.list;
         }
       });
     var nowDate = new Date();
-    // console.log(String(nowDate.getFullYear()))
-    
       $.findAim({ userId: this.id, time: String(nowDate.getFullYear()) }).then(response => {
         if (response.success) {
-          console.log(response.data);
           this.form.trueName = response.data.trueName;
           this.form.depId = response.data.depId;
           this.form.quarter1 = response.data.quarter1;
@@ -82,14 +78,14 @@ export default {
   },
   methods: {
     updateData() {
-      if (!this.validate()) return;
-      $.update({
-        loginName: this.form.loginName,
-        depId: this.form.depId,
-        telephone: this.form.telephone,
-        dingDing: this.form.dingDing,
-        roleId: this.form.roleId,
-        trueName: this.form.trueName
+      $.updateAim({
+        quarter1: this.form.quarter1,
+        quarter2: this.form.quarter2,
+        quarter3: this.form.quarter3,
+        quarter4: this.form.quarter4,
+        yr: this.form.yr,
+        depId : this.form.depId,
+        userId:this.id
       }).then(response => {
         if (response.success) {
           this.$router.replace("index");

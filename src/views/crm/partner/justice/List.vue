@@ -38,9 +38,9 @@
       <el-table-column label="伙伴姓名" align="center">
         <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center">
+      <el-table-column label="录入时间" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sex }}</span>
+          <span>{{ scope.row.createTime.substring(0,10) }}</span>
         </template>
       </el-table-column>
       <el-table-column label="手机号" align="center">

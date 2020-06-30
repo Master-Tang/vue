@@ -1,9 +1,12 @@
 <template>
   <div class="app-container">
     <div class="button" align="center">
-      <el-collapse v-model="activeName" accordion >
-        <el-collapse-item title="资产伙伴查询" name="1" >
+      <el-collapse v-model="activeName" accordion>
+        <el-collapse-item title="资产伙伴查询" name="1">
           <el-form :inline="true">
+            <!-- <el-form-item label="用户选择">
+              <el-cascader v-model="value" :options="options" @change="handleChange"></el-cascader>
+            </el-form-item>-->
             <el-form-item label="机构类型">
               <el-select v-model="orgType" placeholder="请选择" style="width:100%">
                 <el-option
@@ -121,7 +124,7 @@ import qs from "querystring";
 export default {
   data() {
     return {
-      activeName: '1',
+      activeName: "1",
       value: "",
       state: 0,
       list: null,
@@ -131,7 +134,7 @@ export default {
       pageSize: 10,
       total: 0,
       options: [],
-      pushcities:[],
+      pushcities: [],
       orgType: "",
       orgRemark: "",
       belong: "",
@@ -141,11 +144,18 @@ export default {
       bizTypeList: [],
       assetAttrList: [],
       orgTypeList: [],
-      provinceList: []
+      provinceList: [],
+      userList:[],
     };
   },
   created() {
     this.fetchData();
+    $.workersList().then(res=>{
+      console.log(res.data)
+      // for(let i of res.data){
+        // console.log(res.data.资产关系部)
+      // }
+    })
     $.addInit().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
@@ -153,46 +163,42 @@ export default {
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
+        console.log(this.provinceList);
       }
     });
   },
   methods: {
-    reset(){
-       this.orgType="",
-      this.orgRemark="",
-      this.belong= "",
-      this.typeId="",
-      this.typeName="",
-      this.cities=[]
+    reset() {
+        (this.orgType = ""),
+        (this.orgRemark = ""),
+        (this.belong = ""),
+        (this.typeId = ""),
+        (this.typeName = ""),
+        (this.cities = []);
     },
     find() {
       this.listLoading = true;
       this.list = null;
       // console.log(this.overArea)
-      this.pushcities=[]
-      for(let i in this.cities)
-      {
-        this.pushcities.push(this.cities[i][1])
-
+      this.pushcities = [];
+      for (let i in this.cities) {
+        this.pushcities.push(this.cities[i][1]);
       }
-      let params=qs.stringify({
+      let params = qs.stringify({
         partnerType: 1,
-        "cities[]":this.pushcities.length>0?this.pushcities:null,
-        orgType:this.orgType,
-        orgRemark:this.orgRemark,
-        typeId:this.typeId,
-        typeName:this.typeName,
-        belong:this.belong,
-        pageSize:this.pageSize,
-        pageIndex:this.currentPage
-        });
-        // console.log(params)
+        "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
+        orgType: this.orgType,
+        orgRemark: this.orgRemark,
+        typeId: this.typeId,
+        typeName: this.typeName,
+        belong: this.belong,
+        pageSize: this.pageSize,
+        pageIndex: this.currentPage
+      });
       $.findAssetInf(params).then(response => {
-        // console.log(response.data);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(response.data.list);
       });
     },
 
@@ -203,11 +209,10 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        // console.log(response.data);
+        // console.log(response);
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(response.data.list);
       });
     },
     handleSizeChange(val) {
@@ -226,7 +231,7 @@ export default {
         this.find();
       } else this.fetchData();
     },
-     handleEdit(id) {
+    handleEdit(id) {
       this.$router.push({
         path: "edit",
         query: { id: id }

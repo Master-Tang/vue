@@ -1,16 +1,10 @@
 <template>
   <div class="add">
     <el-form ref="form" :model="form" label-width="8rem">
-      <el-form-item label="用户名">
-        <el-input v-model="form.loginName"></el-input>
+      <el-form-item label="姓名">
+        <el-input v-model="form.trueName"></el-input>
       </el-form-item>
-      <el-form-item label="密码">
-        <el-input v-model="form.loginPass"></el-input>
-      </el-form-item>
-      <el-form-item label="确认密码">
-        <el-input v-model="form.confirmPass"></el-input>
-      </el-form-item>
-      <el-form-item label="部门名称">
+       <el-form-item label="部门名称">
         <el-select v-model="form.depId" placeholder="请选择">
           <el-option
             v-for="item in form.departmentList"
@@ -20,15 +14,21 @@
           ></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="用户名">
+        <el-input v-model="form.loginName"></el-input>
+      </el-form-item>
+      <el-form-item label="密码">
+        <el-input v-model="form.loginPass"></el-input>
+      </el-form-item>
+      <el-form-item label="确认密码">
+        <el-input v-model="form.confirmPass"></el-input>
+      </el-form-item>
       <el-form-item label="电话号码">
         <el-input v-model="form.telephone"></el-input>
       </el-form-item>
       <el-form-item label="钉钉号">
         <el-input v-model="form.dingDing"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名">
-        <el-input v-model="form.trueName"></el-input>
-      </el-form-item>
+      </el-form-item> 
       <el-form-item label="权限">
         <el-select v-model="form.roleId" placeholder="请选择">
           <el-option

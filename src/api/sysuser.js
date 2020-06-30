@@ -1,6 +1,20 @@
 import request from '@/utils/request'
 export default
 {
+   yearAim(params){
+      return request({
+         url: '/home/yearAim',
+         method: 'post',
+         params
+       })
+   },
+   updateAim(params){
+      return request({
+         url: '/home/update',
+         method: 'post',
+         params
+       })
+   },
    findAim(params){
       return request({
          url: '/home/findAim',
