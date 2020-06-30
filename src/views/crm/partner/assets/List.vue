@@ -93,9 +93,10 @@ export default {
     };
   },
   created() {
-    console.log('index.......')
+    // console.log('index.......')
     $.getCreateUserId().then(response => {
-      this.createUserId = response.createId;
+      this.createUserId = response.data.userId;
+      // console.log(response.data)
       this.listLoading = false;
       this.fetchData();
     });

@@ -2,7 +2,7 @@
   <div class="add">
     <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item label="用户名">
-        <el-input disabled="" v-model="form.loginName"></el-input>
+        <el-input disabled v-model="form.loginName"></el-input>
       </el-form-item>
       <el-form-item label="部门名称">
         <el-select v-model="form.depId" placeholder="请选择">
@@ -33,7 +33,7 @@
   
 <script>
 import $ from "@/api/sysuser";
-import department from '../../../../api/department';
+import department from "../../../../api/department";
 export default {
   data() {
     return {
@@ -45,49 +45,48 @@ export default {
         dingDing: "",
         roleId: "",
         trueName: "",
-        departmentList:[]
+        departmentList: []
       },
       options: []
     };
   },
   created() {
-      this.id = this.$route.query.id,
-       department.getList().then(response=>{
-      if(response.success){
-        // console.log(response.data.list)
-        this.form.departmentList=response.data.list
-      }
-    });
-      this.getData();
+    (this.id = this.$route.query.id),
+      department.getList().then(response => {
+        if (response.success) {
+          // console.log(response.data.list)
+          this.form.departmentList = response.data.list;
+        }
+      });
+    this.getData();
   },
   methods: {
     getData() {
       // console.log(this.id);
       $.getByUserId({ userId: this.id }).then(response => {
         // console.log(response.data);
-        this.form.loginName = response.data.loginName
-        this.form.depId = response.data.depId
-        this.form.trueName = response.data.trueName
-        this.form.telephone = response.data.telephone
-        this.form.dingDing = response.data.dingDing
-        this.form.roleId = response.data.roleId
-        
+        this.form.loginName = response.data.loginName;
+        this.form.depId = response.data.depId;
+        this.form.trueName = response.data.trueName;
+        this.form.telephone = response.data.telephone;
+        this.form.dingDing = response.data.dingDing;
+        this.form.roleId = response.data.roleId;
       });
     },
     updateData() {
       if (!this.validate()) return;
-        $.update({
-          loginName:this.form.loginName,
-          depId: this.form.depId,
-          telephone: this.form.telephone,
-          dingDing: this.form.dingDing,
-          roleId: this.form.roleId,
-          trueName: this.form.trueName,
-        }).then(response => {
-          if (response.success) {
-            this.$router.replace("index");
-          }
-        });
+      $.update({
+        loginName: this.form.loginName,
+        depId: this.form.depId,
+        telephone: this.form.telephone,
+        dingDing: this.form.dingDing,
+        roleId: this.form.roleId,
+        trueName: this.form.trueName
+      }).then(response => {
+        if (response.success) {
+          this.$router.replace("index");
+        }
+      });
     },
     validate() {
       let error = "";
@@ -97,7 +96,7 @@ export default {
         error = "请输入正确的手机号码\n";
       } else if (this.form.dingDing.length == 0) {
         error = "钉钉不能为空\n";
-      } 
+      }
 
       if (error) {
         this.$message({

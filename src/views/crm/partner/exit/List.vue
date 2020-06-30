@@ -93,7 +93,7 @@ export default {
   },
   created() {
     $.getCreateUserId().then(response => {
-      this.createUserId = response.createId;
+      this.createUserId = response.data.userId;
       this.listLoading = false;
       this.fetchData();
     });

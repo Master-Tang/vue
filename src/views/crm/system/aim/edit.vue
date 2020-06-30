@@ -2,10 +2,10 @@
   <div class="add">
     <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item label="姓名">
-        <el-input disabled v-model="form.loginName"></el-input>
+        <el-input disabled v-model="form.trueName"></el-input>
       </el-form-item>
       <el-form-item label="部门名称">
-        <el-select v-model="form.depId" placeholder="请选择">
+        <el-select v-model="form.depId" disabled="" placeholder="请选择">
           <el-option
             v-for="item in form.departmentList"
             :key="item.id"
@@ -15,19 +15,19 @@
         </el-select>
       </el-form-item>
       <el-form-item label="第一季度">
-        <el-input v-model="form.trueName"></el-input>
+        <el-input v-model="form.quarter1"></el-input>
       </el-form-item>
       <el-form-item label="第二季度">
-        <el-input v-model="form.telephone"></el-input>
+        <el-input v-model="form.quarter2"></el-input>
       </el-form-item>
       <el-form-item label="第三季度">
-        <el-input v-model="form.dingDing"></el-input>
+        <el-input v-model="form.quarter3"></el-input>
       </el-form-item>
       <el-form-item label="第四季度">
-        <el-input v-model="form.dingDing"></el-input>
+        <el-input v-model="form.quarter4"></el-input>
       </el-form-item>
       <el-form-item label="年度">
-        <el-input v-model="form.dingDing"></el-input>
+        <el-input v-model="form.yr"></el-input>
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
@@ -45,40 +45,42 @@ export default {
     return {
       id: "",
       form: {
-        loginName: "",
+        quarter1: "",
+        quarter2: "",
+        quarter3: "",
+        quarter4: "",
         depId: "",
-        telephone: "",
-        dingDing: "",
-        roleId: "",
+        yr: "",
         trueName: "",
-        departmentList: []
-      },
-      options: []
+        departmentList:[]
+      }
     };
   },
   created() {
-    (this.id = this.$route.query.id),
-      $.findAim({userId:this.id,time:"2020"}).then(response => {
+    (this.id = this.$route.query.id)
+    department.getList().then(response => {
         if (response.success) {
-          console.log(response)
-          // this.form.departmentList = response.data.list;
+          // console.log(response.data.list)
+          this.form.departmentList = response.data.list;
         }
       });
-    this.getData();
+    var nowDate = new Date();
+    // console.log(String(nowDate.getFullYear()))
+    
+      $.findAim({ userId: this.id, time: String(nowDate.getFullYear()) }).then(response => {
+        if (response.success) {
+          console.log(response.data);
+          this.form.trueName = response.data.trueName;
+          this.form.depId = response.data.depId;
+          this.form.quarter1 = response.data.quarter1;
+          this.form.quarter2 = response.data.quarter2;
+          this.form.quarter3 = response.data.quarter3;
+          this.form.quarter4 = response.data.quarter4;
+          this.form.yr = response.data.yr;
+        }
+      });
   },
   methods: {
-    getData() {
-      // console.log(this.id);
-      $.getByUserId({ userId: this.id }).then(response => {
-        // console.log(response.data);
-        this.form.loginName = response.data.loginName;
-        this.form.depId = response.data.depId;
-        this.form.trueName = response.data.trueName;
-        this.form.telephone = response.data.telephone;
-        this.form.dingDing = response.data.dingDing;
-        this.form.roleId = response.data.roleId;
-      });
-    },
     updateData() {
       if (!this.validate()) return;
       $.update({
@@ -93,25 +95,6 @@ export default {
           this.$router.replace("index");
         }
       });
-    },
-    validate() {
-      let error = "";
-      if (this.form.trueName.length <= 1) {
-        error = "姓名至少两位\n";
-      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
-        error = "请输入正确的手机号码\n";
-      } else if (this.form.dingDing.length == 0) {
-        error = "钉钉不能为空\n";
-      }
-
-      if (error) {
-        this.$message({
-          message: error,
-          type: "error"
-        });
-        return false;
-      }
-      return true;
     }
   }
 };
