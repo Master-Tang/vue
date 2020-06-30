@@ -235,4 +235,12 @@ export default
                 params
             })
         },
+        reductions(params)
+        {
+            return request({
+                url: '/user/partner/reductions',
+                method: 'post',
+                params
+            })
+        },
     }

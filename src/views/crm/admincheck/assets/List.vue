@@ -79,6 +79,7 @@
       style="width: 100%"
       highlight-current-row
     >
+      <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column label="录入人" align="center">
         <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
@@ -100,8 +101,18 @@
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="success" size="small" @click="handleDel(scope.row.partnerId)">恢复</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            v-if="scope.row.disabled==0"
+            @click="handleEdit(scope.row.partnerId)"
+          >编辑</el-button>
+          <el-button
+            type="success"
+            size="small"
+            v-if="scope.row.disabled==1"
+            @click="handleDel(scope.row.partnerId)"
+          >恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -145,17 +156,17 @@ export default {
       assetAttrList: [],
       orgTypeList: [],
       provinceList: [],
-      userList:[],
+      userList: []
     };
   },
   created() {
     this.fetchData();
-    $.workersList().then(res=>{
+    $.workersList().then(res => {
       // console.log(res.data)
       // for(let i of res.data){
-        // console.log(res.data.资产关系部)
+      // console.log(res.data.资产关系部)
       // }
-    })
+    });
     $.addInit().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
@@ -169,7 +180,7 @@ export default {
   },
   methods: {
     reset() {
-        (this.orgType = ""),
+      (this.orgType = ""),
         (this.orgRemark = ""),
         (this.belong = ""),
         (this.typeId = ""),
@@ -199,7 +210,7 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        console.log(this.list)
+        // console.log(this.list)
       });
     },
 
@@ -213,7 +224,7 @@ export default {
         // console.log(response);
         this.list = response.data.list;
         this.total = response.data.total;
-        console.log(this.list)
+        console.log(this.list);
         this.listLoading = false;
       });
     },
@@ -240,17 +251,18 @@ export default {
       });
     },
     handleDel(id) {
-      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
+      this.$confirm("是否恢复?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           // console.log(id);
-          $.remove({ partnerId: id }).then(response => {
+          $.reductions({ partnerId: id }).then(response => {
+            // console.log(response)
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "已恢复!"
             });
             this.fetchData();
           });
@@ -258,7 +270,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "不恢复"
           });
         });
     }

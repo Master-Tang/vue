@@ -67,8 +67,18 @@
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="success" size="small" @click="handleDel(scope.row.partnerId)">恢复</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            v-if="scope.row.disabled==0"
+            @click="handleEdit(scope.row.partnerId)"
+          >编辑</el-button>
+          <el-button
+            type="success"
+            size="small"
+            v-if="scope.row.disabled==1"
+            @click="handleDel(scope.row.partnerId)"
+          >恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -122,10 +132,8 @@ export default {
     });
   },
   methods: {
-    reset(){
-      this.company="",
-      this.post="",
-      this.cities=[]
+    reset() {
+      (this.company = ""), (this.post = ""), (this.cities = []);
     },
     find() {
       this.listLoading = true;
@@ -187,18 +195,19 @@ export default {
         query: { id: id }
       });
     },
-    handleDel(id) {
-      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
+      handleDel(id) {
+      this.$confirm("是否恢复?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          // console.log(id)
-          $.remove({ partnerId: id }).then(response => {
+          // console.log(id);
+          $.reductions({ partnerId: id }).then(response => {
+            // console.log(response)
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "已恢复!"
             });
             this.fetchData();
           });
@@ -206,7 +215,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "不恢复"
           });
         });
     }

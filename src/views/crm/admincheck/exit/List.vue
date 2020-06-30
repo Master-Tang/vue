@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
     <div class="button">
-      <el-collapse v-model="activeName" accordion >
+      <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="退出伙伴查询" name="1">
           <el-form :inline="true">
             <el-form-item label="退出类型">
@@ -93,7 +93,7 @@
       </el-collapse>
     </div>
 
-   <el-table
+    <el-table
       id="myform"
       v-loading="listLoading"
       :data="list"
@@ -121,11 +121,21 @@
       <el-table-column label="部门岗位" align="center">
         <template slot-scope="scope">{{ scope.row.department+" "+scope.row.post }}</template>
       </el-table-column>
-    
-      <el-table-column label="操作"  align="center">
+
+      <el-table-column label="操作" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="success" size="small" @click="handleDel(scope.row.partnerId)">恢复</el-button>
+          <el-button
+            type="primary"
+            size="small"
+            v-if="scope.row.disabled==0"
+            @click="handleEdit(scope.row.partnerId)"
+          >编辑</el-button>
+          <el-button
+            type="success"
+            size="small"
+            v-if="scope.row.disabled==1"
+            @click="handleDel(scope.row.partnerId)"
+          >恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -143,11 +153,11 @@
 
 <script>
 import $ from "@/api/assets";
-import qs from "querystring"
+import qs from "querystring";
 export default {
   data() {
     return {
-      activeName: '1',
+      activeName: "1",
       value: "",
       state: 0,
       list: null,
@@ -159,7 +169,7 @@ export default {
       orgType: "",
       orgRemark: "",
       usage: "",
-      abilityMin:"",
+      abilityMin: "",
       abilityMax: "",
       typeId: "",
       typeName: "",
@@ -168,8 +178,8 @@ export default {
       usageList: [],
       assetsTypeList: [],
       abilityList: [],
-      provinceList:[],
-      exitTypeList:[]
+      provinceList: [],
+      exitTypeList: []
     };
   },
   created() {
@@ -188,15 +198,15 @@ export default {
     });
   },
   methods: {
-    reset(){
-       this.orgType="",
-      this.orgRemark="",
-      this.usage="",
-      this.abilityMin="",
-      this.abilityMax="",
-      this.typeId="",
-      this.typeName="",
-      this.cities=[]
+    reset() {
+      (this.orgType = ""),
+        (this.orgRemark = ""),
+        (this.usage = ""),
+        (this.abilityMin = ""),
+        (this.abilityMax = ""),
+        (this.typeId = ""),
+        (this.typeName = ""),
+        (this.cities = []);
     },
     find() {
       this.listLoading = true;
@@ -208,12 +218,12 @@ export default {
       }
       let params = qs.stringify({
         partnerType: 3,
-        "cities[]": this.pushcities.length>0?this.pushcities:null,
+        "cities[]": this.pushcities.length > 0 ? this.pushcities : null,
         orgType: this.orgType,
         orgRemark: this.orgRemark,
         usage: this.usage,
         abilityMin: this.abilityMin,
-        abilityMax:this.abilityMax,
+        abilityMax: this.abilityMax,
         typeId: this.typeId,
         typeName: this.typeName,
         pageSize: this.pageSize,
@@ -259,24 +269,25 @@ export default {
         this.find();
       } else this.fetchData();
     },
-   handleEdit(id) {
+    handleEdit(id) {
       this.$router.push({
         path: "edit",
         query: { id: id }
       });
     },
-    handleDel(id) {
-      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
+  handleDel(id) {
+      this.$confirm("是否恢复?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
-          //console.log(id)
-          $.remove({ partnerId:id }).then(response => {
+          // console.log(id);
+          $.reductions({ partnerId: id }).then(response => {
+            // console.log(response)
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "已恢复!"
             });
             this.fetchData();
           });
@@ -284,7 +295,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "不恢复"
           });
         });
     }

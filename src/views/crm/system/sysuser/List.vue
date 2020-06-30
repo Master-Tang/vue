@@ -40,8 +40,8 @@
       <el-table-column label="钉钉号" width align="center">
         <template slot-scope="scope">{{ scope.row.dingDing }}</template>
       </el-table-column>
-      <el-table-column label="角色号" width align="center">
-        <template slot-scope="scope">{{ scope.row.roleId }}</template>
+      <el-table-column label="角色" width align="center">
+        <template slot-scope="scope">{{ scope.row.roleName }}</template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
@@ -94,6 +94,7 @@ export default {
           this.list = response.data.list;
           this.total = response.data.total;
           this.listLoading = false;
+          // console.log(this.list)
         }
       );
     },
