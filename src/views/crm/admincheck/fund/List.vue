@@ -141,29 +141,29 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" align="center">
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+      <el-table-column label="录入人" align="center">
+        <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center">
+      <el-table-column label="录入时间" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sex }}</span>
+          <span>{{ scope.row.createTime.substring(0,10) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center">
-        <template slot-scope="scope">{{ scope.row.telephone }}</template>
+      <el-table-column label="伙伴姓名" align="center">
+        <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
 
       <el-table-column label="单位名称" align="center">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
-      <el-table-column label="岗位" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
+      <el-table-column label="部门岗位" align="center">
+        <template slot-scope="scope">{{ scope.row.department+" "+scope.row.post }}</template>
       </el-table-column>
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
+          <el-button type="success" size="small" @click="handleDel(scope.row.partnerId)">恢复</el-button>
         </template>
       </el-table-column>
     </el-table>

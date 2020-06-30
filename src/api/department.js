@@ -1,6 +1,13 @@
 import request from '@/utils/request'
 export default
 {
+   confirmVal(params){
+      return request({
+         url: '/admin/department/depInfo',
+         method: 'post',
+         params
+       })
+   },
    getList(params)
    {
     return request({

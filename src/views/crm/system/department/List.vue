@@ -20,7 +20,7 @@
       fit
       highlight-current-row
     >
-     <el-table-column label="部门编号">
+      <el-table-column label="部门编号">
         <template slot-scope="scope">{{ scope.row.id }}</template>
       </el-table-column>
       <el-table-column label="部门名称">
@@ -54,6 +54,7 @@ export default {
       value: "",
       state: 0,
       list: null,
+      roleId: "",
       val: "",
       listLoading: true,
       currentPage: 1,
@@ -63,10 +64,9 @@ export default {
     };
   },
   created() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
-    
     fetchData() {
       this.listLoading = true;
       $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
@@ -78,6 +78,7 @@ export default {
         }
       );
     },
+
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
@@ -108,14 +109,27 @@ export default {
         type: "warning"
       })
         .then(() => {
-          //console.log(id)
-          $.delete({ id }).then(response => {
-            this.$message({
-              type: "success",
-              message: "删除成功!"
-            });
-            this.fetchData();
+          $.confirmVal({ depId: id }).then(response => {
+            if (response.success) {
+              // console.log(response)
+              if (response.data[0] == null) {
+                // console.log("lll")
+                $.delete({ id }).then(response => {
+                  this.$message({
+                    type: "success",
+                    message: "删除成功!"
+                  });
+                  this.fetchData();
+                });
+              }else{
+                this.$message({
+                    type: "error",
+                    message: "该部门中还有数据,请清空后删除!"
+                  });
+              }
+            }
           });
+          //console.log(id)
         })
         .catch(() => {
           this.$message({
@@ -123,6 +137,21 @@ export default {
             message: "已取消删除"
           });
         });
+    },
+    validate() {
+      let error = "";
+      if (this.form.name.length <= 1) {
+        error = "姓名至少两位\n";
+      }
+
+      if (error) {
+        this.$message({
+          message: error,
+          type: "error"
+        });
+        return false;
+      }
+      return true;
     }
   }
 };

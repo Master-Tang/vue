@@ -79,29 +79,29 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="伙伴姓名" align="center">
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+      <el-table-column label="录入人" align="center">
+        <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
-      <el-table-column label="性别" align="center">
+      <el-table-column label="录入时间" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.sex }}</span>
+          <span>{{ scope.row.createTime.substring(0,10) }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="手机号" align="center">
-        <template slot-scope="scope">{{ scope.row.telephone }}</template>
+      <el-table-column label="伙伴姓名" align="center">
+        <template slot-scope="scope">{{ scope.row.name }}</template>
       </el-table-column>
 
       <el-table-column label="单位名称" align="center">
         <template slot-scope="scope">{{ scope.row.company }}</template>
       </el-table-column>
-      <el-table-column label="岗位" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
+      <el-table-column label="部门岗位" align="center">
+        <template slot-scope="scope">{{ scope.row.department+" "+scope.row.post }}</template>
       </el-table-column>
 
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
+          <el-button type="success" size="small" @click="handleDel(scope.row.partnerId)">恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -151,7 +151,7 @@ export default {
   created() {
     this.fetchData();
     $.workersList().then(res=>{
-      console.log(res.data)
+      // console.log(res.data)
       // for(let i of res.data){
         // console.log(res.data.资产关系部)
       // }
@@ -163,7 +163,7 @@ export default {
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
-        console.log(this.provinceList);
+        // console.log(this.provinceList);
       }
     });
   },
@@ -199,6 +199,7 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
+        console.log(this.list)
       });
     },
 
@@ -212,6 +213,7 @@ export default {
         // console.log(response);
         this.list = response.data.list;
         this.total = response.data.total;
+        console.log(this.list)
         this.listLoading = false;
       });
     },
