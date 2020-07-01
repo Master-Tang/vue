@@ -172,13 +172,13 @@ export default {
       peerTypeList: [],
       peerBizList: [],
       userList: [],
-       users:[],
+      users: []
     };
   },
   created() {
     this.fetchData();
     $.findDepartmentUser().then(res => {
-      this.userList=res.data
+      this.userList = res.data;
     });
     $.addInit().then(res => {
       if (res.success) {
@@ -194,7 +194,8 @@ export default {
   },
   methods: {
     reset() {
-      (this.orgType = ""),
+      (this.users = []),
+        (this.orgType = ""),
         (this.orgRemark = ""),
         (this.bizListId = ""),
         (this.bizListName = ""),
@@ -202,13 +203,18 @@ export default {
         (this.coopListName = ""),
         (this.cities = []);
     },
-     handleUser(){
-      this.list=null
-       $.findUserList({users:this.users,partnerType:5}).then(response => {
+    handleUser() {
+      this.list = null;
+      $.findUserList({
+        users: this.users[1],
+        partnerType: 5,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(this.list)
+        // console.log(response.data)
       });
     },
     find() {
@@ -275,7 +281,7 @@ export default {
         query: { id: id }
       });
     },
-      handleDel(id) {
+    handleDel(id) {
       this.$confirm("是否恢复?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",

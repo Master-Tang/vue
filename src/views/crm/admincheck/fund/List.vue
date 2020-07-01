@@ -273,6 +273,7 @@ export default {
   },
   methods: {
     reset() {
+      (this.users = []),
       (this.cities = []),
         (this.orgType = ""),
         (this.orgRemark = ""),
@@ -286,13 +287,18 @@ export default {
         (this.incomeRate = ""),
         (this.typeName = "");
     },
-     handleUser(){
-      this.list=null
-       $.findUserList({users:this.users,partnerType:2}).then(response => {
+     handleUser() {
+      this.list = null;
+      $.findUserList({
+        users: this.users[1],
+        partnerType: 2,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(this.list)
+        // console.log(response.data)
       });
     },
     find() {

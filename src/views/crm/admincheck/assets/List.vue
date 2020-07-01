@@ -4,7 +4,7 @@
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="资产伙伴查询" name="1">
           <el-form :inline="true">
-             <el-form-item label="用户选择">
+            <el-form-item label="用户选择">
               <el-cascader
                 style="width:100%"
                 placeholder="请选择用户"
@@ -79,7 +79,43 @@
       </el-collapse>
     </div>
 
-    
+    <el-dialog
+      v-model="userValue"
+      title="选择"
+      :visible.sync="dialogTableVisible"
+      center
+      :append-to-body="true"
+      :lock-scroll="false"
+      width="50%"
+    >
+      <div>
+        <el-table
+          id="myform"
+          v-loading="allLoading"
+          :data="allName"
+          element-loading-text="Loading"
+          border
+          fit
+          ref="table"
+          style="width: 100%"
+          highlight-current-row
+        >
+          <el-table-column label="转入人" align="center">
+            <template slot-scope="scope">{{ scope.row.trueName }}</template>
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+        <template slot-scope="scope">
+          <el-button
+            type="primary"
+            size="small"
+            @click="handleTransfer(scope.row.userId)"
+          >转入</el-button>
+        </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
+
     <el-table
       id="myform"
       v-loading="listLoading"
@@ -90,9 +126,8 @@
       ref="table"
       style="width: 100%"
       highlight-current-row
-  
     >
-      <el-table-column type="selection" align="center" ></el-table-column>
+      <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column label="录入人" align="center">
         <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
@@ -148,12 +183,15 @@ import qs from "querystring";
 export default {
   data() {
     return {
+      userValue: [],
+      dialogTableVisible: false,
       activeName: "1",
       value: "",
       state: 0,
       list: null,
       val: "",
       listLoading: true,
+      allLoading:true,
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -170,14 +208,14 @@ export default {
       orgTypeList: [],
       provinceList: [],
       userList: [],
-      users:[],
-      
+      users: [],
+      allName:[]
     };
   },
   created() {
     this.fetchData();
     $.findDepartmentUser().then(res => {
-      this.userList=res.data
+      this.userList = res.data;
     });
     $.addInit().then(res => {
       if (res.success) {
@@ -190,21 +228,51 @@ export default {
     });
   },
   methods: {
-    handleUser(){
-      this.list=null
-       $.findUserList({users:this.users,partnerType:1}).then(response => {
+    handleTransfer(id){
+      console.log(id)
+      this.dialogTableVisible = false;
+      console.log(this.userValue)
+      $.updateHandover({userValue:this.userValue,userId:id}).then(res=>{
+        if(res.success){
+          this.$message({
+              type: "success",
+              message: "转入成功!"
+            });
+        }else{
+          this.$message({
+              type: "error",
+              message: "转入失败!"
+            });
+        }
+      })
+    },
+    handleUser() {
+      this.list = null;
+      $.findUserList({
+        users: this.users[1],
+        partnerType: 1,
+        pageIndex: this.currentPage,
+        pageSize: this.pageSize
+      }).then(response => {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(this.list)
+        // console.log(response.data)
       });
     },
-    handleSelectionChange(){
-      console.log(this.$refs.table.selection)
-      // console.log("lllll")
+    handleSelectionChange() {
+      this.dialogTableVisible = true;
+      this.userValue = this.$refs.table.selection;
+      console.log(this.$refs.table.selection);
+      $.TransferList().then(response=>{
+        this.allName=response.data
+        this.allLoading=false
+        console.log(response.data)
+      })
     },
     reset() {
-      (this.orgType = ""),
+      (this.users = []),
+        (this.orgType = ""),
         (this.orgRemark = ""),
         (this.belong = ""),
         (this.typeId = ""),

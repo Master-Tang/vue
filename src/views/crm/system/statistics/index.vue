@@ -84,7 +84,7 @@ export default {
   created() {
     this.getTime()
     $.getStatList({
-      begin: this.value1,
+      begin: this.value2,
       end: this.value2
     }).then(res => {
       if (res.success) {
@@ -115,7 +115,6 @@ export default {
       var year = date.getFullYear();
       var month = date.getMonth() + 1;
       var strDate = date.getDate();
-      var yesterday=date.getDate()-7;
       if (month >= 1 && month <= 9) {
         month = "0" + month;
       }
@@ -123,8 +122,6 @@ export default {
         strDate = "0" + strDate;
       }
       var currentdate = year + seperator1 + month + seperator1 + strDate;
-      var currentdate1 = year + seperator1 + month + seperator1 + yesterday;
-      this.value1=currentdate1
       this.value2=currentdate
       
     },

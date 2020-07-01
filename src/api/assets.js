@@ -1,6 +1,26 @@
 import request from '@/utils/request'
 export default
     {
+        updateHandover(params){
+            return request({
+                url: '/handover/updateHandover',
+                method: 'post',
+                params
+            })
+        },
+        TransferList(){
+            return request({
+                url: '/handover/allName',
+                method: 'post',
+            })
+        },
+        findUserList(params){
+            return request({
+                url: '/user/select/personals',
+                method: 'post',
+                params
+            })
+        },
         findDepartmentUser(){
             return request({
                 url: '/admin/sysUser/findDepartmentUser',
