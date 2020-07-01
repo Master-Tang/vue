@@ -4,9 +4,18 @@
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="资产伙伴查询" name="1">
           <el-form :inline="true">
-            <!-- <el-form-item label="用户选择">
-              <el-cascader v-model="value" :options="options" @change="handleChange"></el-cascader>
-            </el-form-item>-->
+             <el-form-item label="用户选择">
+              <el-cascader
+                style="width:100%"
+                placeholder="请选择用户"
+                v-model="users"
+                :options="userList"
+                :props="{value:'depId',label:'depName',children:'userList'}"
+                collapse-tags
+                filterable
+                @change="handleUser"
+              ></el-cascader>
+            </el-form-item>
             <el-form-item label="机构类型">
               <el-select v-model="orgType" placeholder="请选择" style="width:100%">
                 <el-option
@@ -160,16 +169,15 @@ export default {
       assetAttrList: [],
       orgTypeList: [],
       provinceList: [],
-      userList: []
+      userList: [],
+      users:[],
+      
     };
   },
   created() {
     this.fetchData();
-    $.workersList().then(res => {
-      // console.log(res.data)
-      // for(let i of res.data){
-      // console.log(res.data.资产关系部)
-      // }
+    $.findDepartmentUser().then(res => {
+      this.userList=res.data
     });
     $.addInit().then(res => {
       if (res.success) {
@@ -178,11 +186,19 @@ export default {
         this.assetAttrList = res.data.attr;
         this.bizTypeList = res.data.bizTypeList;
         this.orgTypeList = res.data.orgTypeList;
-        // console.log(this.provinceList);
       }
     });
   },
   methods: {
+    handleUser(){
+      this.list=null
+       $.findUserList({users:this.users,partnerType:1}).then(response => {
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        // console.log(this.list)
+      });
+    },
     handleSelectionChange(){
       console.log(this.$refs.table.selection)
       // console.log("lllll")
@@ -232,7 +248,7 @@ export default {
         // console.log(response);
         this.list = response.data.list;
         this.total = response.data.total;
-        console.log(this.list);
+        // console.log(this.list);
         this.listLoading = false;
       });
     },

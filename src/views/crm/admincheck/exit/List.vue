@@ -4,6 +4,18 @@
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="退出伙伴查询" name="1">
           <el-form :inline="true">
+            <el-form-item label="用户选择">
+              <el-cascader
+                style="width:100%"
+                placeholder="请选择用户"
+                v-model="users"
+                :options="userList"
+                :props="{value:'depId',label:'depName',children:'userList'}"
+                collapse-tags
+                filterable
+                @change="handleUser"
+              ></el-cascader>
+            </el-form-item>
             <el-form-item label="退出类型">
               <el-select v-model="orgType" placeholder="请选择" style="width:100%">
                 <el-option
@@ -29,7 +41,7 @@
             </el-form-item>
             <el-form-item label="投资规模">
               <el-row>
-                <el-col :span="6">
+                <el-col :span="8">
                   <el-select v-model="abilityMin" placeholder="请选择" style="width:100%">
                     <el-option
                       v-for="item in abilityList"
@@ -42,7 +54,7 @@
                 <el-col :span="1">
                   <div align="center">{{" ~ "}}</div>
                 </el-col>
-                <el-col :span="6">
+                <el-col :span="8">
                   <el-select v-model="abilityMax" placeholder="请选择" style="width:100%">
                     <el-option
                       v-for="item in abilityList"
@@ -179,11 +191,16 @@ export default {
       assetsTypeList: [],
       abilityList: [],
       provinceList: [],
-      exitTypeList: []
+      exitTypeList: [],
+      userList: [],
+       users:[],
     };
   },
   created() {
     this.fetchData();
+    $.findDepartmentUser().then(res => {
+      this.userList=res.data
+    });
     $.addInit().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
@@ -207,6 +224,15 @@ export default {
         (this.typeId = ""),
         (this.typeName = ""),
         (this.cities = []);
+    },
+     handleUser(){
+      this.list=null
+       $.findUserList({users:this.users,partnerType:3}).then(response => {
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        // console.log(this.list)
+      });
     },
     find() {
       this.listLoading = true;

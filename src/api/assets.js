@@ -1,9 +1,9 @@
 import request from '@/utils/request'
 export default
     {
-        workersList(){
+        findDepartmentUser(){
             return request({
-                url: '/user/select/workes',
+                url: '/admin/sysUser/findDepartmentUser',
                 method: 'post',
             })
         },

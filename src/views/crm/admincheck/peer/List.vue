@@ -4,6 +4,18 @@
       <el-collapse v-model="activeName" accordion>
         <el-collapse-item title="同业伙伴查询" name="1">
           <el-form :inline="true">
+            <el-form-item label="用户选择">
+              <el-cascader
+                style="width:100%"
+                placeholder="请选择用户"
+                v-model="users"
+                :options="userList"
+                :props="{value:'depId',label:'depName',children:'userList'}"
+                collapse-tags
+                filterable
+                @change="handleUser"
+              ></el-cascader>
+            </el-form-item>
             <el-form-item label="机构类型">
               <el-select v-model="orgType" placeholder="请选择" style="width:100%">
                 <el-option
@@ -158,11 +170,16 @@ export default {
       bizTypeList: [],
       orgTypeList: [],
       peerTypeList: [],
-      peerBizList: []
+      peerBizList: [],
+      userList: [],
+       users:[],
     };
   },
   created() {
     this.fetchData();
+    $.findDepartmentUser().then(res => {
+      this.userList=res.data
+    });
     $.addInit().then(res => {
       if (res.success) {
         this.sourceList = res.data.source;
@@ -184,6 +201,15 @@ export default {
         (this.coopListId = ""),
         (this.coopListName = ""),
         (this.cities = []);
+    },
+     handleUser(){
+      this.list=null
+       $.findUserList({users:this.users,partnerType:5}).then(response => {
+        this.list = response.data.list;
+        this.total = response.data.total;
+        this.listLoading = false;
+        // console.log(this.list)
+      });
     },
     find() {
       this.listLoading = true;
