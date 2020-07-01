@@ -229,9 +229,9 @@ export default {
   },
   methods: {
     handleTransfer(id){
-      console.log(id)
+      // console.log(id)
       this.dialogTableVisible = false;
-      console.log(this.userValue)
+      // console.log(this.userValue)
       $.updateHandover({userValue:this.userValue,userId:id}).then(res=>{
         if(res.success){
           this.$message({
@@ -244,6 +244,8 @@ export default {
               message: "转入失败!"
             });
         }
+        this.list=null
+        this.fetchData();
       })
     },
     handleUser() {
@@ -262,12 +264,14 @@ export default {
     },
     handleSelectionChange() {
       this.dialogTableVisible = true;
-      this.userValue = this.$refs.table.selection;
-      console.log(this.$refs.table.selection);
+      for(var i=0;i<this.$refs.table.selection.length;i++){
+          this.userValue.push(this.$refs.table.selection[i].partnerId)
+      }
+      // console.log(this.userValue);
       $.TransferList().then(response=>{
         this.allName=response.data
         this.allLoading=false
-        console.log(response.data)
+        // console.log(response.data)
       })
     },
     reset() {
