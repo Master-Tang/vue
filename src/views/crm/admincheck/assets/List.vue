@@ -80,13 +80,13 @@
     </div>
 
     <el-dialog
+      v-model="userValue"
       title="选择"
       :visible.sync="dialogTableVisible"
       center
       :append-to-body="true"
       :lock-scroll="false"
       width="50%"
-      closable="false"
     >
       <div>
         <el-table
@@ -205,8 +205,7 @@ export default {
       provinceList: [],
       userList: [],
       users: [],
-      allName: [],
-      multipleSelection: []
+      allName: []
     };
   },
   created() {
@@ -229,19 +228,21 @@ export default {
       this.dialogTableVisible = false;
       $.updateHandover({ userValue: String(this.userValue), userId: id }).then(
         res => {
-          if(res.data=="无数据"){
-              this.$message({
+          if (res.data == "无数据") {
+            this.$message({
               type: "error",
               message: "无数据,转入失败!"
             });
-          }else{
-                this.$message({
+            this.list = null;
+            this.$router.go(0)
+          } else {
+            this.$message({
               type: "success",
               message: "转入成功!"
             });
+            this.list = null;
+            this.$router.go(0)
           }
-          this.list = null;
-          this.fetchData();
         }
       );
     },
@@ -263,10 +264,12 @@ export default {
       for (var i = 0; i < this.$refs.table.selection.length; i++) {
         this.userValue.push(this.$refs.table.selection[i].partnerId + "");
       }
+      // console.log(this.userValue);
       $.TransferList().then(response => {
         this.allName = response.data;
         this.allLoading = false;
       });
+      
     },
     reset() {
       (this.users = []),
@@ -319,10 +322,12 @@ export default {
       this.currentPage = 1;
       if (this.state == 1) {
         this.find();
+        //console.log(this.currentPage)
       } else this.fetchData();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
+      //console.log(val)
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
@@ -340,7 +345,9 @@ export default {
         type: "warning"
       })
         .then(() => {
+          // console.log(id);
           $.reductions({ partnerId: id }).then(response => {
+            // console.log(response)
             this.$message({
               type: "success",
               message: "已恢复!"

@@ -314,19 +314,21 @@ export default {
       this.dialogTableVisible = false;
       $.updateHandover({ userValue: String(this.userValue), userId: id }).then(
         res => {
-          if(res.data=="无数据"){
-              this.$message({
+          if (res.data == "无数据") {
+            this.$message({
               type: "error",
               message: "无数据,转入失败!"
             });
-          }else{
-                this.$message({
+            this.list = null;
+            this.$router.go(0)
+          } else {
+            this.$message({
               type: "success",
               message: "转入成功!"
             });
+            this.list = null;
+            this.$router.go(0)
           }
-          this.list = null;
-          this.fetchData();
         }
       );
     },
