@@ -80,13 +80,13 @@
     </div>
 
     <el-dialog
-      v-model="userValue"
       title="选择"
       :visible.sync="dialogTableVisible"
       center
       :append-to-body="true"
       :lock-scroll="false"
       width="50%"
+      closable="false"
     >
       <div>
         <el-table
@@ -104,13 +104,9 @@
             <template slot-scope="scope">{{ scope.row.trueName }}</template>
           </el-table-column>
           <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button
-            type="primary"
-            size="small"
-            @click="handleTransfer(scope.row.userId)"
-          >转入</el-button>
-        </template>
+            <template slot-scope="scope">
+              <el-button type="primary" size="small" @click="handleTransfer(scope.row.userId)">转入</el-button>
+            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -191,7 +187,7 @@ export default {
       list: null,
       val: "",
       listLoading: true,
-      allLoading:true,
+      allLoading: true,
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -209,7 +205,8 @@ export default {
       provinceList: [],
       userList: [],
       users: [],
-      allName:[]
+      allName: [],
+      multipleSelection: []
     };
   },
   created() {
@@ -228,25 +225,25 @@ export default {
     });
   },
   methods: {
-    handleTransfer(id){
-      // console.log(id)
+    handleTransfer(id) {
       this.dialogTableVisible = false;
-      // console.log(this.userValue)
-      $.updateHandover({userValue:this.userValue,userId:id}).then(res=>{
-        if(res.success){
-          this.$message({
+      $.updateHandover({ userValue: String(this.userValue), userId: id }).then(
+        res => {
+          if(res.data=="无数据"){
+              this.$message({
+              type: "error",
+              message: "无数据,转入失败!"
+            });
+          }else{
+                this.$message({
               type: "success",
               message: "转入成功!"
             });
-        }else{
-          this.$message({
-              type: "error",
-              message: "转入失败!"
-            });
+          }
+          this.list = null;
+          this.fetchData();
         }
-        this.list=null
-        this.fetchData();
-      })
+      );
     },
     handleUser() {
       this.list = null;
@@ -259,20 +256,17 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(response.data)
       });
     },
     handleSelectionChange() {
       this.dialogTableVisible = true;
-      for(var i=0;i<this.$refs.table.selection.length;i++){
-          this.userValue.push(this.$refs.table.selection[i].partnerId)
+      for (var i = 0; i < this.$refs.table.selection.length; i++) {
+        this.userValue.push(this.$refs.table.selection[i].partnerId + "");
       }
-      // console.log(this.userValue);
-      $.TransferList().then(response=>{
-        this.allName=response.data
-        this.allLoading=false
-        // console.log(response.data)
-      })
+      $.TransferList().then(response => {
+        this.allName = response.data;
+        this.allLoading = false;
+      });
     },
     reset() {
       (this.users = []),
@@ -286,7 +280,6 @@ export default {
     find() {
       this.listLoading = true;
       this.list = null;
-      // console.log(this.overArea)
       this.pushcities = [];
       for (let i in this.cities) {
         this.pushcities.push(this.cities[i][1]);
@@ -306,7 +299,6 @@ export default {
         this.list = response.data.list;
         this.total = response.data.total;
         this.listLoading = false;
-        // console.log(this.list)
       });
     },
 
@@ -317,25 +309,20 @@ export default {
         pageIndex: this.currentPage,
         pageSize: this.pageSize
       }).then(response => {
-        // console.log(response);
         this.list = response.data.list;
         this.total = response.data.total;
-        // console.log(this.list);
         this.listLoading = false;
       });
     },
     handleSizeChange(val) {
       this.pageSize = val;
       this.currentPage = 1;
-      // console.log(this.currentPage)
       if (this.state == 1) {
         this.find();
-        //console.log(this.currentPage)
       } else this.fetchData();
     },
     handleCurrentChange(val) {
       this.currentPage = val;
-      //console.log(val)
       if (this.state == 1) {
         this.find();
       } else this.fetchData();
@@ -353,9 +340,7 @@ export default {
         type: "warning"
       })
         .then(() => {
-          // console.log(id);
           $.reductions({ partnerId: id }).then(response => {
-            // console.log(response)
             this.$message({
               type: "success",
               message: "已恢复!"

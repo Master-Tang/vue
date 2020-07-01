@@ -96,6 +96,7 @@
                   <div class="grid-content bg-purple-dark">
                     <el-button type="primary" @click="find()">查找</el-button>
                     <el-button type="primary" @click="reset()">重置</el-button>
+                    <el-button type="primary" @click="handleSelectionChange">交接</el-button>
                   </div>
                 </el-col>
               </el-row>
@@ -104,17 +105,51 @@
         </el-collapse-item>
       </el-collapse>
     </div>
+<el-dialog
+      v-model="userValue"
+      title="选择"
+      :visible.sync="dialogTableVisible"
+      center
+      :append-to-body="true"
+      :lock-scroll="false"
+      width="50%"
+    >
+      <div>
+        <el-table
+          id="myform"
+          v-loading="allLoading"
+          :data="allName"
+          element-loading-text="Loading"
+          border
+          fit
+          ref="table"
+          style="width: 100%"
+          highlight-current-row
+        >
+          <el-table-column label="转入人" align="center">
+            <template slot-scope="scope">{{ scope.row.trueName }}</template>
+          </el-table-column>
+          <el-table-column label="操作" align="center">
+            <template slot-scope="scope">
+              <el-button type="primary" size="small" @click="handleTransfer(scope.row.userId)">转入</el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+      </div>
+    </el-dialog>
 
-    <el-table
+   <el-table
       id="myform"
       v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
       border
       fit
+      ref="table"
       style="width: 100%"
       highlight-current-row
     >
+      <el-table-column type="selection" align="center"></el-table-column>
       <el-table-column label="录入人" align="center">
         <template slot-scope="scope">{{ scope.row.trueName }}</template>
       </el-table-column>
@@ -169,12 +204,15 @@ import qs from "querystring";
 export default {
   data() {
     return {
+      userValue: [],
+      dialogTableVisible: false,
       activeName: "1",
       value: "",
       state: 0,
       list: null,
       val: "",
       listLoading: true,
+      allLoading: true,
       currentPage: 1,
       pageSize: 10,
       total: 0,
@@ -193,7 +231,8 @@ export default {
       provinceList: [],
       exitTypeList: [],
       userList: [],
-      users: []
+      users: [],
+      allName: []
     };
   },
   created() {
@@ -215,6 +254,36 @@ export default {
     });
   },
   methods: {
+  handleTransfer(id) {
+      this.dialogTableVisible = false;
+      $.updateHandover({ userValue: String(this.userValue), userId: id }).then(
+        res => {
+          if(res.data=="无数据"){
+              this.$message({
+              type: "error",
+              message: "无数据,转入失败!"
+            });
+          }else{
+                this.$message({
+              type: "success",
+              message: "转入成功!"
+            });
+          }
+          this.list = null;
+          this.fetchData();
+        }
+      );
+    },
+    handleSelectionChange() {
+      this.dialogTableVisible = true;
+      for (var i = 0; i < this.$refs.table.selection.length; i++) {
+        this.userValue.push(this.$refs.table.selection[i].partnerId + "");
+      }
+      $.TransferList().then(response => {
+        this.allName = response.data;
+        this.allLoading = false;
+      });
+    },
     reset() {
       (this.users = []),
         (this.orgType = ""),
