@@ -9,9 +9,7 @@
         <el-input
           v-model="form.name"
           type="text"
-          placeholder="请输入中文名"
-          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
-          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          placeholder="请输入姓名"
         ></el-input>
       </el-form-item>
       <el-form-item label="性别">
