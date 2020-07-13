@@ -9,6 +9,7 @@ import system from './system'
 import partner from './partner'
 import search from './search'
 import admincheck from './admincheck'
+import bus from './bus'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -56,13 +57,6 @@ export const constantRoutes = [
       component: () => import('@/views/dashboard/index'),
       meta: { title: '首页', icon: 'dashboard' }
     }]
-    // {
-    //   path: 'dashboard1',
-    //   name: 'Dashboard',
-    //   component: () => import('@/views/crm/dashboard/index1'),
-    //   meta: { title: '首页', icon: 'dashboard' },
-    //   // hidden
-    // }
   },
 
   // 404 page must be placed at the end !!!
@@ -78,6 +72,7 @@ const createRouter = () => new Router({
     ...search,
     ...admincheck,
     ...system,
+    ...bus,
 
   ]
 })
