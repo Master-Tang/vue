@@ -37,7 +37,9 @@
         <template slot-scope="scope">{{ scope.row.balanTotal }}</template>
       </el-table-column>
       <el-table-column label="本息合计" align="center">
-        <template slot-scope="scope">{{ scope.row.prinTotal+scope.row.interTotal+scope.row.balanTotal }}</template>
+        <template
+          slot-scope="scope"
+        >{{ scope.row.prinTotal+scope.row.interTotal+scope.row.balanTotal }}</template>
       </el-table-column>
       <el-table-column label="所在机构" align="center">
         <template slot-scope="scope">{{ scope.row.institutions }}</template>
@@ -45,19 +47,11 @@
       <el-table-column label="操作" align="center" width="150rem">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.claimsNumber)">编辑</el-button>
+          <el-button type="primary" size="small" @click="detailFind(scope.row.claimsNumber)">查看</el-button>
           <el-button type="danger" size="small" @click="handleDel(scope.row.claimsNumber)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[5, 10, 15, 20]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    ></el-pagination>
   </div>
 </template>
 
@@ -76,7 +70,7 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      options: []
+      options: [],
     };
   },
   created() {
@@ -84,44 +78,32 @@ export default {
   },
   methods: {
     fetchData() {
-      this.listLoading = true;
-      $.claimsList({
-        pageIndex: this.currentPage,
-        pageSize: this.pageSize
-      }).then(response => {
+      $.claimsList().then(response => {
         // console.log(response.data)
-        this.list = response.data.list;
-        this.total = response.data.total;
-        this.listLoading = false;
+        this.list = response.data;
         for (var i = 1; i <= this.list.length; i++) {
           this.$set(this.list[i - 1], "a", i);
         }
-        // console.log(this.list)
+        // console.log(response)
       });
     },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.currentPage = 1;
-      if (this.state == 1) {
-        this.find();
-      } else this.fetchData();
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      //console.log(val)
-      if (this.state == 1) {
-        this.find();
-      } else this.fetchData();
-    },
+
     handleAdd() {
       this.$router.push({
-        path: "add",
+        path: "add"
       });
+      
     },
     handleEdit(id) {
       this.$router.push({
         path: "edit",
-        query: { id: id }
+        query: { claimsNumber: id }
+      });
+    },
+    detailFind(id){
+      this.$router.push({
+        path: "detail",
+        query: { claimsNumber: id }
       });
     },
     handleDel(id) {
@@ -132,7 +114,7 @@ export default {
       })
         .then(() => {
           // console.log(id);
-          $.remove({ partnerId: id }).then(response => {
+          $.claimFake({ claimsNumber: id }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"

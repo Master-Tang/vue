@@ -26,7 +26,13 @@
         抵押金额
         <span class="red">*</span>
       </span>
-      <el-input v-model="form.collateralMoney" type="text" placeholder="请输入抵押金额"></el-input>
+      <el-input
+        v-model="form.collateralMoney"
+        type="text"
+        placeholder="请输入抵押金额"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">抵押期限</span>
@@ -77,7 +83,7 @@
     </el-form-item>
     <el-form-item>
       <span slot="label">关联借款合同</span>
-      <el-select v-model="form.properties" placeholder="请选择关联借款合同" style="width:100%">
+      <el-select v-model="form.collateralLink" placeholder="请选择关联借款合同" style="width:100%">
         <el-option
           v-for="item in collateralContract"
           :key="item.contNum"
@@ -91,8 +97,9 @@
       <el-input v-model="form.note" type="text" placeholder="请输入备注"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="addcontract">保存</el-button>
-      <el-button type="warning" @click="updatecontract">更改</el-button>
+      <el-button type="primary" @click="addcontract" v-if="form.contractId==null">保存</el-button>
+      <el-button type="warning" @click="updatecontract" v-if="form.contractId!=null">更改</el-button>
+      <el-button @click="cencelcontract">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -123,10 +130,11 @@ export default {
       collateralContract: []
     };
   },
-  props: ["logo"],
+
   created() {
-    this.form.claimsNumber = this.logo;
-    $.contractList({ claimsNumber: this.form.claimsNumber }).then(res => {
+    this.form.claimsNumber = this.$route.query.id;
+    this.form.contractId = this.$route.query.contractId;
+    $.mapBorrow({ claimsNumber: this.form.claimsNumber }).then(res => {
       if (res.success) {
         this.collateralContract = res.data.collateralContract;
       }
@@ -134,6 +142,14 @@ export default {
     $.addInit().then(res => {
       if (res.success) {
         this.procolList = res.data.procolList;
+      }
+    });
+    $.contract({ contractId: this.$route.query.contractId}).then(res => {
+      if (res.success) {
+        if(res.data!=null){
+        // console.log(res.data)
+        this.form = res.data;
+        }
       }
     });
   },
@@ -144,27 +160,49 @@ export default {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该合同已存在"
+            message: "该编号已存在,请勿重复添加"
           });
         } else {
           this.form.contractId = response.data;
           this.$message({
-            message: "该合同已添加"
+            type: "success",
+            message: "添加成功"
+          });
+          this.$router.replace({
+            path: "index",
+            query: {
+              activeName: "third",
+              claimsNumber: this.form.claimsNumber
+            }
           });
         }
+      });
+    },
+    cencelcontract() {
+      this.$router.push({
+        path: "index",
+        query: { activeName: "third", claimsNumber: this.form.claimsNumber }
       });
     },
     updatecontract() {
       if (!this.validate()) return;
       $.updatecontract(this.form).then(response => {
-        if (response.data == "无此合同") {
+        if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "请先保存"
+            message: "该合同编号已存在,请重新更改"
           });
         } else {
           this.$message({
-            message: "该合同已更改"
+            type:"success",
+            message: "更改成功"
+          });
+           this.$router.replace({
+            path: "index",
+            query: {
+              activeName: "third",
+              claimsNumber: this.form.claimsNumber
+            }
           });
         }
       });

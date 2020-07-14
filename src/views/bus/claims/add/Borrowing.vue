@@ -6,7 +6,13 @@
     </el-form-item>
     <el-form-item>
       <span slot="label">合同本金</span>
-      <el-input v-model="form.principal" type="text" placeholder="请输入合同本金"></el-input>
+      <el-input
+        v-model="form.principal"
+        type="text"
+        placeholder="请输入合同本金"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">借款期限</span>
@@ -31,15 +37,33 @@
         本金余额
         <span class="red">*</span>
       </span>
-      <el-input v-model="form.prinBalance" type="text" placeholder="请输入本金余额"></el-input>
+      <el-input
+        v-model="form.prinBalance"
+        type="text"
+        placeholder="请输入本金余额"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">利息余额</span>
-      <el-input v-model="form.interBalance" type="text" placeholder="请输入利息余额"></el-input>
+      <el-input
+        v-model="form.interBalance"
+        type="text"
+        placeholder="请输入利息余额"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">其他金额</span>
-      <el-input v-model="form.otherMoney" type="text" placeholder="请输入其他金额"></el-input>
+      <el-input
+        v-model="form.otherMoney"
+        type="text"
+        placeholder="请输入其他金额"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">诉讼有效期</span>
@@ -70,8 +94,9 @@
       ></el-date-picker>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="addborrow">保存</el-button>
-      <el-button type="warning" @click="updateborrow">更改</el-button>
+      <el-button type="primary" @click="addborrow" v-if="form.borrowId==null">保存</el-button>
+      <el-button type="warning" @click="updateborrow" v-if="form.borrowId!=null">更改</el-button>
+      <el-button @click="cencelborrow">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -81,9 +106,6 @@ import $ from "@/api/bus";
 export default {
   data() {
     return {
-      activeName: "first",
-      act: "first",
-      acte: "first",
       form: {
         contNum: "",
         principal: 0,
@@ -96,15 +118,22 @@ export default {
         litigationEnd: "",
         signTime: "",
         claimsNumber: "",
-        borrowId:""
-      },
-      
+        borrowId: ""
+      }
     };
   },
-  props: ["logo"],
   created() {
-    this.form.claimsNumber = this.logo;
-    
+    this.form.claimsNumber = this.$route.query.id;
+    this.form.borrowId = this.$route.query.borrowId;
+    // console.log(this.form.borrowId)
+    $.borrow({ borrowId: this.$route.query.borrowId}).then(res => {
+      if (res.success) {
+        if(res.data!=null){
+        // console.log(res.data)
+        this.form = res.data;
+        }
+      }
+    });
   },
   methods: {
     addborrow() {
@@ -113,32 +142,54 @@ export default {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该合同已存在"
+            message: "已存在,请勿重复添加"
           });
         } else {
-          this.form.borrowId=response.data
+          this.form.borrowId = response.data;
           this.$message({
-            message: "该合同已添加"
+            type: "success",
+            message: "添加成功"
+          });
+          this.$router.replace({
+            path: "index",
+            query: {
+              activeName: "second",
+              claimsNumber: this.form.claimsNumber
+            }
           });
         }
       });
     },
-    updateborrow(){
+    cencelborrow() {
+      this.$router.push({
+        path: "index",
+        query: { activeName: "second", claimsNumber: this.form.claimsNumber }
+      });
+    },
+    updateborrow() {
       if (!this.validate()) return;
-      $.updateborrow(this.form).then(response =>{
-        if (response.data == "无此合同") {
+      $.updateborrow(this.form).then(response => {
+        if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "请先保存"
+            message: "该合同编号已存在"
           });
         } else {
           this.$message({
-            message: "该合同已更改"
+            type: "success",
+            message: "更改成功"
+          });
+          this.$router.replace({
+            path: "index",
+            query: {
+              activeName: "second",
+              claimsNumber: this.form.claimsNumber
+            }
           });
         }
-      })
+      });
     },
-     validate() {
+    validate() {
       let error = "";
       if (this.form.contNum.length == 0) {
         error = "借款合同编号必填\n";

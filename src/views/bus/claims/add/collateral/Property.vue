@@ -1,7 +1,10 @@
 <template>
   <el-form ref="form" :model="form" label-width="5rem">
     <el-form-item>
-      <span slot="label">产证号<span class="red">*</span></span>
+      <span slot="label">
+        产证号
+        <span class="red">*</span>
+      </span>
       <el-input v-model="form.houseProdu" type="text" placeholder="请输入产证号"></el-input>
     </el-form-item>
     <el-form-item>
@@ -27,15 +30,33 @@
     </el-form-item>
     <el-form-item>
       <span slot="label">首层层高（工业资产）</span>
-      <el-input v-model="form.fishHigh" type="text" placeholder="请输入首层层高（工业资产）"></el-input>
+      <el-input
+        v-model="form.fishHigh"
+        type="text"
+        placeholder="请输入首层层高（工业资产）"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">总层数</span>
-      <el-input v-model="form.layer" type="text" placeholder="请输入总层数"></el-input>
+      <el-input
+        v-model="form.layer"
+        type="text"
+        placeholder="请输入总层数"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">所在层数</span>
-      <el-input v-model="form.inLayer" type="text" placeholder="请输入所在层数"></el-input>
+      <el-input
+        v-model="form.inLayer"
+        type="text"
+        placeholder="请输入所在层数"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">出租情况</span>
@@ -72,15 +93,22 @@
     </el-form-item>
     <el-form-item>
       <span slot="label">建筑面积</span>
-      <el-input v-model="form.structArea" type="text" placeholder="请输入建筑面积"></el-input>
+      <el-input
+        v-model="form.structArea"
+        type="text"
+        placeholder="请输入建筑面积"
+        onkeyup="value=value.replace(/\D/g,'')"
+        onchange="value=value.replace(/\D/g,'')"
+      ></el-input>
     </el-form-item>
     <el-form-item>
       <span slot="label">备注</span>
       <el-input v-model="form.newNess" type="text" placeholder="请输入备注"></el-input>
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="addproperty">保存</el-button>
-      <el-button type="warning" @click="updateproperty">更改</el-button>
+      <el-button type="primary" @click="addproperty" v-if="form.propertyId==null">保存</el-button>
+      <el-button type="warning" @click="updateproperty" v-if="form.propertyId!=null">更改</el-button>
+      <el-button @click="cencelproperty">取消</el-button>
     </el-form-item>
   </el-form>
 </template>
@@ -110,15 +138,17 @@ export default {
         newNess: "",
         collateralId: ""
       },
+      claimsNumber: "",
       buildingList: [],
       rentalsList: [],
       isRentalsList: [],
       isSinglehouseList: []
     };
   },
-  props: ["logo"],
   created() {
-    this.form.collateralId = this.logo;
+    this.claimsNumber = this.$route.query.id;
+    this.form.collateralId = this.$route.query.collId;
+    this.form.propertyId = this.$route.query.propertyId;
     $.addInit().then(res => {
       if (res.success) {
         this.buildingList = res.data.buildingList;
@@ -127,36 +157,72 @@ export default {
         this.isSinglehouseList = res.data.isSinglehouseList;
       }
     });
+    $.property({ propertyId: this.$route.query.propertyId}).then(res => {
+      if (res.success) {
+        if(res.data!=null){
+        // console.log(res.data)
+        this.form = res.data;
+        }
+      }
+    });
   },
   methods: {
-     addproperty() {
+    addproperty() {
       if (!this.validate()) return;
       $.addproperty(this.form).then(response => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "房产信息已存在"
+            message: "该产证号已存在,请勿重复添加"
           });
         } else {
           this.form.propertyId = response.data;
           // console.log(response.data)
           this.$message({
-            message: "房产信息已添加"
+            type: "success",
+            message: "添加成功"
           });
+          this.$router.replace({
+            path: "index",
+            query: {
+              activeName: "second",
+              collId: this.form.collateralId,
+              id: this.claimsNumber
+            }
+          });
+        }
+      });
+    },
+    cencelproperty() {
+      this.$router.push({
+        path: "index",
+        query: {
+          activeName: "second",
+          collId: this.form.collateralId,
+          id: this.claimsNumber
         }
       });
     },
     updateproperty() {
       if (!this.validate()) return;
       $.updateproperty(this.form).then(response => {
-        if (response.data == "无此信息") {
+        if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "请先保存"
+            message: "该产证号已存在,请重新更改"
           });
         } else {
           this.$message({
-            message: "该房产已更改"
+            type:"success",
+            message: "更改成功"
+          });
+          this.$router.replace({
+            path: "index",
+            query: {
+              activeName: "second",
+              collId: this.form.collateralId,
+              id: this.claimsNumber
+            }
           });
         }
       });
@@ -165,7 +231,7 @@ export default {
       let error = "";
       if (this.form.houseProdu.length == 0) {
         error = "产证号必填\n";
-      } 
+      }
       if (error) {
         this.$message({
           message: error,
@@ -174,7 +240,7 @@ export default {
         return false;
       }
       return true;
-    },
+    }
   }
 };
 </script>
