@@ -2,7 +2,6 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
-    
         <el-form-item>
           <el-row>
             <el-col :span="24">
@@ -46,7 +45,18 @@
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.userId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.loginName)">删除</el-button>
+          <el-button
+            type="danger"
+            size="small"
+            @click="handleDel(scope.row.loginName)"
+            v-if="!scope.row.disabled"
+          >删除</el-button>
+          <el-button
+            type="success"
+            size="small"
+            @click="handleBack(scope.row.userId)"
+            v-if="scope.row.disabled"
+          >恢复</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -83,6 +93,18 @@ export default {
     this.fetchData();
   },
   methods: {
+    handleBack(id) {
+      $.backUser({ userId: id }).then(response => {
+        console.log(response)
+        if (response.success) {
+          this.$message({
+            type: "success",
+            message: "已恢复!"
+          });
+          this.fetchData()
+        }
+      });
+    },
     vvv() {
       this.currentPage = 1;
     },
@@ -94,7 +116,6 @@ export default {
           this.list = response.data.list;
           this.total = response.data.total;
           this.listLoading = false;
-          // console.log(this.list)
         }
       );
     },

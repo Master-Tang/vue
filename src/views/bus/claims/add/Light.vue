@@ -1,4 +1,5 @@
 <template>
+<div class="my-padding">
   <el-form ref="form" :model="form" label-width="5rem">
     <el-form-item>
       <span slot="label">
@@ -38,6 +39,7 @@
       <el-button @click="cencellight">取消</el-button>
     </el-form-item>
   </el-form>
+</div>
 </template>
 
 <script>

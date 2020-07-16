@@ -1,6 +1,6 @@
 <template>
   <div class="app-container">
-    <div style="border:1px dashed #999999;">
+    <div style="border-bottom:1px solid #999999;">
       <h2 align="center">借款基本信息</h2>
       <el-form :model="form">
         <el-row>
@@ -217,7 +217,7 @@
     </div>
 
     <div v-for="(item,i) in lightList" :key="i+'e'">
-      <h2 align="center">亮点信息</h2>
+      <h2 align="center">亮点信息{{i+1}}</h2>
       <el-row  style="height:3rem">
         <el-col :span="8">{{"类型: "+item.claimsType}}</el-col>
         <el-col :span="8">{{"描述: "+item.describes}}</el-col>
@@ -227,6 +227,7 @@
         <el-col :span="8">{{"依据: "+item.basis}}</el-col>
       </el-row>
     </div>
+    <el-button type="primary" @click="$router.push('/bus/claims/index')">退出</el-button>
   </div>
 </template>
 

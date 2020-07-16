@@ -18,7 +18,7 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="序号" align="center">
+      <el-table-column label="序号" align="center" width="50rem">
         <template slot-scope="scope">{{ scope.row.a }}</template>
       </el-table-column>
       <el-table-column label="债权编号" align="center">
@@ -46,9 +46,9 @@
       </el-table-column>
       <el-table-column label="操作" align="center" width="150rem">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.claimsNumber)">编辑</el-button>
-          <el-button type="primary" size="small" @click="detailFind(scope.row.claimsNumber)">查看</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.claimsNumber)">删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" circle size="small" @click="handleEdit(scope.row.claimsNumber)"></el-button>
+          <el-button type="info" icon="el-icon-search" circle  size="small" @click="detailFind(scope.row.claimsNumber)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" @click="handleDel(scope.row.claimsNumber)"></el-button>
         </template>
       </el-table-column>
     </el-table>

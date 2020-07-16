@@ -4,7 +4,7 @@ export default [
         path: '/bus',
         component: Layout,
         redirect: '/bus/claims',
-        meta: { title: '标的录入', icon: 'example' },
+        meta: { title: '标的管理', icon: 'example' },
         children: [{
             path: 'claims',
             name: 'claims',

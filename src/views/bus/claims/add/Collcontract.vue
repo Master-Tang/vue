@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="form" :model="form" label-width="5rem">
+<div class="my-padding">
+  <el-form ref="form" :model="form" label-width="7rem">
     <el-form-item>
       <span slot="label">
         抵押物合同编号
@@ -102,6 +103,7 @@
       <el-button @click="cencelcontract">取消</el-button>
     </el-form-item>
   </el-form>
+</div>
 </template>
 <script>
 import $ from "@/api/bus";

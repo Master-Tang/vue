@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="form" :model="form" label-width="5rem">
+<div class="my-padding">
+  <el-form ref="form" :model="form" label-width="7rem">
     <el-form-item>
       <span slot="label">借款合同编号</span>
       <el-input v-model="form.contNum" type="text" placeholder="请输入借款合同编号"></el-input>
@@ -99,6 +100,7 @@
       <el-button @click="cencelborrow">取消</el-button>
     </el-form-item>
   </el-form>
+</div>
 </template>
 <script>
 import $ from "@/api/bus";

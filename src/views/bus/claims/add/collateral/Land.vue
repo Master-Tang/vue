@@ -1,5 +1,6 @@
 <template>
-  <el-form ref="form" :model="form" label-width="5rem">
+<div class="my-padding">
+  <el-form ref="form" :model="form" label-width="6rem">
     <el-form-item>
       <span slot="label">
         产证号
@@ -80,6 +81,7 @@
       <el-button @click="cencelland">取消</el-button>
     </el-form-item>
   </el-form>
+</div>
 </template>
 
 <script>

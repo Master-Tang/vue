@@ -3,6 +3,7 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>个人信息</span>
+        <el-button style="float: right; padding: 3px 0" type="text" @click="open">修改密码</el-button>
       </div>
       <div class="text item">姓名: {{ trueName }}</div>
       <div class="text item">手机号码: {{ telephone }}</div>
@@ -41,6 +42,40 @@ export default {
         this.depName = response.data.depName;
       }
     });
+  },
+  methods: {
+    open() {
+      this.$prompt("请输入新密码", "密码更改", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消"
+      })
+        .then(({ value }) => {
+          if (value.length < 6) {
+            this.$message({
+              type: "error",
+              message: "新密码不能少于6位"
+            });
+          } else {
+            $.updatePassword({
+              loginName: this.loginName,
+              loginPass: value
+            }).then(res => {
+              if (res.success) {
+                this.$message({
+                  type: "success",
+                  message: "修改成功,你的新密码是: " + value
+                });
+              }
+            });
+          }
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消更改"
+          });
+        });
+    }
   }
 };
 </script>

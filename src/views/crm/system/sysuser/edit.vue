@@ -25,6 +25,7 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
+        <el-button type="warning" @click="open">重置密码</el-button>
         <el-button @click="$router.back()">取消</el-button>
       </el-form-item>
     </el-form>
@@ -61,6 +62,32 @@ export default {
     this.getData();
   },
   methods: {
+    open() {
+      this.$confirm("此操作将重置该用户密码为password, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          $.updatePassword({
+            loginName: this.form.loginName,
+            loginPass: "password"
+          }).then(res => {
+            if (res.success) {
+              this.$message({
+                type: "success",
+                message: "重置成功,新密码为password"
+              });
+            }
+          });
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消"
+          });
+        });
+    },
     getData() {
       // console.log(this.id);
       $.getByUserId({ userId: this.id }).then(response => {

@@ -1,7 +1,9 @@
 <template>
-  <el-tabs v-model="act" type="card" stretch>
+<div class="my-padding">
+  <el-tabs v-model="act" stretch>
+    
     <el-tab-pane label="抵押物基本信息" name="first">
-      <el-form ref="form" :model="form" label-width="5rem">
+      <el-form ref="form" :model="form" label-width="10.5rem">
         <el-form-item>
           <span slot="label">
             关联抵押物合同
@@ -158,9 +160,10 @@
         </el-form-item>
       </el-form>
     </el-tab-pane>
-    <el-tab-pane label="抵押物房产信息" name="second" align="center" v-if="judge">
-      <div>
-        <el-button type="info" plain @click="Toproperty">添加</el-button>
+    <el-tab-pane label="抵押物房产信息" name="second" v-if="judge">
+      <div style="padding-bottom:1rem">
+        <el-button type="primary" @click="Toproperty">添加</el-button>
+        <el-button @click="back" style="float:right">返回抵押物信息</el-button>
       </div>
       <el-table
         id="myform"
@@ -203,9 +206,10 @@
         </el-table-column>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane label="抵押物土地信息" name="third" align="center" v-if="judge">
-      <div>
-        <el-button type="info" plain @click="Toland">添加</el-button>
+    <el-tab-pane label="抵押物土地信息" name="third" v-if="judge">
+      <div style="padding-bottom:1rem">
+        <el-button type="primary" @click="Toland">添加</el-button>
+        <el-button @click="back" style="float:right">返回抵押物信息</el-button>
       </div>
       <el-table
         id="myform"
@@ -248,9 +252,10 @@
         </el-table-column>
       </el-table>
     </el-tab-pane>
-    <el-tab-pane label="其他资产信息" name="forth" align="center" v-if="judge">
-      <div>
-        <el-button type="info" plain @click="Toother">添加</el-button>
+    <el-tab-pane label="其他资产信息" name="forth" v-if="judge">
+      <div style="padding-bottom:1rem">
+        <el-button type="primary" @click="Toother">添加</el-button>
+        <el-button @click="back" style="float:right">返回抵押物信息</el-button>
       </div>
       <el-table
         id="myform"
@@ -288,6 +293,7 @@
       </el-table>
     </el-tab-pane>
   </el-tabs>
+</div>
 </template>
 
 <script>
@@ -404,6 +410,12 @@ export default {
   },
 
   methods: {
+    back() {
+      this.$router.push({
+        path: "/bus/claims/add/index",
+        query: { activeName: "forth", claimsNumber: this.form.claimsNumber }
+      });
+    },
     addcollateral() {
       if (!this.validate()) return;
       $.addcollateral(this.form).then(response => {
@@ -439,7 +451,7 @@ export default {
           });
         } else {
           this.$message({
-            type:"success",
+            type: "success",
             message: "更改成功"
           });
         }

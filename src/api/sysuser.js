@@ -1,6 +1,20 @@
 import request from '@/utils/request'
 export default
 {
+   backUser(params){
+      return request({
+         url:'/admin/sysUser/backUser',
+         method:'post',
+         params
+      }) 
+   },
+   updatePassword(params){
+      return request({
+          url: '/admin/sysUser/password',
+          method: 'post',
+          params,
+      })
+  },
    yearAim(params){
       return request({
          url: '/home/yearAim',
