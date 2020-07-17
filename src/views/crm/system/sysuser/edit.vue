@@ -23,6 +23,16 @@
       <el-form-item label="钉钉号">
         <el-input v-model="form.dingDing"></el-input>
       </el-form-item>
+      <el-form-item label="权限">
+        <el-select v-model="form.roleId" placeholder="请选择">
+          <el-option
+            v-for="item in roleIdList"
+            :key="item.roleId"
+            :label="item.roleName"
+            :value="item.roleId"
+          ></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
         <el-button type="warning" @click="open">重置密码</el-button>
@@ -48,11 +58,18 @@ export default {
         trueName: "",
         departmentList: []
       },
-      options: []
+      options: [],
+      roleIdList:[]
     };
   },
   created() {
     (this.id = this.$route.query.id),
+    $.getRoleList().then(response => {
+      if (response.success) {
+        // console.log(response.data)
+        this.roleIdList = response.data.list;
+      }
+    });
       department.getList().then(response => {
         if (response.success) {
           // console.log(response.data.list)

@@ -19,7 +19,6 @@
       <el-form-item>
         <span slot="label">
           手机号
-          <span class="red">*</span>
         </span>
         <el-input
           v-model="form.telephone"
@@ -188,6 +187,9 @@
       <el-form-item label="关系人岗位职务">
         <el-input v-model="form.justiceInfo.pos" placeholder="关系人岗位职务"></el-input>
       </el-form-item>
+      <el-form-item label="备注">
+        <el-input v-model="form.note" placeholder="备注"></el-input>
+      </el-form-item>
 
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
@@ -221,6 +223,7 @@ export default {
         address: "",
         partnerRemark: "",
         assetAttr: "",
+        note:"",
         overArea: [],
         justiceInfo: {
           name: "",
@@ -286,7 +289,7 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
-      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
+      } else if (!/^1\d{10}$/.test(this.form.telephone)&&this.form.telephone.replace(" ","")!="") {
         error = "手机号码不正确\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
