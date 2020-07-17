@@ -39,7 +39,7 @@ export default [
         path: 'dict',
         redirect:"/system/dict/index",
         component: () => import('@/views/crm/system/dict/Index'),
-        meta: { title: '字典设置' },
+        meta: { title: '伙伴字典' },
         children:[
           {
             path: 'index',
@@ -55,6 +55,32 @@ export default [
           {
             path: 'edit',
             component: () => import('@/views/crm/system/dict/edit'),
+            meta: { title: '编辑' },
+            hidden: true
+          },
+        ]
+      },
+
+      {
+        path: 'busdict',
+        redirect:"/system/busdict/index",
+        component: () => import('@/views/crm/system/busdict/Index'),
+        meta: { title: '业务字典' },
+        children:[
+          {
+            path: 'index',
+            component: () => import('@/views/crm/system/busdict/List'),
+            hidden:true
+          },
+          {
+            path: 'add',
+            component: () => import('@/views/crm/system/busdict/add'),
+            meta: { title: '添加' },
+            hidden: true
+          },
+          {
+            path: 'edit',
+            component: () => import('@/views/crm/system/busdict/edit'),
             meta: { title: '编辑' },
             hidden: true
           },

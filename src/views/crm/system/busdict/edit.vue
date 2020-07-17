@@ -48,7 +48,7 @@ export default {
   methods: {
     getData() {
       // console.log(this.form.id);
-      $.getDict({ id: this.id }).then(response => {
+      $.getbusDict({ id: this.id }).then(response => {
         this.form.groupName = response.data.dict.groupName;
         this.form.dicKey = response.data.dict.dicKey;
         this.form.dicValue = response.data.dict.dicValue;
@@ -57,7 +57,7 @@ export default {
     },
     updateData() {
       if (this.form.dicKey.length > 0 && this.form.dicValue.length > 0) {
-        $.update({
+        $.updatebus({
           id: this.id,
           dicKey: this.form.dicKey,
           dicValue: this.form.dicValue,

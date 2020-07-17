@@ -1,7 +1,7 @@
 <template>
   <div class="my-padding">
     <el-tabs v-model="activeName" stretch>
-      <el-tab-pane label="借款基本信息" name="first">
+      <el-tab-pane label="债权基本信息" name="first">
         <el-form ref="form" :model="form" label-width="7rem">
           <el-form-item>
             <span slot="label">
@@ -63,10 +63,7 @@
             <el-input v-model="form.institutions" type="text" placeholder="请输入债权所在机构"></el-input>
           </el-form-item>
           <el-form-item>
-            <span slot="label">
-              联系人
-              <span class="red">*</span>
-            </span>
+            <span slot="label">联系人</span>
             <el-input v-model="form.contact" type="text" placeholder="请输入联系人"></el-input>
           </el-form-item>
           <el-form-item>
@@ -196,7 +193,7 @@
         </el-table>
       </el-tab-pane>
 
-      <el-tab-pane label="抵押物合同" name="third" v-if="judge">
+      <el-tab-pane label="抵押合同" name="third" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocontract">添加</el-button>
           <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
@@ -237,7 +234,7 @@
         </el-table>
       </el-tab-pane>
 
-      <el-tab-pane label="抵押物信息" name="forth" v-if="judge">
+      <el-tab-pane label="抵质押物信息" name="forth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocoll">添加</el-button>
           <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>

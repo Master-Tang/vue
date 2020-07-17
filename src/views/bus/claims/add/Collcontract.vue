@@ -53,37 +53,9 @@
         placeholder="请选择抵押终止期限"
       ></el-date-picker>
     </el-form-item>
-    <el-form-item>
-      <span slot="label">主债权合同期限</span>
-      <el-date-picker
-        v-model="form.principalBegin"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择主债权发生起始期限"
-      ></el-date-picker>
-      {{"~"}}
-      <el-date-picker
-        v-model="form.principalEnd"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择主债权发生终止期限"
-      ></el-date-picker>
-    </el-form-item>
 
     <el-form-item>
-      <span slot="label">合同签订时间</span>
-      <el-date-picker
-        v-model="form.signedTime"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择合同签订时间"
-      ></el-date-picker>
-    </el-form-item>
-    <el-form-item>
-      <span slot="label">关联借款合同</span>
+      <span slot="label">关联借款合同<span class="red">*</span></span>
       <el-select v-model="form.collateralLink" placeholder="请选择关联借款合同" style="width:100%">
         <el-option
           v-for="item in collateralContract"
@@ -120,9 +92,6 @@ export default {
         collateralMoney: "",
         collateralBegin: "",
         collateralEnd: "",
-        principalBegin: "",
-        principalEnd: "",
-        signedTime: "",
         note: "",
         collateralLink: "",
         claimsNumber: "",
@@ -217,6 +186,8 @@ export default {
         error = "抵质押合同类型必选\n";
       } else if (this.form.collateralMoney.length == 0) {
         error = "抵质押金额\n";
+      }else if (this.form.collateralLink.length == 0) {
+        error = "关联合同必选\n";
       }
 
       if (error) {

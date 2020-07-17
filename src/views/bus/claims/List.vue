@@ -1,13 +1,9 @@
 <template>
   <div class="app-container">
-    <div class="button">
-      <el-row>
-        <el-col :span="24">
+    <div class="button" style="padding-bottom:1rem">
           <div class="grid-content bg-purple-dark">
-            <el-button type="primary" @click="handleAdd">添加</el-button>
+            <el-button type="primary" @click="handleAdd" >添加</el-button>
           </div>
-        </el-col>
-      </el-row>
     </div>
     <el-table
       id="myform"

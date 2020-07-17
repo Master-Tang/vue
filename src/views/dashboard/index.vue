@@ -3,7 +3,11 @@
     <el-card class="box-card">
       <div slot="header" class="clearfix">
         <span>个人信息</span>
-        <el-button style="float: right; padding: 3px 0" type="text" @click="open">修改密码</el-button>
+        <el-button
+          style="float: right; padding: 3px 0"
+          type="text"
+          @click="handleSelectionChange"
+        >修改密码</el-button>
       </div>
       <div class="text item">姓名: {{ trueName }}</div>
       <div class="text item">手机号码: {{ telephone }}</div>
@@ -11,6 +15,33 @@
       <div class="text item">部门: {{ depName }}</div>
       <div class="text item">共录入伙伴数: {{ countPartner }}</div>
     </el-card>
+
+    <el-dialog
+      title="更改密码"
+      :visible.sync="dialogTableVisible"
+      center
+      :append-to-body="true"
+      :lock-scroll="false"
+      width="50%"
+    >
+      <el-form>
+        <el-form-item>
+          <span slot="label">原密码</span>
+          <el-input v-model="password" type="text" placeholder="请输入原密码"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">新密码</span>
+          <el-input v-model="newpassword" type="text" placeholder="请输入至少六位的新密码"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">确认密码</span>
+          <el-input v-model="confirmpassword" type="text" placeholder="请输入确认密码"></el-input>
+        </el-form-item>
+        <el-form-item align="center">
+          <el-button type="primary" @click="open">确认更改</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
 
@@ -20,12 +51,16 @@ import $ from "@/api/assets";
 export default {
   data() {
     return {
+      dialogTableVisible: false,
       loginName: "",
       countPartner: "",
       trueName: "",
       telephone: "",
       dingDing: "",
-      depName: ""
+      depName: "",
+      password: "",
+      confirmpassword: "",
+      newpassword: ""
     };
   },
   created() {
@@ -44,37 +79,46 @@ export default {
     });
   },
   methods: {
+    handleSelectionChange() {
+      this.dialogTableVisible = true;
+    },
     open() {
-      this.$prompt("请输入新密码", "密码更改", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消"
-      })
-        .then(({ value }) => {
-          if (value.length < 6) {
+      if (this.newpassword.length < 6) {
+        this.$message({
+          type: "error",
+          message: "新密码不能少于6位"
+        });
+      } else if (this.newpassword != this.confirmpassword) {
+        this.$message({
+          type: "error",
+          message: "确认密码不一致"
+        });
+        this.password = "";
+        this.newpassword = "";
+        this.confirmpassword = "";
+      } else {
+        $.updatePass({
+          loginName: this.loginName,
+          loginPass: this.newpassword,
+          passOld: this.password
+        }).then(res => {
+          if (res.data == "旧密码错误") {
+            this.password = "";
+            this.newpassword = "";
+            this.confirmpassword = "";
             this.$message({
               type: "error",
-              message: "新密码不能少于6位"
+              message: "原密码不正确"
             });
           } else {
-            $.updatePassword({
-              loginName: this.loginName,
-              loginPass: value
-            }).then(res => {
-              if (res.success) {
-                this.$message({
-                  type: "success",
-                  message: "修改成功,你的新密码是: " + value
-                });
-              }
+            this.dialogTableVisible = false;
+            this.$message({
+              type: "success",
+              message: "修改成功,你的新密码是: " + this.newpassword
             });
           }
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "取消更改"
-          });
         });
+      }
     }
   }
 };

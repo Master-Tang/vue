@@ -1,13 +1,14 @@
 import request from '@/utils/request'
 export default
     {
-        updatePassword(params){
+        updatePass(params){
             return request({
                 url: '/admin/sysUser/password',
                 method: 'post',
                 params,
             })
         },
+        
         updateHandover(params){
             return request({
                 url: '/handover/updateHandover',

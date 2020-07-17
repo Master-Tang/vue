@@ -27,17 +27,6 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <span slot="label">保证方式</span>
-      <el-select v-model="form.guarantee" placeholder="请选择保证方式" style="width:100%">
-        <el-option
-          v-for="item in guaranteeList"
-          :key="item.dicValue"
-          :label="item.dicKey"
-          :value="item.dicValue"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item>
       <span slot="label">
         保证人金额
         <span class="red">*</span>
@@ -208,7 +197,6 @@ export default {
       form: {
         guarantorId: "",
         loanContract: [],
-        guarantee: "",
         guarantorAmount: "",
         contractNum: "",
         guaranteedBegin: "",

@@ -10,7 +10,7 @@ export default
    },
    updatePassword(params){
       return request({
-          url: '/admin/sysUser/password',
+          url: '/admin/sysUser/passwordReset',
           method: 'post',
           params,
       })

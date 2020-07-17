@@ -1,6 +1,73 @@
 import request from '@/utils/request'
 export default
 {
+   getbusList(params)
+   {
+    return request({
+        url: '/business/dict/list',
+        method: 'get',
+        params
+      })
+   },
+
+   buslistByGroup(params)
+   {
+      return request({
+         url: '/business/dict/listByGroup',
+         method: 'post',
+         params
+      })
+   },
+   buslistByGroupName(params)
+   {
+      return request({
+         url: '/business/dict/listByGroupName',
+         method: 'post',
+         params
+      })
+   },
+   addbus(data)
+   {
+      return request({
+         url:'/business/dict/add',
+         method:'post',
+         data
+      })
+   },
+   updatebus(data)
+   {
+      return request({
+         url:'/business/dict/update',
+         method:'post',
+         data
+      })
+   },
+   getbusDict(params)
+   {
+    return request({
+        url: '/business/dict/get',
+        method: 'post',
+        params
+      })
+   },
+   removebusDict(params)
+   {
+      
+    return request({
+        url: '/business/dict/remove',
+        method: 'post',
+        params
+      })
+   },
+
+   getbusGroupName()
+   {
+      return request({
+         url: '/business/dict/group',
+         method: 'post',
+      })
+   },
+
    getList(params)
    {
     return request({

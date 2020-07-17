@@ -44,7 +44,7 @@ export default {
   methods: {
     addData() {
      // console.log(this.value, this.form.name, this.form.region);
-      $.add({
+      $.addbus({
         dicKey: this.form.name,
         dicValue: this.form.region,
         groupName: this.value
@@ -57,7 +57,7 @@ export default {
     },
     fetchData() {
       this.options.splice(0,this.options.length)
-      $.getGroupName().then(response=>{
+      $.getbusGroupName().then(response=>{
         // console.log(response.data)
         this.options=response.data;
      

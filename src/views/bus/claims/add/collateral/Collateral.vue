@@ -2,12 +2,11 @@
 <div class="my-padding">
   <el-tabs v-model="act" stretch>
     
-    <el-tab-pane label="抵押物基本信息" name="first">
+    <el-tab-pane label="抵质押物基本信息" name="first">
       <el-form ref="form" :model="form" label-width="10.5rem">
         <el-form-item>
           <span slot="label">
             关联抵押物合同
-            <span class="red">*</span>
           </span>
           <el-select v-model="form.loanCont" multiple placeholder="请选择关联抵押物合同" style="width:100%">
             <el-option
@@ -21,7 +20,6 @@
         <el-form-item>
           <span slot="label">
             抵（质）押合同编号
-            <span class="red">*</span>
           </span>
           <el-input v-model="form.noContract" type="text" placeholder="请输入债权编号"></el-input>
         </el-form-item>
@@ -36,24 +34,7 @@
             ></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <span slot="label">担保的主债权发生期间</span>
-          <el-date-picker
-            v-model="form.prinBegin"
-            type="date"
-            format="yyyy年MM月dd日"
-            value-format="yyyy年MM月dd日"
-            placeholder="请选择主权起始期限"
-          ></el-date-picker>
-          {{"~"}}
-          <el-date-picker
-            v-model="form.prinEnd"
-            type="date"
-            format="yyyy年MM月dd日"
-            value-format="yyyy年MM月dd日"
-            placeholder="请选择主权终止期限"
-          ></el-date-picker>
-        </el-form-item>
+
         <el-form-item>
           <span slot="label">
             地址（包含楼盘信息）
@@ -72,10 +53,6 @@
         <el-form-item>
           <span slot="label">地图链接</span>
           <el-input v-model="form.mapLink" type="text" placeholder="请输入地图链接"></el-input>
-        </el-form-item>
-        <el-form-item>
-          <span slot="label">所在地</span>
-          <el-input v-model="form.home" type="text" placeholder="请输入所在地"></el-input>
         </el-form-item>
         <el-form-item>
           <span slot="label">所有权人</span>
@@ -150,8 +127,8 @@
           <el-input v-model="form.courtSei" type="text" placeholder="请输入查封法院"></el-input>
         </el-form-item>
         <el-form-item>
-          <span slot="label">需核实信息</span>
-          <el-input v-model="form.verifyInfo" type="text" placeholder="请输入需核实信息"></el-input>
+          <span slot="label">备注</span>
+          <el-input v-model="form.verifyInfo" type="text" placeholder="请输入备注"></el-input>
         </el-form-item>
         <el-form-item>
           <el-button type="primary" @click="addcollateral" v-if="form.collId==null">保存</el-button>
@@ -459,15 +436,9 @@ export default {
     },
     validate() {
       let error = "";
-      if (this.form.loanCont.length == 0) {
-        error = "对应借款合同必选\n";
-      } else if (this.form.noContract.length == 0) {
-        error = "抵（质）押合同编号必填\n";
-      } else if (this.form.city.length == 0) {
+     if (this.form.city.length == 0) {
         error = "地址所在城市必选\n";
-      } else if (this.form.address.length == 0) {
-        error = "详细地址必填\n";
-      } else if (this.form.assetType.length == 0) {
+      }else if (this.form.assetType.length == 0) {
         error = "资产类型必选\n";
       }
 

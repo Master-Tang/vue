@@ -2,7 +2,26 @@
   <div class="app-container">
     <div class="button">
       <el-form :inline="true">
+        <el-form-item label="分组名称">
+          <el-select v-model="value" placeholder="请选择">
+            <el-option
+              v-for="item in options"
+              :key="item.value"
+              :label="item.label"
+              :value="item.label"
+            ></el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item>
+          <el-row>
+            <el-col :span="24">
+              <div class="grid-content bg-purple-dark">
+                <el-button type="primary" @click="vvv(),find()">查询</el-button>
+              </div>
+            </el-col>
+          </el-row>
+        </el-form-item>
+        <el-form-item style="float:right">
           <el-row>
             <el-col :span="24">
               <div class="grid-content bg-purple-dark">
@@ -22,41 +41,21 @@
       fit
       highlight-current-row
     >
-      <el-table-column label="用户名">
-        <template slot-scope="scope">{{ scope.row.loginName }}</template>
+      <el-table-column label="分组名称" fixed>
+        <template slot-scope="scope">{{ scope.row.groupName }}</template>
       </el-table-column>
-      <el-table-column label="部门名称" width align="center">
+      <el-table-column label="标签名称" width align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.depId }}</span>
+          <span>{{ scope.row.dicKey }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="姓名" width align="center">
-        <template slot-scope="scope">{{ scope.row.trueName }}</template>
-      </el-table-column>
-      <el-table-column label="电话号码" width align="center">
-        <template slot-scope="scope">{{ scope.row.telephone }}</template>
-      </el-table-column>
-      <el-table-column label="钉钉号" width align="center">
-        <template slot-scope="scope">{{ scope.row.dingDing }}</template>
-      </el-table-column>
-      <el-table-column label="角色" width align="center">
-        <template slot-scope="scope">{{ scope.row.roleName }}</template>
+      <el-table-column label="标签值" width align="center">
+        <template slot-scope="scope">{{ scope.row.dicValue }}</template>
       </el-table-column>
       <el-table-column label="操作" width="150" align="center">
         <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.userId)">编辑</el-button>
-          <el-button
-            type="danger"
-            size="small"
-            @click="handleDel(scope.row.loginName)"
-            v-if="!scope.row.disabled"
-          >删除</el-button>
-          <el-button
-            type="success"
-            size="small"
-            @click="handleBack(scope.row.userId)"
-            v-if="scope.row.disabled"
-          >恢复</el-button>
+          <el-button type="primary" size="small" @click="handleEdit(scope.row.id)">编辑</el-button>
+          <el-button type="danger" size="small" @click="handleDel(scope.row.id)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -73,7 +72,7 @@
 </template>
 
 <script>
-import $ from "@/api/sysuser";
+import $ from "@/api/dict";
 
 export default {
   data() {
@@ -90,32 +89,50 @@ export default {
     };
   },
   created() {
-    this.fetchData();
+    this.fetchData(), this.findData();
   },
   methods: {
-    handleBack(id) {
-      $.backUser({ userId: id }).then(response => {
-        // console.log(response)
-        if (response.success) {
-          this.$message({
-            type: "success",
-            message: "已恢复!"
-          });
-          this.fetchData()
-        }
-      });
-    },
     vvv() {
       this.currentPage = 1;
     },
-
+    find() {
+      if (this.value==null) {
+        this.fetchData()
+      } else {
+        $.buslistByGroupName({
+          groupName: this.value,
+          pageIndex: this.currentPage,
+          pageSize: this.pageSize
+        }).then(response => {
+          this.list = null;
+          this.total = 0;
+          this.listLoading = true;
+          this.pageSize = 10;
+          this.state = 1;
+          this.list = response.data.list;
+          this.total = response.data.total;
+          this.listLoading = false;
+          //console.log(response.data)
+        });
+      }
+    },
+    findData() {
+      this.options.splice(0, this.options.length);
+      $.getbusGroupName().then(response => {
+        // console.log(response.data);
+        for (let s of response.data) {
+          this.options.push({ label: s, value: s });
+        }
+      });
+    },
     fetchData() {
       this.listLoading = true;
-      $.getList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
+      $.getbusList({ pageIndex: this.currentPage, pageSize: this.pageSize }).then(
         response => {
           this.list = response.data.list;
           this.total = response.data.total;
           this.listLoading = false;
+          // console.log(response.data)
         }
       );
     },
@@ -142,15 +159,15 @@ export default {
         query: { id: id }
       });
     },
-    handleDel(loginName) {
-      this.$confirm("此操作将删除该用户, 是否继续?", "提示", {
+    handleDel(id) {
+      this.$confirm("此操作将删除该字典项, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
         type: "warning"
       })
         .then(() => {
           //console.log(id)
-          $.remove({ loginName }).then(response => {
+          $.removebusDict({ id }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"
