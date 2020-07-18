@@ -1,6 +1,41 @@
 import request from '@/utils/request'
 export default
     {
+        legal(params) {
+            return request({
+                url: '/business/claims/legal',
+                method: 'post',
+                params
+            })
+        },
+        legalFake(params) {
+            return request({
+                url: '/business/claims/legalFake',
+                method: 'post',
+                params
+            })
+        },
+        legalList(params) {
+            return request({
+                url: '/business/claims/legalList',
+                method: 'post',
+                params
+            })
+        },
+        legalUpdate(data) {
+            return request({
+                url: '/business/claims/legalUpdate',
+                method: 'post',
+                data
+            })
+        },
+        legalAdd(data) {
+            return request({
+                url: '/business/claims/legalAdd',
+                method: 'post',
+                data
+            })
+        },
         mapAll(params) {
             return request({
                 url: '/business/claimsSelect/mapAll',

@@ -1,6 +1,6 @@
 <template>
 <div class="my-padding">
-  <el-form ref="form" :model="form" label-width="7rem">
+  <el-form ref="form" :model="form" label-width="8rem">
     <el-form-item>
       <span slot="label">
         抵押物合同编号

@@ -1,5 +1,5 @@
 <template>
-  <el-form ref="form" :model="form" label-width="5rem">
+  <el-form ref="form" :model="form" label-width="8rem">
     <el-form-item>
       <span slot="label">
         抵押物合同编号
@@ -53,35 +53,6 @@
       ></el-date-picker>
     </el-form-item>
     <el-form-item>
-      <span slot="label">主债权合同期限</span>
-      <el-date-picker
-        v-model="form.principalBegin"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择主债权发生起始期限"
-      ></el-date-picker>
-      {{"~"}}
-      <el-date-picker
-        v-model="form.principalEnd"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择主债权发生终止期限"
-      ></el-date-picker>
-    </el-form-item>
-
-    <el-form-item>
-      <span slot="label">合同签订时间</span>
-      <el-date-picker
-        v-model="form.signedTime"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择合同签订时间"
-      ></el-date-picker>
-    </el-form-item>
-    <el-form-item>
       <span slot="label">关联借款合同</span>
       <el-select v-model="form.collateralLink" placeholder="请选择关联借款合同" style="width:100%">
         <el-option
@@ -118,9 +89,6 @@ export default {
         collateralMoney: "",
         collateralBegin: "",
         collateralEnd: "",
-        principalBegin: "",
-        principalEnd: "",
-        signedTime: "",
         note: "",
         collateralLink: "",
         claimsNumber: "",

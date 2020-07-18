@@ -72,7 +72,7 @@ const createRouter = () => new Router({
     ...search,
     ...admincheck,
     ...system,
-    // ...bus,
+    ...bus,
 
   ]
 })
