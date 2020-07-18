@@ -35,35 +35,35 @@
       </el-form-item>
       <el-form-item>
         <span slot="label">
-          本金余额
+          本金余额/代偿余额
           <span class="red">*</span>
         </span>
         <el-input
           v-model="form.prinBalance"
           type="text"
-          placeholder="请输入本金余额"
+          placeholder="请输入本金余额/代偿余额"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">利息余额</span>
+        <span slot="label">当前利息</span>
         <el-input
           v-model="form.interBalance"
           type="text"
-          placeholder="请输入利息余额"
+          placeholder="请输入当前利息"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">其他金额</span>
+        <span slot="label">罚息（滞纳金）</span>
         <el-row>
           <el-col :span="6">
             <el-input
               v-model="form.otherMoney"
               type="text"
-              placeholder="请输入其他金额"
+              placeholder="请输入罚息（滞纳金）"
               onkeyup="value=value.replace(/\D/g,'')"
               onchange="value=value.replace(/\D/g,'')"
             ></el-input>

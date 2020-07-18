@@ -1,6 +1,26 @@
 import request from '@/utils/request'
 export default
     {
+        mortgageFake(params) {
+            return request({
+                url: '/business/mortgageq/mortgageFake',
+                method: 'post',
+                params
+            })
+        },
+        mortgageList(){
+            return request({
+                url: '/business/mortgageq/mortgageList',
+                method: 'post',
+            })
+        },
+        addmortgage(data) {
+            return request({
+                url: '/business/mortgageq/mortgageAdd',
+                method: 'post',
+                data
+            })
+        },
         legal(params) {
             return request({
                 url: '/business/claims/legal',
@@ -34,6 +54,13 @@ export default
                 url: '/business/claims/legalAdd',
                 method: 'post',
                 data
+            })
+        },
+        mapLists(params) {
+            return request({
+                url: '/business/mortgageq/mapAll',
+                method: 'post',
+                params
             })
         },
         mapAll(params) {
@@ -158,6 +185,13 @@ export default
         borrow(params) {
             return request({
                 url: '/business/claimsSelect/borrow',
+                method: 'post',
+                params
+            })
+        },
+        mortgage(params) {
+            return request({
+                url: '/business/mortgageq/mortgage',
                 method: 'post',
                 params
             })

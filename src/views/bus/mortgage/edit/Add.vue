@@ -1,6 +1,6 @@
 <template>
   <div class="my-padding">
-    <el-button @click="$router.push('/bus/claims/index')">退出</el-button>
+    <el-button @click="$router.push('/bus/mortgage/index')">退出</el-button>
     <el-tabs v-model="activeName" stretch>
       <el-tab-pane label="债权基本信息" name="first">
         <el-form ref="form" :model="form" label-width="7rem">
@@ -24,7 +24,7 @@
           </el-form-item>
           <el-form-item>
             <span slot="label">
-              所在地
+              放款区域
               <span class="red">*</span>
             </span>
             <el-cascader
@@ -35,7 +35,6 @@
               :props="{value:'regionId',label:'regionName',children:'children' }"
               filterable
             ></el-cascader>
-            <el-input v-model="form.address" type="text" placeholder="请输入具体地址"></el-input>
           </el-form-item>
           <el-form-item>
             <span slot="label">行业</span>
@@ -86,8 +85,8 @@
             <el-input v-model="form.contact" type="text" placeholder="请输入联系人"></el-input>
           </el-form-item>
           <el-form-item>
-            <span slot="label">原始债权人</span>
-            <el-input v-model="form.origCreditors" type="text" placeholder="请输入原始债权人"></el-input>
+            <span slot="label">合作单位</span>
+            <el-input v-model="form.address" type="text" placeholder="请输入联系人"></el-input>
           </el-form-item>
           <el-form-item>
             <span slot="label">基准日</span>
@@ -110,9 +109,35 @@
             ></el-date-picker>
           </el-form-item>
           <el-form-item>
-            <el-button type="primary" @click="addclaims" v-if="form.claimsNumber==null">保存</el-button>
-            <el-button type="warning" @click="updateclaims" v-if="form.claimsNumber!=null">更改</el-button>
-            <el-button @click="$router.push('/bus/claims/index')">取消</el-button>
+            <span slot="label">贷款行</span>
+            <el-input v-model="form.lendBank" type="text" placeholder="请输入贷款行"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <span slot="label">逾期日期/代偿日期</span>
+            <el-date-picker
+              v-model="form.lateBegin"
+              type="date"
+              format="yyyy年MM月dd日"
+              value-format="yyyy年MM月dd日"
+              placeholder="请选择起始日"
+            ></el-date-picker>
+            {{"~"}}
+            <el-date-picker
+              v-model="form.lateEnd"
+              type="date"
+              format="yyyy年MM月dd日"
+              value-format="yyyy年MM月dd日"
+              placeholder="请选择结束日"
+            ></el-date-picker>
+          </el-form-item>
+          <el-form-item>
+            <span slot="label">逾期利率</span>
+            <el-input v-model="form.lateIntRates" type="text" placeholder="请输入逾期利率"></el-input>
+          </el-form-item>
+          <el-form-item>
+            <el-button type="primary" @click="addclaims" v-if="form.number==null">保存</el-button>
+            <el-button type="warning" @click="updateclaims" v-if="form.number!=null">更改</el-button>
+            <el-button @click="$router.push('/bus/mortgage/index')">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -120,7 +145,7 @@
       <el-tab-pane label="借款合同" name="second" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="ToBorrow()">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
+          <el-button @click="$router.push('/bus/mortgage/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -143,11 +168,14 @@
           <el-table-column label="合同本金" align="center">
             <template slot-scope="scope">{{ scope.row.principal }}</template>
           </el-table-column>
-          <el-table-column label="本金余额" align="center">
+          <el-table-column label="本金余额/代偿余额（元）" align="center">
             <template slot-scope="scope">{{ scope.row.prinBalance }}</template>
           </el-table-column>
-          <el-table-column label="利息余额" align="center">
+          <el-table-column label="当期利息（元）" align="center">
             <template slot-scope="scope">{{ scope.row.interBalance }}</template>
+          </el-table-column>
+          <el-table-column label="罚息（滞纳金）" align="center">
+            <template slot-scope="scope">{{ scope.row.otherMoney }}</template>
           </el-table-column>
           <el-table-column label="诉讼有效期" align="center">
             <template slot-scope="scope">{{ scope.row.litigationBegin+"~"+scope.row.litigationEnd }}</template>
@@ -164,7 +192,7 @@
       <el-tab-pane label="保证合同" name="sixth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Toguarante">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
+          <el-button @click="$router.push('/bus/mortgage/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -213,7 +241,7 @@
       <el-tab-pane label="抵押合同" name="third" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocontract">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
+          <el-button @click="$router.push('/bus/mortgage/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -254,7 +282,7 @@
       <el-tab-pane label="抵质押物信息" name="forth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocoll">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
+          <el-button @click="$router.push('/bus/mortgage/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -309,7 +337,7 @@
       <el-tab-pane label="亮点信息" name="fifth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tolight">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
+          <el-button @click="$router.push('/bus/mortgage/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -365,6 +393,7 @@ export default {
       form: {
         borrowers: "测试",
         city: [],
+        //合作单位
         address: "测试",
         industry: "",
         situation: "",
@@ -372,10 +401,18 @@ export default {
         telephone: "",
         institutions: "测试",
         contact: "测试",
-        origCreditors: "测试",
+        origCreditors: "",
         baseDay: "",
         interestEnd: "",
-        claimType: ""
+        claimType: "",
+        lendBank:"",
+        lateBegin:"",
+        lateEnd:"",
+        lateIntRates:"",
+        prinBalance:"",
+        curInter:"",
+        lateFee:"",
+        credits:"",
       },
       claimsNumber: "",
       businessList: [],
@@ -416,7 +453,7 @@ export default {
       }
     });
     //债权资本信息(完)
-    $.claims({ claimsNumber: this.$route.query.claimsNumber }).then(res => {
+    $.mortgage({ number: this.$route.query.claimsNumber }).then(res => {
       if (res.success) {
         if (res.data != null) {
           // console.log(res.data)
@@ -425,11 +462,10 @@ export default {
       }
     });
     //借款合同(完)
-    console.log(this.$route.query.claimsNumber)
     $.borrowList({ claimsNumber: this.$route.query.claimsNumber }).then(res => {
       if (res.success) {
         this.list1 = res.data;
-        console.log(this.list1)
+        // console.log(this.list1)
         for (var i = 1; i <= this.list1.length; i++) {
           this.$set(this.list1[i - 1], "a", i);
         }
@@ -486,7 +522,7 @@ export default {
   methods: {
     addclaims() {
       if (!this.validate()) return;
-      $.addclaims(this.form).then(response => {
+      $.addmortgage(this.form).then(response => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
@@ -576,7 +612,7 @@ export default {
           query: { id: this.claimsNumber }
         });
       } else {
-         this.form1.claimsNumber=this.$route.query.claimsNumber
+        this.form1.claimsNumber=this.$route.query.claimsNumber
         $.addguarantee(this.form1).then(res=>{
           // console.log(res.data)
            this.$router.push({
@@ -798,10 +834,8 @@ export default {
       if (this.form.borrowers.length == 0) {
         error = "借款人名称必填\n";
       } else if (this.form.city.length == 0) {
-        error = "地区必选\n";
-      } else if (this.form.address.length == 0) {
-        error = "地址必填\n";
-      } else if (this.form.institutions.length == 0) {
+        error = "放款区域必选\n";
+      }  else if (this.form.institutions.length == 0) {
         error = "债权所在机构必填\n";
       }
 

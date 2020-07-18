@@ -3,7 +3,7 @@
     <el-button
       type="primary"
       plain
-      @click="$router.push('/bus/claims/index')"
+      @click="$router.push('/bus/mortgage/index')"
       style="float:right"
     >退出</el-button>
     <div style="border-bottom:1px solid #999999;">
@@ -14,7 +14,7 @@
             <el-form-item label="借款人名称:">{{form.borrowers}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="所在地:">{{form.city+" "+form.address}}</el-form-item>
+            <el-form-item label="所在地:">{{form.city+""}}</el-form-item>
           </el-col>
           <el-col :span="8">
             <el-form-item label="行业:">{{form.industry}}</el-form-item>
@@ -36,10 +36,10 @@
             <el-form-item label="债权所在机构:">{{form.institutions}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="联系人:">{{form.contact}}</el-form-item>
+            <el-form-item label="合作单位:">{{form.address}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="原始债权人:">{{form.origCreditors}}</el-form-item>
+            <el-form-item label="联系人:">{{form.contact}}</el-form-item>
           </el-col>
         </el-row>
         <el-row>
@@ -47,15 +47,15 @@
             <el-form-item label="基准日:">{{form.baseDay}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="合同本金:">{{form.prinTotal}}</el-form-item>
+            <el-form-item label="本金余额/代偿余额:">{{form.prinBalance}}</el-form-item>
           </el-col>
           <el-col :span="8">
-            <el-form-item label="本金余额:">{{form.balanTotal}}</el-form-item>
+            <el-form-item label="当前利息:">{{form.curInter}}</el-form-item>
           </el-col>
         </el-row>
         <el-row>
           <el-col :span="8">
-            <el-form-item label="利息余额:">{{form.interTotal}}</el-form-item>
+            <el-form-item label="罚息（滞纳金）:">{{form.lateFee}}</el-form-item>
           </el-col>
         </el-row>
       </el-form>
@@ -69,9 +69,9 @@
         <el-col :span="8">{{"借款期限: "+item.beginTime+"~"+item.endTime}}</el-col>
       </el-row>
       <el-row style="height:3rem">
-        <el-col :span="8">{{"本金余额: "+item.prinBalance}}</el-col>
-        <el-col :span="8">{{"利息余额: "+item.interBalance}}</el-col>
-        <el-col :span="8">{{"其他金额: "+item.otherMoney+" "+item.note}}</el-col>
+        <el-col :span="8">{{"本金余额/代偿余额: "+item.prinBalance}}</el-col>
+        <el-col :span="8">{{"当前利息: "+item.interBalance}}</el-col>
+        <el-col :span="8">{{"罚息（滞纳金）: "+item.otherMoney+" "+item.note}}</el-col>
       </el-row>
       <el-row style="height:3rem">
         <el-col :span="8">{{"诉讼有效期: "+item.litigationBegin+"~"+item.litigationEnd}}</el-col>
@@ -137,7 +137,7 @@
     </div>
 
     <div style="border-bottom:1px dashed #999999;" v-for="(item,i) in collateralList" :key="i+'d'">
-      <h2 align="center">抵押物信息</h2>
+      <h2 align="center">抵押物信息{{i+1}}</h2>
       <el-row style="height:3rem">
         <el-col :span="8">{{"关联抵押物合同: "+item.loanCont}}</el-col>
         <el-col :span="8">{{"抵（质）押合同编号: "+item.noContract}}</el-col>
@@ -240,6 +240,7 @@ export default {
       form: {
         borrowers: "",
         city: [],
+        //合作单位
         address: "",
         industry: "",
         situation: "",
@@ -249,9 +250,16 @@ export default {
         contact: "",
         origCreditors: "",
         baseDay: "",
-        prinTotal: "",
-        balanTotal: "",
-        interTotal: ""
+        interestEnd: "",
+        claimType: "",
+        lendBank:"",
+        lateBegin:"",
+        lateEnd:"",
+        lateIntRates:"",
+        prinBalance:"",
+        curInter:"",
+        lateFee:"",
+        credits:"",
       },
       borrowList: [],
       guaranteeList: [],
@@ -268,9 +276,10 @@ export default {
   },
   created() {
     this.claimsNumber = this.$route.query.claimsNumber;
-    $.mapAll({ claimsNumber: this.claimsNumber }).then(response => {
+    $.mapLists({ number: this.claimsNumber }).then(response => {
       if (response.success) {
-        this.form = response.data.claim;
+        console.log(response.data)
+        this.form = response.data.mortgage;
         this.borrowList = response.data.borrow;
         for (let index = 0; index < response.data.guarantor.length; index++) {
           this.guaranteeList.push(response.data.guarantor[index].guarantor);

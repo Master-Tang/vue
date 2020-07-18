@@ -69,7 +69,6 @@
             icon="el-icon-circle-plus"
             @click="addNature"
           >添加自然人</el-button>
-
           <el-table
             id="myform"
             :data="naturedList"
@@ -128,7 +127,6 @@
             icon="el-icon-circle-plus"
             @click="addCorporte"
           >添加法人</el-button>
-
           <el-table
             id="myform"
             :data="corporateList"
@@ -177,7 +175,6 @@
           </el-table>
         </div>
       </el-form-item>
-
       <el-form-item>
         <el-button type="primary" @click="addguarantee" v-if="form.guarantorId==null">保存</el-button>
         <el-button type="primary" @click="updateguarantee" v-if="form.guarantorId!=null">保存</el-button>
@@ -211,7 +208,11 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">身份证号</span>
-          <el-input v-model="form1.naturalCard" type="text" placeholder="请输入身份证号"></el-input>
+          <el-input v-model="form1.naturalCard" type="text" 
+          placeholder="请输入身份证号"
+          onkeyup="value=value.replace(/([^0-9Xx])+/g,'')"
+            onchange="value=value.replace(/([^0-9Xx])+/g,'')"
+          ></el-input>
         </el-form-item>
         <el-form-item>
           <span slot="label">地址</span>
@@ -231,8 +232,6 @@
             v-model="form1.contact"
             type="text"
             placeholder="请输入联系方式"
-            onkeyup="value=value.replace(/\D/g,'')"
-            onchange="value=value.replace(/\D/g,'')"
           ></el-input>
         </el-form-item>
         <el-form-item>
@@ -270,7 +269,7 @@
           <span slot="label">企业性质</span>
           <el-select v-model="form1.corporateNature" placeholder="请选择企业性质" style="width:100%">
             <el-option
-              v-for="item in natureList"
+              v-for="item in corporatedList"
               :key="item.dicValue"
               :label="item.dicKey"
               :value="item.dicValue"
@@ -380,7 +379,8 @@ export default {
       guarantorList: [],
       guacolList: [],
       naturedList: [],
-      corporateList: []
+      corporateList: [],
+      corporatedList:[],
     };
   },
 
@@ -401,6 +401,7 @@ export default {
         this.relationshipList = res.data.relationshipList;
         this.guarantorList = res.data.guarantorList;
         this.guacolList = res.data.guacolList;
+        this.corporatedList=res.data.corporateList;
       }
     });
     $.guarantor({ guarantorId: this.$route.query.guarantorId }).then(res => {
@@ -446,7 +447,6 @@ export default {
     },
     handleNatureEditData() {
       this.dialogTableVisible1 = false;
-      // console.log(this.form1)
       $.legalUpdate(this.form1).then(res => {
         this.$message({
           type: "success",
@@ -480,7 +480,6 @@ export default {
       this.dialogTableVisible1 = false;
       this.form1.contractId = this.form.guarantorId;
       this.form1.contractType = "01";
-      // console.log(this.form1.contractId)
       $.legalAdd(this.form1).then(response => {
         if (response.success) {
           $.legalList({ contractId: this.$route.query.guarantorId }).then(
@@ -564,7 +563,7 @@ export default {
               if (res.success) {
                 this.naturedList = res.data.naturalList;
                 this.corporateList = res.data.legalList;
-                console.log(res.data);
+                // console.log(res.data);
               }
             }
           );
@@ -632,7 +631,7 @@ export default {
         error = "保证人金额必填\n";
       } else if (this.form.contractNum.length == 0) {
         error = "保证人合同编号必填\n";
-      } 
+      }
 
       if (error) {
         this.$message({
@@ -642,7 +641,7 @@ export default {
         return false;
       }
       return true;
-    }
+    },
   }
 };
 </script>

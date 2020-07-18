@@ -384,7 +384,7 @@ export default {
   methods: {
     back() {
       this.$router.push({
-        path: "/bus/claims/add/index",
+        path: "/bus/mortgage/add/index",
         query: { activeName: "forth", claimsNumber: this.form.claimsNumber }
       });
     },
@@ -409,7 +409,7 @@ export default {
     },
     cencelcollateral() {
       this.$router.push({
-        path: "/bus/claims/add/index",
+        path: "/bus/mortgage/add/index",
         query: { activeName: "forth", claimsNumber: this.form.claimsNumber }
       });
     },

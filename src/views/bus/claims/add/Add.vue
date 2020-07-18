@@ -1,5 +1,6 @@
 <template>
   <div class="my-padding">
+    <el-button @click="$router.push('/bus/claims/index')">退出</el-button>
     <el-tabs v-model="activeName" stretch>
       <el-tab-pane label="债权基本信息" name="first">
         <el-form ref="form" :model="form" label-width="7rem">
@@ -267,13 +268,13 @@
           <el-table-column label="序号" align="center" width="50rem">
             <template slot-scope="scope">{{ scope.row.a }}</template>
           </el-table-column>
+          <el-table-column label="抵质押物编号" align="center">
+            <template slot-scope="scope">{{ scope.row.noContract}}</template>
+          </el-table-column>
           <el-table-column label="所属抵质押合同" align="center">
             <template
               slot-scope="scope"
             >{{ String(scope.row.loanCont).substring(0, String(scope.row.loanCont).length) }}</template>
-          </el-table-column>
-          <el-table-column label="抵质押物编号" align="center">
-            <template slot-scope="scope">{{ scope.row.noContract}}</template>
           </el-table-column>
           <el-table-column label="抵质押类型" align="center">
             <template slot-scope="scope">{{ scope.row.mortType }}</template>
@@ -293,7 +294,7 @@
           <el-table-column label="查封法院" align="center">
             <template slot-scope="scope">{{ scope.row.courtSeizureCity+" "+scope.row.courtSei }}</template>
           </el-table-column>
-          <el-table-column label="需核实信息" align="center">
+          <el-table-column label="备注" align="center">
             <template slot-scope="scope">{{ scope.row.verifyInfo }}</template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150rem">
@@ -414,6 +415,7 @@ export default {
         this.instituList = res.data.instituList;
       }
     });
+    //债权资本信息(完)
     $.claims({ claimsNumber: this.$route.query.claimsNumber }).then(res => {
       if (res.success) {
         if (res.data != null) {
@@ -422,7 +424,7 @@ export default {
         }
       }
     });
-    //借款人
+    //借款合同(完)
     $.borrowList({ claimsNumber: this.$route.query.claimsNumber }).then(res => {
       if (res.success) {
         this.list1 = res.data;
@@ -436,7 +438,6 @@ export default {
     $.guarantorList({ claimsNumber: this.$route.query.claimsNumber }).then(
       res => {
         if (res.success) {
-          console.log(res.data)
           this.list2 = res.data;
           // console.log(this.list1)
           for (var i = 1; i <= this.list2.length; i++) {

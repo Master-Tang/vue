@@ -113,11 +113,13 @@ export default {
         principal: 0,
         beginTime: "",
         endTime: "",
+        borTerms:"",
         prinBalance: 0,
         interBalance: 0,
         otherMoney: 0,
         litigationBegin: "",
         litigationEnd: "",
+        validity:"",
         //备注
         note: "",
         claimsNumber: "",
@@ -129,11 +131,11 @@ export default {
     this.form.claimsNumber = this.$route.query.id;
     this.form.borrowId = this.$route.query.borrowId;
     // console.log(this.form.borrowId)
-    $.borrow({ borrowId: this.$route.query.borrowId}).then(res => {
+    $.borrow({ borrowId: this.$route.query.borrowId }).then(res => {
       if (res.success) {
-        if(res.data!=null){
-        // console.log(res.data)
-        this.form = res.data;
+        if (res.data != null) {
+          // console.log(res.data)
+          this.form = res.data;
         }
       }
     });

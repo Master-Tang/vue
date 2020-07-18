@@ -38,7 +38,7 @@ export default [
                         {
                             path: 'borrow',
                             component: () => import('@/views/bus/claims/edit/Borrowing'),
-                            meta: { title: '借款人合同' },
+                            meta: { title: '借款合同' },
                             hidden: true
                         },
                         {
@@ -109,7 +109,7 @@ export default [
                         {
                             path: 'borrow',
                             component: () => import('@/views/bus/claims/add/Borrowing'),
-                            meta: { title: '借款人合同' },
+                            meta: { title: '借款合同' },
                             hidden: true
                         },
                         {
@@ -167,6 +167,7 @@ export default [
                 },
             ]
         },
+
         {
             path: 'mortgage',
             name: 'mortgage',
@@ -180,16 +181,152 @@ export default [
                     hidden: true
                 },
                 {
-                    path: 'add',
-                    component: () => import('@/views/bus/mortgage/Add'),
-                    meta: { title: '新增' },
+                    path: 'detail',
+                    component: () => import('@/views/bus/mortgage/Detail'),
+                    meta: { title: '详细信息' },
                     hidden: true
                 },
                 {
                     path: 'edit',
-                    component: () => import('@/views/bus/mortgage/Edit'),
+                    redirect: "/bus/mortgage/edit/index",
+                    component: () => import('@/views/bus/mortgage/edit/Index'),
                     meta: { title: '编辑' },
-                    hidden: true
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/mortgage/edit/Add'),
+                            hidden: true,
+                        },
+                        {
+                            path: 'borrow',
+                            component: () => import('@/views/bus/mortgage/edit/Borrowing'),
+                            meta: { title: '借款合同' },
+                            hidden: true
+                        },
+                        {
+                            path: 'guarantee',
+                            component: () => import('@/views/bus/mortgage/edit/Guarantee'),
+                            meta: { title: '保证合同' },
+                            hidden: true
+                        },
+                        {
+                            path: 'collcontract',
+                            component: () => import('@/views/bus/mortgage/edit/Collcontract'),
+                            meta: { title: '抵押物合同' },
+                            hidden: true
+                        },
+                        {
+                            path: 'collateral',
+                            redirect: "/bus/mortgage/edit/collateral/index",
+                            component: () => import('@/views/bus/mortgage/edit/collateral/Index'),
+                            meta: { title: '抵押信息' },
+                            hidden: true,
+                            children:[
+                                {
+                                    path: 'index',
+                                    component: () => import('@/views/bus/mortgage/edit/collateral/Collateral'),
+                                    hidden: true,
+                                },
+                                {
+                                    path: 'property',
+                                    component: () => import('@/views/bus/mortgage/edit/collateral/Property'),
+                                    meta: { title: '房产信息' },
+                                    hidden: true
+                                },
+                                {
+                                    path: 'land',
+                                    component: () => import('@/views/bus/mortgage/edit/collateral/Land'),
+                                    meta: { title: '土地信息' },
+                                    hidden: true
+                                },
+                                {
+                                    path: 'other',
+                                    component: () => import('@/views/bus/mortgage/edit/collateral/Other'),
+                                    meta: { title: '其他资产信息' },
+                                    hidden: true
+                                },
+                            ]
+                        },
+                        {
+                            path: 'light',
+                            component: () => import('@/views/bus/mortgage/edit/Light'),
+                            meta: { title: '亮点信息' },
+                            hidden: true
+                        },
+
+                    ]
+                },
+                {
+                    path: 'add',
+                    redirect: "/bus/mortgage/add/index",
+                    component: () => import('@/views/bus/mortgage/add/Index'),
+                    meta: { title: '新增' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/mortgage/add/Add'),
+                            hidden: true,
+                        },
+                        {
+                            path: 'borrow',
+                            component: () => import('@/views/bus/mortgage/add/Borrowing'),
+                            meta: { title: '借款人合同' },
+                            hidden: true
+                        },
+                        {
+                            path: 'guarantee',
+                            component: () => import('@/views/bus/mortgage/add/Guarantee'),
+                            meta: { title: '保证合同' },
+                            hidden: true
+                        },
+                        {
+                            path: 'collcontract',
+                            component: () => import('@/views/bus/mortgage/add/Collcontract'),
+                            meta: { title: '抵押物合同' },
+                            hidden: true
+                        },
+                        {
+                            path: 'collateral',
+                            redirect: "/bus/mortgage/add/collateral/index",
+                            component: () => import('@/views/bus/mortgage/add/collateral/Index'),
+                            meta: { title: '抵押信息' },
+                            hidden: true,
+                            children:[
+                                {
+                                    path: 'index',
+                                    component: () => import('@/views/bus/mortgage/add/collateral/Collateral'),
+                                    hidden: true,
+                                },
+                                {
+                                    path: 'property',
+                                    component: () => import('@/views/bus/mortgage/add/collateral/Property'),
+                                    meta: { title: '房产信息' },
+                                    hidden: true
+                                },
+                                {
+                                    path: 'land',
+                                    component: () => import('@/views/bus/mortgage/add/collateral/Land'),
+                                    meta: { title: '土地信息' },
+                                    hidden: true
+                                },
+                                {
+                                    path: 'other',
+                                    component: () => import('@/views/bus/mortgage/add/collateral/Other'),
+                                    meta: { title: '其他资产信息' },
+                                    hidden: true
+                                },
+                            ]
+                        },
+                        {
+                            path: 'light',
+                            component: () => import('@/views/bus/mortgage/add/Light'),
+                            meta: { title: '亮点信息' },
+                            hidden: true
+                        },
+
+                    ]
                 },
             ]
         },
