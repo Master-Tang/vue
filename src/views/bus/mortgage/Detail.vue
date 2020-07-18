@@ -278,7 +278,7 @@ export default {
     this.claimsNumber = this.$route.query.claimsNumber;
     $.mapLists({ number: this.claimsNumber }).then(response => {
       if (response.success) {
-        console.log(response.data)
+        // console.log(response.data)
         this.form = response.data.mortgage;
         this.borrowList = response.data.borrow;
         for (let index = 0; index < response.data.guarantor.length; index++) {
