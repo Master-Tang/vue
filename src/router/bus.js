@@ -343,18 +343,75 @@ export default [
                     hidden: true
                 },
                 {
-                    path: 'add',
-                    component: () => import('@/views/bus/property/Add'),
-                    meta: { title: '新增' },
+                    path: 'detail',
+                    component: () => import('@/views/bus/property/Detail'),
+                    meta: { title: '详细信息' },
                     hidden: true
                 },
                 {
                     path: 'edit',
-                    component: () => import('@/views/bus/property/Edit'),
+                    redirect: "/bus/property/edit/index",
+                    component: () => import('@/views/bus/property/edit/Index'),
                     meta: { title: '编辑' },
-                    hidden: true
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/property/edit/Add'),
+                            hidden: true,
+                        },
+                        {
+                            path: 'property',
+                            component: () => import('@/views/bus/property/edit/Property'),
+                            meta: { title: '房产信息' },
+                            hidden: true
+                        },
+                        {
+                            path: 'land',
+                            component: () => import('@/views/bus/property/edit/Land'),
+                            meta: { title: '土地信息' },
+                            hidden: true
+                        },
+                        {
+                            path: 'other',
+                            component: () => import('@/views/bus/property/edit/Other'),
+                            meta: { title: '其他资产信息' },
+                            hidden: true
+                        },
+                    ]
                 },
-
+                {
+                    path: 'add',
+                    redirect: "/bus/property/add/index",
+                    component: () => import('@/views/bus/property/add/Index'),
+                    meta: { title: '新增' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/property/add/Add'),
+                            hidden: true,
+                        },
+                        {
+                            path: 'property',
+                            component: () => import('@/views/bus/property/add/Property'),
+                            meta: { title: '房产信息' },
+                            hidden: true
+                        },
+                        {
+                            path: 'land',
+                            component: () => import('@/views/bus/property/add/Land'),
+                            meta: { title: '土地信息' },
+                            hidden: true
+                        },
+                        {
+                            path: 'other',
+                            component: () => import('@/views/bus/property/add/Other'),
+                            meta: { title: '其他资产信息' },
+                            hidden: true
+                        },
+                    ]
+                },
             ]
         },
 

@@ -543,6 +543,7 @@ export default {
     },
     updateclaims() {
       if (!this.validate()) return;
+      // console.log(this.form)
       $.updateclaims(this.form).then(response => {
         this.$message({
           duration: 800,

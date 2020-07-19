@@ -425,11 +425,11 @@ export default {
       }
     });
     //借款合同(完)
-    console.log(this.$route.query.claimsNumber)
+    // console.log(this.$route.query.claimsNumber)
     $.borrowList({ claimsNumber: this.$route.query.claimsNumber }).then(res => {
       if (res.success) {
         this.list1 = res.data;
-        console.log(this.list1)
+        // console.log(this.list1)
         for (var i = 1; i <= this.list1.length; i++) {
           this.$set(this.list1[i - 1], "a", i);
         }

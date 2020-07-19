@@ -1,6 +1,40 @@
 import request from '@/utils/request'
 export default
     {
+        prorigUpdate(data) {
+            return request({
+                url: '/business/prorigq/prorigUpdate',
+                method: 'post',
+                data
+            })
+        },
+        prorigAdd(data) {
+            return request({
+                url: '/business/prorigq/prorigAdd',
+                method: 'post',
+                data
+            })
+        },
+        prorig(params) {
+            return request({
+                url: '/business/prorigq/prorig',
+                method: 'post',
+                params
+            })
+        },
+        prorigFake(params) {
+            return request({
+                url: '/business/prorigq/prorigFake',
+                method: 'post',
+                params
+            })
+        },
+        prorigList(){
+            return request({
+                url: '/business/prorigq/prorigList',
+                method: 'post',
+            })
+        },
         mortgageFake(params) {
             return request({
                 url: '/business/mortgageq/mortgageFake',
@@ -54,6 +88,13 @@ export default
                 url: '/business/claims/legalAdd',
                 method: 'post',
                 data
+            })
+        },
+        mapproAll(params) {
+            return request({
+                url: '/business/prorigq/mapAll',
+                method: 'post',
+                params
             })
         },
         mapLists(params) {

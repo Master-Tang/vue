@@ -1,8 +1,12 @@
 <template>
   <div class="app-container">
+    <div class="button" style="padding-bottom:1rem">
+          <div class="grid-content bg-purple-dark">
+            <el-button type="primary" @click="handleAdd" >添加</el-button>
+          </div>
+    </div>
     <el-table
       id="myform"
-      v-loading="listLoading"
       :data="list"
       element-loading-text="Loading"
       border
@@ -10,58 +14,39 @@
       style="width: 100%"
       highlight-current-row
     >
-      <el-table-column label="序号" align="center">
-        <template slot-scope="scope">{{ scope.row.name }}</template>
+      <el-table-column label="序号" align="center" width="50rem">
+        <template slot-scope="scope">{{ scope.row.a }}</template>
       </el-table-column>
-      <el-table-column label="债权编号" align="center">
+      <el-table-column label="地址" align="center">
+        <template slot-scope="scope">{{ scope.row.city+" "+scope.row.address}}</template>
+      </el-table-column>
+      <el-table-column label="所有权人" align="center">
+        <template slot-scope="scope">{{ scope.row.owner }}</template>
+      </el-table-column>
+      <el-table-column label="资产类型" align="center">
+        <template slot-scope="scope">{{ scope.row.assetType }}</template>
+      </el-table-column>
+      <el-table-column label="需要核实信息" align="center">
+        <template slot-scope="scope">{{ scope.row.info }}</template>
+      </el-table-column>
+      <el-table-column label="操作" align="center" width="150rem">
         <template slot-scope="scope">
-          <span>{{ scope.row.createTime}}</span>
-        </template>
-      </el-table-column>
-      <el-table-column label="借款人" align="center">
-        <template slot-scope="scope">{{ scope.row.telephone }}</template>
-      </el-table-column>
-
-      <el-table-column label="本金金额" align="center">
-        <template slot-scope="scope">{{ scope.row.company }}</template>
-      </el-table-column>
-      <el-table-column label="利息余额" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column>
-      <el-table-column label="代垫费用" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column>
-      <el-table-column label="本息合计" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column>
-      <el-table-column label="所在机构" align="center">
-        <template slot-scope="scope">{{ scope.row.post }}</template>
-      </el-table-column>
-      <el-table-column label="操作" align="center">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
+          <el-button type="primary" icon="el-icon-edit" circle size="small" @click="handleEdit(scope.row.number)"></el-button>
+          <el-button type="info" icon="el-icon-search" circle  size="small" @click="propertyFind(scope.row.number)"></el-button>
+          <el-button type="danger" icon="el-icon-delete" circle size="small" @click="handleDel(scope.row.number)"></el-button>
         </template>
       </el-table-column>
     </el-table>
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page="currentPage"
-      :page-sizes="[5, 10, 15, 20]"
-      :page-size="pageSize"
-      layout="total, sizes, prev, pager, next, jumper"
-      :total="total"
-    ></el-pagination>
   </div>
 </template>
 
 <script>
+import asstes from "@/api/assets";
+import $ from "@/api/bus";
 
 export default {
   data() {
     return {
-      createUserId: "",
       value: "",
       state: 0,
       list: null,
@@ -70,56 +55,40 @@ export default {
       currentPage: 1,
       pageSize: 10,
       total: 0,
-      options: []
+      options: [],
     };
   },
   created() {
-    $.getCreateUserId().then(response => {
-      this.createUserId = response.data.userId;
-      this.listLoading = false;
-      this.fetchData();
-    });
-    
+    this.fetchData();
   },
   methods: {
     fetchData() {
-      this.listLoading = true;
-      $.findAll({
-        partnerType: 1,
-        createId:this.createUserId,
-        pageIndex: this.currentPage,
-        pageSize: this.pageSize
-      }).then(response => {
-        this.list = response.data.list;
-        this.total = response.data.total;
-        this.listLoading = false;
-        // console.log(this.list)
+      $.prorigList().then(response => {
+        // console.log(response.data)
+        this.list = response.data;
+        for (var i = 1; i <= this.list.length; i++) {
+          this.$set(this.list[i - 1], "a", i);
+        }
+        // console.log(response)
       });
     },
-    handleSizeChange(val) {
-      this.pageSize = val;
-      this.currentPage = 1;
-      if (this.state == 1) {
-        this.find();
-      } else this.fetchData();
-    },
-    handleCurrentChange(val) {
-      this.currentPage = val;
-      //console.log(val)
-      if (this.state == 1) {
-        this.find();
-      } else this.fetchData();
-    },
-    handleAdd(id) {
+
+    handleAdd() {
       this.$router.push({
-        path: "add",
-        query: { id: id }
+        path: "add"
       });
+      
     },
     handleEdit(id) {
       this.$router.push({
         path: "edit",
-        query: { id: id }
+        query: { claimsNumber: id }
+      });
+    },
+    propertyFind(id){
+      this.$router.push({
+        path: "detail",
+        query: { claimsNumber: id }
       });
     },
     handleDel(id) {
@@ -130,7 +99,7 @@ export default {
       })
         .then(() => {
           // console.log(id);
-          $.remove({ partnerId: id }).then(response => {
+          $.prorigFake({ number: id }).then(response => {
             this.$message({
               type: "success",
               message: "删除成功!"
