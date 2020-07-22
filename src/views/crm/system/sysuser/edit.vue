@@ -35,10 +35,33 @@
       </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">确定</el-button>
-        <el-button type="warning" @click="open">重置密码</el-button>
+        <el-button type="warning" @click="opendialog">重置密码</el-button>
         <el-button @click="$router.back()">取消</el-button>
       </el-form-item>
     </el-form>
+
+    <el-dialog
+      title="重置密码"
+      :visible.sync="dialogTableVisible"
+      center
+      :append-to-body="true"
+      :lock-scroll="false"
+      width="50%"
+    >
+      <el-form>
+        <el-form-item>
+          <span slot="label">新密码</span>
+          <el-input v-model="newpassword" type="text" placeholder="请输入至少六位的新密码"></el-input>
+        </el-form-item>
+        <el-form-item>
+          <span slot="label">确认密码</span>
+          <el-input v-model="confirmpassword" type="text" placeholder="请输入确认密码"></el-input>
+        </el-form-item>
+        <el-form-item align="center">
+          <el-button type="primary" @click="open">确认更改</el-button>
+        </el-form-item>
+      </el-form>
+    </el-dialog>
   </div>
 </template>
   
@@ -49,6 +72,9 @@ export default {
   data() {
     return {
       id: "",
+      dialogTableVisible: false,
+      newpassword: "",
+      confirmpassword: "",
       form: {
         loginName: "",
         depId: "",
@@ -59,51 +85,57 @@ export default {
         departmentList: []
       },
       options: [],
-      roleIdList:[]
+      roleIdList: []
     };
   },
   created() {
     (this.id = this.$route.query.id),
-    $.getRoleList().then(response => {
-      if (response.success) {
-        // console.log(response.data)
-        this.roleIdList = response.data.list;
-      }
-    });
-      department.getList().then(response => {
+      $.getRoleList().then(response => {
         if (response.success) {
-          // console.log(response.data.list)
-          this.form.departmentList = response.data.list;
+          // console.log(response.data)
+          this.roleIdList = response.data.list;
         }
       });
+    department.getList().then(response => {
+      if (response.success) {
+        // console.log(response.data.list)
+        this.form.departmentList = response.data.list;
+      }
+    });
     this.getData();
   },
   methods: {
+    opendialog() {
+      this.dialogTableVisible = true;
+    },
     open() {
-      this.$confirm("此操作将重置该用户密码为password, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          $.updatePassword({
-            loginName: this.form.loginName,
-            loginPass: "password"
-          }).then(res => {
-            if (res.success) {
-              this.$message({
-                type: "success",
-                message: "重置成功,新密码为password"
-              });
-            }
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消"
-          });
+      if (this.newpassword.length < 6) {
+        this.$message({
+          type: "error",
+          message: "新密码不能少于6位"
         });
+      } else if (this.newpassword != this.confirmpassword) {
+        this.$message({
+          type: "error",
+          message: "确认密码不一致"
+        });
+        this.password = "";
+        this.newpassword = "";
+        this.confirmpassword = "";
+      } else {
+        $.updatePassword({
+          loginName: this.form.loginName,
+          loginPass: this.confirmpassword
+        }).then(res => {
+          if (res.success) {
+            this.dialogTableVisible = false;
+            this.$message({
+              type: "success",
+              message: "重置成功,新密码为"+this.confirmpassword
+            });
+          }
+        });
+      }
     },
     getData() {
       // console.log(this.id);

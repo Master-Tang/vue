@@ -57,7 +57,7 @@
       <el-table-column label="操作" align="center">
         <template slot-scope="scope">
           <el-button type="primary" size="small" @click="handleEdit(scope.row.partnerId)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDel(scope.row.partnerId)">删除</el-button>
+          <el-button type="danger" icon="el-icon-delete" circle @click="handleDel(scope.row.partnerId)"></el-button>
         </template>
       </el-table-column>
     </el-table>

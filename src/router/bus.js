@@ -27,13 +27,19 @@ export default [
                     path: 'edit',
                     redirect: "/bus/claims/edit/index",
                     component: () => import('@/views/bus/claims/edit/Index'),
-                    meta: { title: '编辑' },
+                    meta: { title: '债权界面' },
                     hidden: true,
                     children: [
                         {
                             path: 'index',
-                            component: () => import('@/views/bus/claims/edit/Add'),
+                            component: () => import('@/views/bus/claims/edit/Choose'),
                             hidden: true,
+                        },
+                        {
+                            path:'add',
+                            component:()=>import('@/views/bus/claims/edit/Add'),
+                            meta:{title:'债权基本信息'},
+                            hidden:true
                         },
                         {
                             path: 'borrow',

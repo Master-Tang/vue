@@ -53,7 +53,16 @@
       </el-form-item>
 
       <el-form-item label="投资规模:">
-        <el-select v-model="form.exitInfo.ability" placeholder style="width:100%" disabled>
+        <el-select v-model="form.exitInfo.abilityMin" placeholder  disabled>
+          <el-option
+            v-for="item in abilityList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+        {{"~"}}
+        <el-select v-model="form.exitInfo.abilityMax" placeholder  disabled>
           <el-option
             v-for="item in abilityList"
             :key="item.dicValue"
@@ -155,6 +164,7 @@ export default {
         this.assetsTypeList = res.data.assetsTypeList;
         let partner = res.data.partner;
         this.form = partner;
+        // console.log(this.form)
       }
     });
   },

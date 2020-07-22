@@ -19,7 +19,6 @@
       <el-form-item>
         <span slot="label">
           手机号
-          <span class="red">*</span>
         </span>
         <el-input
           v-model="form.telephone"

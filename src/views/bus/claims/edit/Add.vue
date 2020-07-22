@@ -1,6 +1,6 @@
 <template>
   <div class="my-padding">
-    <el-button @click="$router.push('/bus/claims/index')">退出</el-button>
+    <el-button @click="back">退出</el-button>
     <el-tabs v-model="activeName" stretch>
       <el-tab-pane label="债权基本信息" name="first">
         <el-form ref="form" :model="form" label-width="7rem">
@@ -112,7 +112,7 @@
           <el-form-item>
             <el-button type="primary" @click="addclaims" v-if="form.claimsNumber==null">保存</el-button>
             <el-button type="warning" @click="updateclaims" v-if="form.claimsNumber!=null">更改</el-button>
-            <el-button @click="$router.push('/bus/claims/index')">取消</el-button>
+            <el-button @click="back">取消</el-button>
           </el-form-item>
         </el-form>
       </el-tab-pane>
@@ -120,7 +120,6 @@
       <el-tab-pane label="借款合同" name="second" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="ToBorrow()">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -164,7 +163,6 @@
       <el-tab-pane label="保证合同" name="sixth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Toguarante">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -213,7 +211,6 @@
       <el-tab-pane label="抵押合同" name="third" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocontract">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -254,7 +251,6 @@
       <el-tab-pane label="抵质押物信息" name="forth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocoll">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -309,7 +305,6 @@
       <el-tab-pane label="亮点信息" name="fifth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tolight">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -401,6 +396,7 @@ export default {
   },
   created() {
     // console.log(this.$route.path)
+    this.claimsNumber=this.$route.query.claimsNumber
     if (this.$route.query.activeName == null) {
       this.activeName = "first";
     } else {
@@ -484,6 +480,12 @@ export default {
   },
 
   methods: {
+    back(){
+      this.$router.push({
+        path: "index",
+        query: {  claimsNumber: this.$route.query.claimsNumber }
+      });
+    },
     addclaims() {
       if (!this.validate()) return;
       $.addclaims(this.form).then(response => {
