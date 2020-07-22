@@ -2,7 +2,7 @@
   <div class="app-container">
     <div class="button" style="padding-bottom:1rem">
           <div class="grid-content bg-purple-dark">
-            <el-button type="primary" @click="handleAdd" >添加</el-button>
+            <el-button type="primary" @click="handleAdd" >添加债权基本信息</el-button>
           </div>
     </div>
     <el-table

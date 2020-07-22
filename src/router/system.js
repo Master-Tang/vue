@@ -119,9 +119,14 @@ export default [
         meta: { title: '绩效统计' }
       },
       {
+        path: 'statistics/find',
+        component: () => import('@/views/crm/system/statistics/find'),
+        meta: { title: '阶段统计' }
+      },
+      {
         path: 'aim',
         redirect:"/system/aim/index",
-        component: () => import('@/views/crm/system/aim/Index'),
+        component: () => import('@/views/crm/system/aim/index'),
         meta: { title: '绩效目标' },
         children:[
           {

@@ -64,7 +64,7 @@ export default {
           groupName: this.form.groupName
         }).then(response => {
           if (response.success) {
-            this.$router.replace("/system/dict");
+            this.$router.replace("/system/busdict");
           }
         });
       } else {

@@ -121,7 +121,7 @@ export default {
       $.getbusGroupName().then(response => {
         // console.log(response.data);
         for (let s of response.data) {
-          this.options.push({ label: s, value: s });
+          this.options.push({ label: s.groupName, value: s.groupKey });
         }
       });
     },

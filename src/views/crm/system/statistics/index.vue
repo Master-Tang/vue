@@ -19,7 +19,7 @@
       ></el-date-picker>
 
       <el-button type="primary" @click="handle()">统计</el-button>
-        <el-button type="primary" @click="handleExport()">导出excel</el-button>
+      <el-button type="primary" @click="handleExport()">导出excel</el-button>
     </div>
 
     <el-table
@@ -78,38 +78,38 @@ export default {
       list: [],
       listLoading: true,
       value1: "",
-      value2: "",
+      value2: ""
     };
   },
   created() {
-    this.getTime()
+    this.getTime();
     $.getStatList({
       begin: this.value2,
       end: this.value2
     }).then(res => {
       if (res.success) {
-          // console.log(res.data);
-          this.list=res.data
-          this.listLoading = false;
-          for (var i = 1; i <= this.list.length; i++) {
-            this.$set(this.list[i-1], "a", i);
-          }
-          // var n=[]
-          for (var n = 0; n < this.list.length; n++) {
-            var sum =
-              this.list[n].justiceNum +
-              this.list[n].assetNum +
-              this.list[n].fundNum +
-              this.list[n].orgNum +
-              this.list[n].exitNum +
-              this.list[n].peerNum;
-            this.$set(this.list[n], "sum", sum);
-          }
+        // console.log(res.data);
+        this.list = res.data;
+        this.listLoading = false;
+        for (var i = 1; i <= this.list.length; i++) {
+          this.$set(this.list[i - 1], "a", i);
         }
+        // var n=[]
+        for (var n = 0; n < this.list.length; n++) {
+          var sum =
+            this.list[n].justiceNum +
+            this.list[n].assetNum +
+            this.list[n].fundNum +
+            this.list[n].orgNum +
+            this.list[n].exitNum +
+            this.list[n].peerNum;
+          this.$set(this.list[n], "sum", sum);
+        }
+      }
     });
   },
   methods: {
-    getTime(){
+    getTime() {
       var date = new Date();
       var seperator1 = "-";
       var year = date.getFullYear();
@@ -122,8 +122,7 @@ export default {
         strDate = "0" + strDate;
       }
       var currentdate = year + seperator1 + month + seperator1 + strDate;
-      this.value2=currentdate
-      
+      this.value2 = currentdate;
     },
     handle() {
       this.list = [];
@@ -134,11 +133,11 @@ export default {
       }).then(res => {
         if (res.success) {
           // console.log(res.data);
-          this.list=res.data
-         
+          this.list = res.data;
+
           this.listLoading = false;
           for (var i = 1; i <= this.list.length; i++) {
-            this.$set(this.list[i-1], "a", i);
+            this.$set(this.list[i - 1], "a", i);
           }
           // var n=[]
           for (var n = 0; n < this.list.length; n++) {
@@ -154,38 +153,39 @@ export default {
         }
       });
     },
-    handleExport()
-    {
+    handleExport() {
       $.export({
         begin: this.value1,
         end: this.value2
-      }).then(response => {
-       
-       // resolve(response.data)
-        let blob = new Blob([response.data], {
-          type: 'application/vnd.ms-excel'
-        })
-       
-        let fileName = decodeURI(response.headers['content-disposition'].split("=")[1])
-         if (window.navigator.msSaveOrOpenBlob) {
-          
-          navigator.msSaveBlob(blob, fileName)
-        } else {
+      }).then(
+        response => {
+          // resolve(response.data)
+          let blob = new Blob([response.data], {
+            type: "application/vnd.ms-excel"
+          });
 
-          var link = document.createElement('a')
-          link.href = window.URL.createObjectURL(blob)
-          link.download = fileName
-          link.click()
-          //释放内存
-          window.URL.revokeObjectURL(link.href)
+          let fileName = decodeURI(
+            response.headers["content-disposition"].split("=")[1]
+          );
+          if (window.navigator.msSaveOrOpenBlob) {
+            navigator.msSaveBlob(blob, fileName);
+          } else {
+            var link = document.createElement("a");
+            link.href = window.URL.createObjectURL(blob);
+            link.download = fileName;
+            link.click();
+            //释放内存
+            window.URL.revokeObjectURL(link.href);
+          }
+        },
+        err => {
+          // reject(err)
+          //console.log(err)
         }
-      },err=>{
-         // reject(err)
-         //console.log(err)
-        })
+      );
     }
   }
-}
+};
 </script>
 <style  scoped>
 .button {

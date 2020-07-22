@@ -1,6 +1,51 @@
 import request from '@/utils/request'
 export default
 {
+   exportWeek(params){
+      return request({
+         url:'/admin/detail/exportWeek',
+         method:'post',
+         params,
+         responseType: 'blob'
+      }) 
+   },
+   exportMouth(params){
+      return request({
+         url:'/admin/detail/exportMouth',
+         method:'post',
+         params,
+         responseType: 'blob'
+      }) 
+   },
+   exportQuqrter(params){
+      return request({
+         url:'/admin/detail/exportQuqrter',
+         method:'post',
+         params,
+         responseType: 'blob'
+      }) 
+   },
+   rankQuqrter(params){
+      return request({
+         url:'/admin/detail/rankQuqrter',
+         method:'post',
+         params
+      }) 
+   },
+   rankMouth(params){
+      return request({
+         url:'/admin/detail/rankMouth',
+         method:'post',
+         params
+      }) 
+   },
+   rankWeek(params){
+      return request({
+         url:'/admin/detail/rankWeek',
+         method:'post',
+         params
+      }) 
+   },
    backUser(params){
       return request({
          url:'/admin/sysUser/backUser',

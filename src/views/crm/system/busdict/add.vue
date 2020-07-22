@@ -5,9 +5,9 @@
         <el-select v-model="value" placeholder="请选择">
           <el-option
             v-for="item in options"
-            :key="item"
-            :label="item"
-            :value="item"
+            :key="item.value"
+            :label="item.label"
+            :value="item.label+','+item.value"
           ></el-option>
         </el-select>
       </el-form-item>
@@ -44,14 +44,17 @@ export default {
   methods: {
     addData() {
      // console.log(this.value, this.form.name, this.form.region);
+      let a=this.value.split(',')[0]
+      let b=this.value.split(',')[1]
       $.addbus({
         dicKey: this.form.name,
         dicValue: this.form.region,
-        groupName: this.value
+        groupName: a,
+        groupKey:b
       }).then(response => {
         if(response.success)
           {
-            this.$router.replace('/system/dict')
+            this.$router.replace('/system/busdict')
           }
       });
     },
@@ -59,7 +62,9 @@ export default {
       this.options.splice(0,this.options.length)
       $.getbusGroupName().then(response=>{
         // console.log(response.data)
-        this.options=response.data;
+        for (let s of response.data) {
+          this.options.push({ label: s.groupName, value: s.groupKey });
+        }
      
       })
     }

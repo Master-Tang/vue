@@ -120,7 +120,6 @@
       <el-tab-pane label="借款合同" name="second" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="ToBorrow()">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -164,7 +163,6 @@
       <el-tab-pane label="保证合同" name="sixth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Toguarante">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -213,7 +211,6 @@
       <el-tab-pane label="抵押合同" name="third" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocontract">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -254,7 +251,6 @@
       <el-tab-pane label="抵质押物信息" name="forth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tocoll">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
@@ -309,7 +305,6 @@
       <el-tab-pane label="亮点信息" name="fifth" v-if="judge">
         <div style="padding-bottom:1rem">
           <el-button type="primary" @click="Tolight">添加</el-button>
-          <el-button @click="$router.push('/bus/claims/index')" style="float:right">退出</el-button>
         </div>
         <el-table
           id="myform"
