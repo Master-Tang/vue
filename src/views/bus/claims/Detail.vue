@@ -140,7 +140,7 @@
       <h2 align="center">抵押物信息</h2>
       <el-row style="height:3rem">
         <el-col :span="8">{{"关联抵押物合同: "+item.loanCont}}</el-col>
-        <el-col :span="8">{{"抵（质）押合同编号: "+item.noContract}}</el-col>
+        <el-col :span="8">{{"抵（质）押信息编号: "+item.noContract}}</el-col>
         <el-col :span="8">{{"抵质押类型: "+item.mortType}}</el-col>
       </el-row>
       <el-row style="height:3rem">

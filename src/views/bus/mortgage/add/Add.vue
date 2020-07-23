@@ -268,7 +268,7 @@
             <template slot-scope="scope">{{ scope.row.collateralBegin+"~"+scope.row.collateralEnd }}</template>
           </el-table-column>
           <el-table-column label="对应借款合同" align="center">
-            <template slot-scope="scope">{{ scope.row.collateralLink }}</template>
+            <template slot-scope="scope">{{ scope.row.collateralLink+"" }}</template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150rem">
             <template slot-scope="scope">

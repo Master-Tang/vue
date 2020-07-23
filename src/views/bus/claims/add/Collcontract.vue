@@ -1,5 +1,4 @@
 <template>
-<div class="my-padding">
   <el-form ref="form" :model="form" label-width="8rem">
     <el-form-item>
       <span slot="label">
@@ -53,10 +52,9 @@
         placeholder="请选择抵押终止期限"
       ></el-date-picker>
     </el-form-item>
-
     <el-form-item>
-      <span slot="label">关联借款合同<span class="red">*</span></span>
-      <el-select v-model="form.collateralLink" placeholder="请选择关联借款合同" style="width:100%">
+      <span slot="label">关联借款合同</span>
+      <el-select v-model="form.collateralLink" multiple placeholder="请选择关联借款合同" style="width:100%">
         <el-option
           v-for="item in collateralContract"
           :key="item.contNum"
@@ -75,7 +73,6 @@
       <el-button @click="cencelcontract">取消</el-button>
     </el-form-item>
   </el-form>
-</div>
 </template>
 <script>
 import $ from "@/api/bus";
@@ -186,8 +183,6 @@ export default {
         error = "抵质押合同类型必选\n";
       } else if (this.form.collateralMoney.length == 0) {
         error = "抵质押金额\n";
-      }else if (this.form.collateralLink.length == 0) {
-        error = "关联合同必选\n";
       }
 
       if (error) {

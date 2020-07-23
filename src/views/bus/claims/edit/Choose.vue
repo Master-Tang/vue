@@ -1,13 +1,19 @@
 <template>
-  <div>
-    <el-button @click="toBasInfo">债权基本信息</el-button>
-    <el-button @click="toJudPro">债权司法流程</el-button>
-    <el-button @click="toAssVal">债权资产估值</el-button>
-    <el-button @click="toSitPos">债权现场尽调情况</el-button>
-    <el-button @click="toDefChe">债权瑕疵排查</el-button>
-    <el-button @click="toMerMan">债权招商管理</el-button>
-    <el-button @click="toProInfo">债权财产信息</el-button>
-    <el-button @click="toExitPlan">债权退出预案</el-button>
+  <div style="align:center">
+    <div>
+      <div class="centerall"><button class="button1" @click="toBasInfo">债权基本信息</button></div>
+      <div class="centerall"><button class="button1" @click="toJudPro">债权司法流程</button></div>
+      <div class="centerall"><button class="button1" @click="toAssVal">债权资产估值</button></div>
+    </div>
+    <div>
+      <div class="centerall"><button class="button1" @click="toSitPos">债权现场尽调情况</button></div>
+      <div class="centerall"><button class="button1" @click="toDefChe">债权瑕疵排查</button></div>
+      <div class="centerall"><button class="button1" @click="toMerMan">债权招商管理</button></div>
+    </div>
+    <div>
+      <div class="centerall"><button class="button1" @click="toProInfo">债权财产信息</button></div>
+      <div class="centerall"><button class="button1" @click="toExitPlan">债权退出预案</button></div>
+    </div>
   </div>
 </template>
 <script>
@@ -31,7 +37,12 @@ export default {
     //债权司法流程
     toJudPro() {},
     // 债权资产估值
-    toAssVal() {},
+    toAssVal() {
+      this.$router.push({
+        path: "../valuation/index",
+        query: { claimsNumber: this.claimsNumber }
+      });
+    },
     //债权现场尽调情况
     toSitPos() {},
     //债权瑕疵排查
@@ -45,56 +56,29 @@ export default {
   }
 };
 </script>
-<style scoped>
-.orange {
-  color: #fef4e9;
-
-  border: solid1px#da7c0c;
-
-  background: #f78d1d;
-
-  background: -webkit-gradient(
-    linear,
-    lefttop,
-    leftbottom,
-    from(#faa51a),
-    to(#f47a20)
-  );
-
-  background: -moz-linear-gradient(top, #faa51a, #f47a20);
-
-  filter:   progid:DXImageTransform.Microsoft.gradient(startColorstr='#faa51a', endColorstr='#f47a20');
+<style>
+.button1{
+  text-align: center;
+  color: aliceblue;
+  font-family: "华文楷体";
+  font-size: 2.5rem;
+  width: 100%;
+  height: 100%;
+  background:url("../../../../assets/images/31.gif");
 }
-
-.orange:hover {
-  background: #f47c20;
-
-  background: -webkit-gradient(
-    linear,
-    lefttop,
-    leftbottom,
-    from(#f88e11),
-    to(#f06015)
-  );
-
-  background: -moz-linear-gradient(top, #f88e11, #f06015);
-
-  filter:   progid:DXImageTransform.Microsoft.gradient(startColorstr='#f88e11', endColorstr='#f06015');
+.centerall {
+  float: left;
+  background-color: #7fffd4;
+  margin-top: 2%;
+  margin-left: 2.5%;
+  width: 30%;
+  height: 200px;
 }
+.centerall:hover {
+  -webkit-box-shadow: #ccc 0px 10px 10px;
 
-.orange:active {
-  color: #fcd3a5;
+  -moz-box-shadow: #ccc 0px 10px 10px;
 
-  background: -webkit-gradient(
-    linear,
-    lefttop,
-    leftbottom,
-    from(#f47a20),
-    to(#faa51a)
-  );
-
-  background: -moz-linear-gradient(top, #f47a20, #faa51a);
-
-  filter:   progid:DXImageTransform.Microsoft.gradient(startColorstr='#f47a20', endColorstr='#faa51a');
+  box-shadow: #ccc 0px 10px 10px;
 }
 </style>

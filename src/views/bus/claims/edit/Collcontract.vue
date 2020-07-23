@@ -54,7 +54,7 @@
     </el-form-item>
     <el-form-item>
       <span slot="label">关联借款合同</span>
-      <el-select v-model="form.collateralLink" placeholder="请选择关联借款合同" style="width:100%">
+      <el-select v-model="form.collateralLink" multiple placeholder="请选择关联借款合同" style="width:100%">
         <el-option
           v-for="item in collateralContract"
           :key="item.contNum"

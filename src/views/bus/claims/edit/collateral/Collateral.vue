@@ -4,8 +4,8 @@
       <el-tab-pane label="抵质押物基本信息" name="first">
         <el-form ref="form" :model="form" label-width="10.5rem">
           <el-form-item>
-            <span slot="label">关联抵押物合同</span>
-            <el-select v-model="form.loanCont" multiple placeholder="请选择关联抵押物合同" style="width:100%">
+            <span slot="label">关联抵（质）押物合同</span>
+            <el-select v-model="form.loanCont" placeholder="请选择关联抵押物合同" style="width:100%">
               <el-option
                 v-for="item in mapList"
                 :key="item.collateralNumber"
@@ -15,7 +15,7 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <span slot="label">抵（质）押合同编号</span>
+            <span slot="label">抵（质）押物编号</span>
             <el-input v-model="form.noContract" type="text" placeholder="请输入债权编号"></el-input>
           </el-form-item>
           <el-form-item>
@@ -282,7 +282,7 @@ export default {
       list2: [],
       list3: [],
       form: {
-        loanCont: [],
+        loanCont: "",
         city: [],
         courtSeizureCity: [],
         noContract: "",

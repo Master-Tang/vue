@@ -171,6 +171,21 @@ export default [
 
                     ]
                 },
+                {
+                    path: 'valuation',
+                    redirect: "/bus/claims/valuation/index",
+                    component: () => import('@/views/bus/claims/valuation/Index'),
+                    meta: { title: '资产估值' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/claims/valuation/Valuation'),
+                            hidden: true,
+                        },
+
+                    ]
+                },
             ]
         },
 
