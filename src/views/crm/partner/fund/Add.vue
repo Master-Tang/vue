@@ -6,46 +6,42 @@
           伙伴姓名
           <span class="red">*</span>
         </span>
-        <el-input
-          v-model="form.name"
-          type="text"
-          placeholder="请输入姓名"
-        ></el-input>
+        <el-input v-model="form.name" type="text" placeholder="请输入姓名" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="性别">
-        <el-radio v-model="form.sex" label="男">男</el-radio>
-        <el-radio v-model="form.sex" label="女">女</el-radio>
+        <el-radio v-model="form.sex" label="男" :disabled="kaiguan">男</el-radio>
+        <el-radio v-model="form.sex" label="女" :disabled="kaiguan">女</el-radio>
       </el-form-item>
       <el-form-item>
-        <span slot="label">
-          手机号
-        </span>
+        <span slot="label">手机号</span>
         <el-input
           @change="selectNum()"
           v-model="form.telephone"
           placeholder="请输入11位数字"
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
+          :disabled="kaiguan"
         ></el-input>
       </el-form-item>
       <el-form-item>
         <span slot="label">其他联系方式</span>
         <el-row>
           <el-col :span="2">
-            <el-button  plain @click="addtelephoneItem()">添加</el-button>
+            <el-button plain @click="addtelephoneItem()" :disabled="kaiguan">添加</el-button>
           </el-col>
           <el-col :span="18">
             <div v-for="(item, index) in form.telephoneList" :key="index">
               <div style="width:60%">
                 <el-row>
                   <el-col :span="15">
-                    <el-input v-model="item.telephones" placeholder="请输入联系方式"></el-input>
+                    <el-input v-model="item.telephones" placeholder="请输入联系方式" :disabled="kaiguan"></el-input>
                   </el-col>
                   <el-col :span="5">
                     <el-button
                       icon="el-icon-delete"
                       circle
                       @click="deletetelephoneItem(item, index)"
+                      :disabled="kaiguan"
                     ></el-button>
                   </el-col>
                 </el-row>
@@ -55,22 +51,22 @@
         </el-row>
       </el-form-item>
       <el-form-item label="微信号">
-        <el-input v-model="form.weixin" placeholder="微信号"></el-input>
+        <el-input v-model="form.weixin" placeholder="微信号" @change="selectWei" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="电子邮箱">
-        <el-input v-model="form.email" placeholder="电子邮箱"></el-input>
+        <el-input v-model="form.email" placeholder="电子邮箱" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="单位名称">
-        <el-input v-model="form.company" placeholder="单位名称"></el-input>
+        <el-input v-model="form.company" placeholder="单位名称" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="联系地址">
-        <el-input v-model="form.address" placeholder="联系地址"></el-input>
+        <el-input v-model="form.address" placeholder="联系地址" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="工作部门">
-        <el-input v-model="form.department" placeholder="工作部门"></el-input>
+        <el-input v-model="form.department" placeholder="工作部门" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="工作岗位">
-        <el-input v-model="form.post" placeholder="工作岗位"></el-input>
+        <el-input v-model="form.post" placeholder="工作岗位" :disabled="kaiguan"></el-input>
       </el-form-item>
       <el-form-item label="伙伴来源">
         <el-select v-model="form.source" placeholder="请选择" style="width:100%">
@@ -297,16 +293,17 @@ export default {
         item: "",
         debt: "",
         address: "",
-        note:"",
+        note: "",
         overArea: [],
         fundInfo: {
           structList: [],
           fancyList: [],
-          otherMark: ""
-        }
+          otherMark: "",
+        },
       },
       assetAttrList: [],
       provinceList: [],
+      kaiguan: false,
       sourceList: [],
       bizTypeList: [],
       orgTypeList: [],
@@ -320,12 +317,12 @@ export default {
       deadlineList: [],
       sexList: [
         { label: "男", value: "男" },
-        { label: "女", value: "女" }
-      ]
+        { label: "女", value: "女" },
+      ],
     };
   },
   created() {
-    $.addInit().then(res => {
+    $.addInit().then((res) => {
       if (res.success) {
         this.sourceList = res.data.source;
         this.provinceList = res.data.province;
@@ -344,7 +341,34 @@ export default {
     });
   },
   methods: {
-     addtelephoneItem() {
+    selectWei(){
+      $.weixinNumber({
+        weixin: this.form.weixin,
+        create_user_id: this.$route.query.id,
+      }).then((res) => {
+        // console.log(res);
+        if (res.data != null) {
+          this.form.name = res.data.name;
+          this.form.sex = res.data.sex;
+          this.form.weixin = res.data.weixin;
+          this.form.email = res.data.email;
+          this.form.telephone = res.data.telephone;
+          this.form.company = res.data.company;
+          this.form.department = res.data.department;
+          this.form.post = res.data.post;
+          this.form.orgType = res.data.orgType;
+          this.form.source = res.data.source;
+          this.form.telephoneList = res.data.telephoneList;
+          this.kaiguan = true;
+          this.$notify({
+            title: "基本信息匹配成功",
+            message: "若要修改基本信息，请至编辑修改",
+            type: "success",
+          });
+        }
+      });
+    },
+    addtelephoneItem() {
       this.form.telephoneList.push({
         telephones: "",
       });
@@ -358,21 +382,28 @@ export default {
       }
       $.matchNumber({
         telephone: this.form.telephone,
-        create_user_id: this.$route.query.id
-      }).then(res => {
+        create_user_id: this.$route.query.id,
+      }).then((res) => {
         if (res.success) {
           if (res.data != null) {
             // console.log(res.data);
             this.form.name = res.data.name;
             this.form.sex = res.data.sex;
             this.form.weixin = res.data.weixin;
+            this.form.telephone=res.data.telephone
             this.form.email = res.data.email;
             this.form.company = res.data.company;
             this.form.department = res.data.department;
             this.form.post = res.data.post;
             this.form.orgType = res.data.orgType;
-            this.form.source=res.data.source;
-            this.form.telephoneList=res.data.telephoneList
+            this.form.source = res.data.source;
+            this.form.telephoneList = res.data.telephoneList;
+            this.kaiguan = true;
+            this.$notify({
+              title: "基本信息匹配成功",
+              message: "若要修改基本信息，请至编辑修改",
+              type: "success",
+            });
             // console.log(res.data)
           }
         }
@@ -388,7 +419,7 @@ export default {
         scaleMax: "",
         deadline: "",
         incomeType: "",
-        incomeRate: ""
+        incomeRate: "",
       });
     },
     deleteItem1(item, index) {
@@ -397,7 +428,7 @@ export default {
     addItem() {
       this.form.fundInfo.fancyList.push({
         typeId: "",
-        typeName: ""
+        typeName: "",
       });
     },
     deleteItem(item, index) {
@@ -406,12 +437,12 @@ export default {
     addData() {
       // console.log(this.form);
       if (!this.validate()) return;
-      $.add(this.form).then(response => {
+      $.add(this.form).then((response) => {
         if (response.success) {
           //console.log(response.data);
           if (response.data === 0) {
             this.$message({
-              message: "手机号,邮箱号或微信号重复"
+              message: "手机号,邮箱号或微信号重复",
             });
             this.$router.push("add");
           } else {
@@ -424,7 +455,10 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
-      } else if (!/^1\d{10}$/.test(this.form.telephone)&&this.form.telephone.replace(" ","")!="") {
+      } else if (
+        !/^1\d{10}$/.test(this.form.telephone) &&
+        this.form.telephone.replace(" ", "") != ""
+      ) {
         error = "手机号码不正确\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
@@ -438,13 +472,13 @@ export default {
       if (error) {
         this.$message({
           message: error,
-          type: "error"
+          type: "error",
         });
         return false;
       }
       return true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

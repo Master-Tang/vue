@@ -211,7 +211,7 @@ export default {
         this.orgTypeList = res.data.orgTypeList;
         let partner = res.data.partner;
         this.form = partner;
-        console.log(this.form)
+        // console.log(this.form)
       }
     });
   },

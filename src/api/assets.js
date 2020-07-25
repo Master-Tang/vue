@@ -157,6 +157,13 @@ export default
                 params
             })
         }, 
+        weixinNumber(params) {
+            return request({
+                url: '/user/select/weixinNumber',
+                method: 'post',
+                params
+            })
+        },
         matchNumber(params) {
             return request({
                 url: '/user/select/matchNumber',
