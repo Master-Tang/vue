@@ -6,20 +6,14 @@
           伙伴姓名
           <span class="red">*</span>
         </span>
-        <el-input
-          v-model="form.name"
-          type="text"
-          placeholder="请输入姓名"
-        ></el-input>
+        <el-input v-model="form.name" type="text" placeholder="请输入姓名"></el-input>
       </el-form-item>
       <el-form-item label="性别">
         <el-radio v-model="form.sex" label="男">男</el-radio>
         <el-radio v-model="form.sex" label="女">女</el-radio>
       </el-form-item>
       <el-form-item>
-        <span slot="label">
-          手机号
-        </span>
+        <span slot="label">手机号</span>
         <el-input
           @change="selectNum()"
           v-model="form.telephone"
@@ -27,6 +21,32 @@
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">其他联系方式</span>
+        <el-row>
+          <el-col :span="2">
+            <el-button  plain @click="addtelephoneItem()">添加</el-button>
+          </el-col>
+          <el-col :span="18">
+            <div v-for="(item, index) in form.telephoneList" :key="index">
+              <div style="width:60%">
+                <el-row>
+                  <el-col :span="15">
+                    <el-input v-model="item.telephones" placeholder="请输入联系方式"></el-input>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-button
+                      icon="el-icon-delete"
+                      circle
+                      @click="deletetelephoneItem(item, index)"
+                    ></el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="微信号">
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
@@ -144,6 +164,7 @@ export default {
         partnerType: 1,
         name: "",
         sex: "",
+        telephoneList: [],
         telephone: "",
         weixin: "",
         email: "",
@@ -158,12 +179,12 @@ export default {
         address: "",
         orgType: "",
         orgRemark: "",
-        note:"",
+        note: "",
         overArea: [],
         assetInfo: {
           belong: "",
-          businessTypes: []
-        }
+          businessTypes: [],
+        },
       },
       assetAttrList: [],
       provinceList: [],
@@ -172,12 +193,12 @@ export default {
       orgTypeList: [],
       sexList: [
         { label: "男", value: "男" },
-        { label: "女", value: "女" }
-      ]
+        { label: "女", value: "女" },
+      ],
     };
   },
   created() {
-    $.addInit().then(res => {
+    $.addInit().then((res) => {
       if (res.success) {
         // console.log(res.data)
         this.sourceList = res.data.source;
@@ -193,11 +214,11 @@ export default {
       if (!/^1\d{10}$/.test(this.form.telephone)) {
         return;
       }
-      
+
       $.matchNumber({
         telephone: this.form.telephone,
-        create_user_id: this.$route.query.id
-      }).then(res => {
+        create_user_id: this.$route.query.id,
+      }).then((res) => {
         // console.log(res);
         if (res.data != null) {
           this.form.name = res.data.name;
@@ -208,14 +229,23 @@ export default {
           this.form.department = res.data.department;
           this.form.post = res.data.post;
           this.form.orgType = res.data.orgType;
-          this.form.source=res.data.source;
+          this.form.source = res.data.source;
+          // this.form.telephoneList=res.data.telephoneList
         }
       });
+    },
+    addtelephoneItem() {
+      this.form.telephoneList.push({
+        telephones: "",
+      });
+    },
+    deletetelephoneItem(item, index) {
+      this.form.telephoneList.splice(index, 1);
     },
     addItem() {
       this.form.assetInfo.businessTypes.push({
         typeId: "",
-        typeName: ""
+        typeName: "",
       });
     },
     deleteItem(item, index) {
@@ -223,12 +253,12 @@ export default {
     },
     addData() {
       if (!this.validate()) return;
-      $.add(this.form).then(response => {
+      $.add(this.form).then((response) => {
         if (response.success) {
           //console.log(response.data);
           if (response.data === 0) {
             this.$message({
-              message: "手机号,邮箱号或微信号重复"
+              message: "手机号,邮箱号或微信号重复",
             });
             this.$router.push("add");
           } else {
@@ -241,11 +271,16 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
-      } else if (!/^1\d{10}$/.test(this.form.telephone)&&this.form.telephone.replace(" ","").length!=0) {
+      } else if (
+        !/^1\d{10}$/.test(this.form.telephone) &&
+        this.form.telephone.replace(" ", "").length != 0
+      ) {
         error = "手机号码不正确\n";
       } else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
-      } else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
+      } else if (
+        this.form.email.length != 0 &&
+        !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }
@@ -253,13 +288,13 @@ export default {
       if (error) {
         this.$message({
           message: error,
-          type: "error"
+          type: "error",
         });
         return false;
       }
       return true;
-    }
-  }
+    },
+  },
 };
 </script>
 <style scoped>

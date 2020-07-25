@@ -27,6 +27,32 @@
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
       </el-form-item>
+      <el-form-item>
+        <span slot="label">其他联系方式</span>
+        <el-row>
+          <el-col :span="2">
+            <el-button  plain @click="addtelephoneItem()">添加</el-button>
+          </el-col>
+          <el-col :span="18">
+            <div v-for="(item, index) in form.telephoneList" :key="index">
+              <div style="width:60%">
+                <el-row>
+                  <el-col :span="15">
+                    <el-input v-model="item.telephones" placeholder="请输入联系方式"></el-input>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-button
+                      icon="el-icon-delete"
+                      circle
+                      @click="deletetelephoneItem(item, index)"
+                    ></el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
+      </el-form-item>
       <el-form-item label="微信号">
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
       </el-form-item>
@@ -258,6 +284,7 @@ export default {
         name: "",
         sex: "",
         telephone: "",
+        telephoneList: [],
         weixin: "",
         email: "",
         company: "",
@@ -318,6 +345,14 @@ export default {
     });
   },
   methods: {
+     addtelephoneItem() {
+      this.form.telephoneList.push({
+        telephones: "",
+      });
+    },
+    deletetelephoneItem(item, index) {
+      this.form.telephoneList.splice(index, 1);
+    },
     addItem1() {
       this.form.fundInfo.structList.push({
         currency: "",

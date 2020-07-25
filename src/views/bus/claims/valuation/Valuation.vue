@@ -481,7 +481,7 @@ export default {
         otherAmo: "",
         //合计
         subToal: "",
-        cashBag: ""
+        cashBag: "",
       },
       //保证人估值
       form1: {
@@ -493,7 +493,7 @@ export default {
         optimisticMoney: "",
         //依据
         basis: "",
-        claimsNumber: ""
+        claimsNumber: "",
       },
       //资产估值
       form2: {
@@ -518,7 +518,7 @@ export default {
         //其他数量
         otherNumbers: "",
         infos: "",
-        collateralId: ""
+        collateralId: "",
       },
       //土地，房产，其他
       form3: {
@@ -555,7 +555,7 @@ export default {
         //税后价值 乐观分析
         optimisticAfter: "",
         //抵押债权内的抵质押物价值 保守分析
-        optimisticIn: ""
+        optimisticIn: "",
       },
       form4: {
         assetsId: "",
@@ -591,7 +591,7 @@ export default {
         //税后价值 乐观分析
         optimisticAfter: "",
         //抵押债权内的抵质押物价值 保守分析
-        optimisticIn: ""
+        optimisticIn: "",
       },
       form5: {
         assetsId: "",
@@ -627,7 +627,7 @@ export default {
         //税后价值 乐观分析
         optimisticAfter: "",
         //抵押债权内的抵质押物价值 保守分析
-        optimisticIn: ""
+        optimisticIn: "",
       },
       form6: {
         //保证人保守
@@ -639,13 +639,13 @@ export default {
         //资产乐观
         assopt: 0,
         //包内现金
-        pacmoney: 0
+        pacmoney: 0,
       },
       borrowers: [],
       guavalList: [],
       assetsValList: [],
       auctionList: [],
-      dataList: []
+      dataList: [],
     };
   },
 
@@ -653,21 +653,21 @@ export default {
     this.claimsNumber = this.$route.query.claimsNumber;
     this.form1.claimsNumber = this.$route.query.claimsNumber;
     // console.log(this.claimsNumber);
-    $.addInit().then(res => {
+    $.addInit().then((res) => {
       if (res.success) {
         this.auctionList = res.data.auctionList;
       }
     });
     //获取所有信息
-    $.packeValue({ claimsNumber: this.claimsNumber }).then(res => {
+    $.packeValue({ claimsNumber: this.claimsNumber }).then((res) => {
       if (res.success) {
         this.form = res.data;
-        this.form6.pacmoney=this.form.cashBag
+        this.form6.pacmoney = this.form.cashBag;
         // console.log(res.data);
       }
     });
     //获取所有保证人名字
-    $.guarantorList({ claimsNumber: this.claimsNumber }).then(res => {
+    $.guarantorList({ claimsNumber: this.claimsNumber }).then((res) => {
       if (res.success) {
         // console.log(res.data);
         this.borrowers = res.data;
@@ -676,7 +676,7 @@ export default {
     //获取所有保证人估值信息
     this.valueList();
     //查询所有资产估值
-    $.assetList({ claimsNumber: this.claimsNumber }).then(res => {
+    $.assetList({ claimsNumber: this.claimsNumber }).then((res) => {
       if (res.success) {
         // console.log(res.data);
         this.assetsValList = res.data;
@@ -690,15 +690,18 @@ export default {
   methods: {
     //包内现金
     cashBagChange() {
-      $.updateCash({cashBag:this.form.cashBag,claimsNumber:this.claimsNumber}).then(res => {
-          if(res.success){
-              this.form6.pacmoney=this.form.cashBag
-          }
+      $.updateCash({
+        cashBag: this.form.cashBag,
+        claimsNumber: this.claimsNumber,
+      }).then((res) => {
+        if (res.success) {
+          this.form6.pacmoney = this.form.cashBag;
+        }
       });
     },
     valueList() {
       $.valueList({ claimsNumber: this.$route.query.claimsNumber }).then(
-        res => {
+        (res) => {
           if (res.success) {
             // console.log(res.data);
             this.guavalList = res.data;
@@ -719,13 +722,13 @@ export default {
     xiangqing(id) {
       this.dialogTableVisible = true;
       $.assetDto({ claimsNumber: this.claimsNumber, collateralId: id }).then(
-        res => {
+        (res) => {
           if (res.success) {
             this.form2 = res.data;
           }
         }
       );
-      $.AssetsvalueList({ collateralId: id }).then(res => {
+      $.AssetsvalueList({ collateralId: id }).then((res) => {
         this.form3 = res.data[0];
         this.form4 = res.data[1];
         this.form5 = res.data[2];
@@ -743,7 +746,7 @@ export default {
       if (a == true) {
         // console.log("更新");
         // console.log(this.form1);
-        $.valueUpdate(this.form1).then(res => {
+        $.valueUpdate(this.form1).then((res) => {
           if (res.success) {
             this.form1.legalId = "";
             this.form1.conservativeMoney = "";
@@ -751,7 +754,7 @@ export default {
             this.form1.basis = "";
             this.$message({
               message: "估值成功",
-              type: "success"
+              type: "success",
             });
             this.valueList();
           }
@@ -759,7 +762,7 @@ export default {
       } else {
         // console.log("插入");
         // console.log(this.form1);
-        $.valueAdd(this.form1).then(res => {
+        $.valueAdd(this.form1).then((res) => {
           if (res.success) {
             this.form1.legalId = "";
             this.form1.conservativeMoney = "";
@@ -767,7 +770,7 @@ export default {
             this.form1.basis = "";
             this.$message({
               message: "估值成功",
-              type: "success"
+              type: "success",
             });
             this.valueList();
           }
@@ -776,7 +779,7 @@ export default {
     },
     //资产估值
     assetVal(id) {
-      $.AssetsvalueList({ collateralId: id }).then(res => {
+      $.AssetsvalueList({ collateralId: id }).then((res) => {
         this.dataList = res.data;
         this.$set(this.dataList[0], "a", "房产");
         this.$set(this.dataList[1], "a", "土地");
@@ -796,24 +799,24 @@ export default {
       $.update({
         auctions: this.form2.auctions,
         infos: this.form2.infos,
-        collateralId: this.form2.collateralId
-      }).then(res => {
+        collateralId: this.form2.collateralId,
+      }).then((res) => {
         if (res.success) {
-        //   console.log("基础信息更改成功");
+          //   console.log("基础信息更改成功");
         }
       });
-      $.AssvalueUpdate(this.form3).then(res => {
+      $.AssvalueUpdate(this.form3).then((res) => {
         // console.log("房产更新成功");
       });
-      $.AssvalueUpdate(this.form4).then(res => {
+      $.AssvalueUpdate(this.form4).then((res) => {
         // console.log("土地更新成功");
       });
-      $.AssvalueUpdate(this.form5).then(res => {
+      $.AssvalueUpdate(this.form5).then((res) => {
         // console.log("其他更新成功");
       });
       this.dialogTableVisible = false;
-    }
-  }
+    },
+  },
 };
 </script>
 
