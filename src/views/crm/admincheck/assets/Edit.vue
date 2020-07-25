@@ -9,9 +9,7 @@
         <el-input
           v-model="form.name"
           type="text"
-          placeholder="请输入中文名"
-          onkeyup="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
-          onchange="value=value.replace(/[^\u4E00-\u9FA5]/g,'')"
+          placeholder="请输入姓名"
         ></el-input>
       </el-form-item>
       <el-form-item label="性别">
@@ -21,7 +19,6 @@
       <el-form-item>
         <span slot="label">
           手机号
-          <span class="red">*</span>
         </span>
         <el-input
           v-model="form.telephone"
@@ -29,6 +26,32 @@
           onkeyup="value=value.replace(/\D/g,'')"
           onchange="value=value.replace(/\D/g,'')"
         ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">其他联系方式</span>
+        <el-row>
+          <el-col :span="2">
+            <el-button  plain @click="addtelephoneItem()">添加</el-button>
+          </el-col>
+          <el-col :span="18">
+            <div v-for="(item, index) in form.telephoneList" :key="index">
+              <div style="width:60%">
+                <el-row>
+                  <el-col :span="15">
+                    <el-input v-model="item.telephones" placeholder="请输入联系方式"></el-input>
+                  </el-col>
+                  <el-col :span="5">
+                    <el-button
+                      icon="el-icon-delete"
+                      circle
+                      @click="deletetelephoneItem(item, index)"
+                    ></el-button>
+                  </el-col>
+                </el-row>
+              </div>
+            </div>
+          </el-col>
+        </el-row>
       </el-form-item>
       <el-form-item label="微信号">
         <el-input v-model="form.weixin" placeholder="微信号"></el-input>
@@ -125,6 +148,9 @@
           filterable
         ></el-cascader>
       </el-form-item>
+      <el-form-item label="备注">
+        <el-input v-model="form.note" placeholder="备注"></el-input>
+      </el-form-item>
       <el-form-item>
         <el-button type="primary" @click="updateData()">保存</el-button>
         <el-button @click="$router.push('index')">取消</el-button>
@@ -142,8 +168,9 @@ export default {
       form: {
         partnerType: 1,
         name: "",
-        sex: "男",
+        sex: "",
         telephone: "",
+        telephoneList: [],
         weixin: "",
         email: "",
         company: "",
@@ -153,8 +180,9 @@ export default {
         item: "",
         debt: "",
         address: "",
+        note:"",
         overArea: [],
-        orgType: "01",
+        orgType: "",
         orgRemark: "",
         assetInfo: {
           belong: "",
@@ -183,10 +211,19 @@ export default {
         this.orgTypeList = res.data.orgTypeList;
         let partner = res.data.partner;
         this.form = partner;
+        // console.log(this.form)
       }
     });
   },
   methods: {
+     addtelephoneItem() {
+      this.form.telephoneList.push({
+        telephones: "",
+      });
+    },
+    deletetelephoneItem(item, index) {
+      this.form.telephoneList.splice(index, 1);
+    },
     addItem() {
       this.form.assetInfo.businessTypes.push({
         typeId: "",
@@ -209,15 +246,14 @@ export default {
       let error = "";
       if (this.form.name.length <= 1) {
         error = "姓名至少两位\n";
-      } else if (!/^1\d{10}$/.test(this.form.telephone)) {
+      } else if (!/^1\d{10}$/.test(this.form.telephone)&&this.form.telephone.replace(" ","")!="") {
         error = "手机号码不正确\n";
-      } else if (this.form.overArea.length == 0) {
+      }else if (this.form.overArea.length == 0) {
         error = "请选择区域\n";
       }else if (this.form.email.length!=0&&!/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
       }
-
       if (error) {
         this.$message({
           message: error,

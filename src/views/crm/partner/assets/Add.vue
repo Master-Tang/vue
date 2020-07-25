@@ -34,11 +34,7 @@
               <div style="width:60%">
                 <el-row>
                   <el-col :span="15">
-                    <el-input
-                      v-model="item.telephones"
-                      placeholder="请输入联系方式"
-                      :disabled="kaiguan"
-                    ></el-input>
+                    <el-input v-model="item.telephones" placeholder="请输入联系方式" :disabled="kaiguan"></el-input>
                   </el-col>
                   <el-col :span="5">
                     <el-button
@@ -217,7 +213,7 @@ export default {
     });
   },
   methods: {
-    selectWei(){
+    selectWei() {
       $.weixinNumber({
         weixin: this.form.weixin,
         create_user_id: this.$route.query.id,
@@ -299,7 +295,14 @@ export default {
           //console.log(response.data);
           if (response.data === 0) {
             this.$message({
-              message: "手机号,邮箱号或微信号重复",
+              type: "error",
+              message: "此类型伙伴已存在",
+            });
+            this.$router.push("add");
+          } else if (response.data === 1) {
+            this.$message({
+              type: "error",
+              message: "至少输入一种联系方式",
             });
             this.$router.push("add");
           } else {
@@ -324,7 +327,7 @@ export default {
         !/^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/.test(this.form.email)
       ) {
         error = "邮箱不正确\n";
-      } 
+      }
 
       if (error) {
         this.$message({

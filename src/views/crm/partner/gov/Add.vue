@@ -341,7 +341,14 @@ export default {
           //console.log(response.data);
           if (response.data === 0) {
             this.$message({
-              message: "手机号,邮箱号或微信号重复",
+              type: "error",
+              message: "此类型伙伴已存在",
+            });
+            this.$router.push("add");
+          } else if (response.data === 1) {
+            this.$message({
+              type: "error",
+              message: "至少输入一种联系方式",
             });
             this.$router.push("add");
           } else {
