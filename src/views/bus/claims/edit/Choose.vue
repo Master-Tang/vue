@@ -50,7 +50,12 @@ export default {
     //债权招商管理
     toMerMan() {},
     //债权财产信息
-    toProInfo() {},
+    toProInfo() {
+      this.$router.push({
+        path: "../proinfo/index",
+        query: { claimsNumber: this.claimsNumber }
+      });
+    },
     //债权退出预案
     toExitPlan() {}
   }

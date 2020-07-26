@@ -186,6 +186,21 @@ export default [
 
                     ]
                 },
+                {
+                    path: 'proinfo',
+                    redirect: "/bus/claims/proinfo/index",
+                    component: () => import('@/views/bus/claims/proinfo/Index'),
+                    meta: { title: '财产信息' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/claims/proinfo/Proinfo'),
+                            hidden: true,
+                        },
+
+                    ]
+                },
             ]
         },
 

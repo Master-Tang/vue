@@ -1,5 +1,6 @@
 <template>
   <div class="my-padding">
+    <el-button @click="back">退出</el-button>
     <el-tabs v-model="act" stretch>
       <el-tab-pane label="保证人估值" name="first">
         <el-form ref="form1" :model="form1" label-width="7rem">
@@ -688,6 +689,12 @@ export default {
   },
 
   methods: {
+    back(){
+      this.$router.push({
+        path:'/bus/claims/edit/index',
+        query: {  claimsNumber: this.$route.query.claimsNumber }
+        })
+    },
     //包内现金
     cashBagChange() {
       $.updateCash({
