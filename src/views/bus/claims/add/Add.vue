@@ -165,7 +165,6 @@
           <el-button type="primary" @click="Toguarante">添加</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list2"
           element-loading-text="Loading"
           border
@@ -188,12 +187,6 @@
           <el-table-column label="保证期间" align="center">
             <template slot-scope="scope">{{ scope.row.guaranteedBegin+"~"+scope.row.guaranteedEnd }}</template>
           </el-table-column>
-          <!-- <el-table-column label="法人数量" align="center"> -->
-          <!-- <template slot-scope="scope">{{ scope.row.balanTotal }}</template> -->
-          <!-- </el-table-column> -->
-          <!-- <el-table-column label="自然人数量" align="center"> -->
-          <!-- <template slot-scope="scope">{{ scope.row.balanTotal }}</template> -->
-          <!-- </el-table-column> -->
           <el-table-column label="对应借款合同" align="center">
             <template
               slot-scope="scope"
@@ -253,7 +246,6 @@
           <el-button type="primary" @click="Tocoll">添加</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list4"
           element-loading-text="Loading"
           border
@@ -341,7 +333,7 @@
     </el-tabs>
   </div>
 </template>
-  
+
 <script>
 import $ from "@/api/bus";
 
@@ -578,7 +570,7 @@ export default {
           query: { id: this.$route.query.claimsNumber ,guarantorId:res.data}
         });
         })
-       
+
       }
     },
     guaranteEdit(id) {

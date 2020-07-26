@@ -32,7 +32,7 @@
             <el-button type="primary" @click="guaval">加入估值</el-button>
           </el-form-item>
         </el-form>
-        <el-table id="myform" :data="guavalList" border fit show-summary style="width: 100%">
+        <el-table :data="guavalList" border fit show-summary style="width: 100%">
           <el-table-column prop="a" align="center"></el-table-column>
           <el-table-column prop="name" label="保证人" align="center"></el-table-column>
           <el-table-column prop="conservativeMoney" label="保守回现(万元)" sortable align="center"></el-table-column>
@@ -44,7 +44,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="资产估值" name="second">
-        <el-table id="myform" :data="assetsValList" border fit style="width: 100%">
+        <el-table  :data="assetsValList" border fit style="width: 100%">
           <el-table-column prop="a" label="序号" align="center" width="60rem"></el-table-column>
           <el-table-column prop="address" label="抵押物描述（包括地址／楼盘名称）" align="center" width="300rem"></el-table-column>
           <el-table-column prop="mortgageType" label="抵/质押物类型" align="center"></el-table-column>
