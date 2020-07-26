@@ -48,7 +48,12 @@ export default {
     //债权瑕疵排查
     toDefChe() {},
     //债权招商管理
-    toMerMan() {},
+    toMerMan() {
+      this.$router.push({
+        path: "../merman/index",
+        query: { claimsNumber: this.claimsNumber }
+      });
+    },
     //债权财产信息
     toProInfo() {
       this.$router.push({

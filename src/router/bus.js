@@ -187,6 +187,21 @@ export default [
                     ]
                 },
                 {
+                    path: 'merman',
+                    redirect: "/bus/claims/merman/index",
+                    component: () => import('@/views/bus/claims/merman/Index'),
+                    meta: { title: '招商管理' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/claims/merman/Merman'),
+                            hidden: true,
+                        },
+
+                    ]
+                },
+                {
                     path: 'proinfo',
                     redirect: "/bus/claims/proinfo/index",
                     component: () => import('@/views/bus/claims/proinfo/Index'),
