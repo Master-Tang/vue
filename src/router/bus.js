@@ -216,6 +216,21 @@ export default [
 
                     ]
                 },
+                {
+                    path: 'exitplan',
+                    redirect: "/bus/claims/exitplan/index",
+                    component: () => import('@/views/bus/claims/exitplan/Index'),
+                    meta: { title: '退出预案' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/claims/exitplan/Exitplan'),
+                            hidden: true,
+                        },
+
+                    ]
+                },
             ]
         },
 

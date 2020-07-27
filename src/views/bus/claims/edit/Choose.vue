@@ -62,7 +62,12 @@ export default {
       });
     },
     //债权退出预案
-    toExitPlan() {}
+    toExitPlan() {
+      this.$router.push({
+        path: "../exitplan/index",
+        query: { claimsNumber: this.claimsNumber }
+      });
+    }
   }
 };
 </script>
