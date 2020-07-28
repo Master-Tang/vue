@@ -46,7 +46,12 @@ export default {
     //债权现场尽调情况
     toSitPos() {},
     //债权瑕疵排查
-    toDefChe() {},
+    toDefChe() {
+      this.$router.push({
+        path: "../defcheck/index",
+        query: { claimsNumber: this.claimsNumber }
+      });
+    },
     //债权招商管理
     toMerMan() {
       this.$router.push({

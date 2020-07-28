@@ -187,6 +187,21 @@ export default [
                     ]
                 },
                 {
+                    path: 'defcheck',
+                    redirect: "/bus/claims/defcheck/index",
+                    component: () => import('@/views/bus/claims/defcheck/Index'),
+                    meta: { title: '瑕疵排查' },
+                    hidden: true,
+                    children: [
+                        {
+                            path: 'index',
+                            component: () => import('@/views/bus/claims/defcheck/Defcheck'),
+                            hidden: true,
+                        },
+
+                    ]
+                },
+                {
                     path: 'merman',
                     redirect: "/bus/claims/merman/index",
                     component: () => import('@/views/bus/claims/merman/Index'),
