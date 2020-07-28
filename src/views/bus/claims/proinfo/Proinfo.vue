@@ -1,6 +1,7 @@
 <template>
   <div class="my-padding">
     <el-button @click="back">退出</el-button>
+    <el-divider content-position="center">财产线索</el-divider>
     <div style="margin-top: 1rem;border: 1px solid #000;padding: 1rem">
       <h3 style="padding-bottom: 0.5rem" v-if="kaiguan==false">添加财产线索信息</h3>
       <h3 style="padding-bottom: 0.5rem" v-if="kaiguan==true">修改财产线索信息</h3>
