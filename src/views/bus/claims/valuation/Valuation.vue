@@ -447,14 +447,14 @@
             <el-col :span="5" align="center">{{form6.guacon}}</el-col>
             <el-col :span="5" align="center">{{form6.asscon}}</el-col>
             <el-col :span="5" align="center">{{form6.pacmoney}}</el-col>
-            <el-col :span="5" align="center">{{form6.guacon+form6.asscon+form6.pacmoney}}</el-col>
+            <el-col :span="5" align="center">{{sum1}}</el-col>
           </el-row>
           <el-row style="margin-bottom:2rem">
             <el-col :span="4" align="center">{{"乐观"}}</el-col>
             <el-col :span="5" align="center">{{form6.guaopt}}</el-col>
             <el-col :span="5" align="center">{{form6.assopt}}</el-col>
             <el-col :span="5" align="center">{{form6.pacmoney}}</el-col>
-            <el-col :span="5" align="center">{{form6.guaopt+form6.assopt+form6.pacmoney}}</el-col>
+            <el-col :span="5" align="center">{{sum2}}</el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -464,6 +464,7 @@
 
 <script>
 import $ from "@/api/valuation";
+import  math from 'mathjs'
 
 export default {
   data() {
@@ -687,8 +688,35 @@ export default {
       }
     });
   },
+  computed :{
+    sum1(){
+      let value=parseFloat(this.form6.guacon)+parseFloat(this.form6.asscon)+parseFloat(this.form6.pacmoney)
+      let realVal = ''
+      if (!isNaN(value) && value!== '') {
+        // 截取当前数据到小数点后三位
+        let tempVal = parseFloat(value).toFixed(3)
+        realVal = tempVal.substring(0, tempVal.length - 1)
+      } else {
+        realVal = '--'
+      }
+      return realVal
 
+    },
+    sum2(){
+      let value=parseFloat(this.form6.guaopt)+parseFloat(this.form6.assopt)+parseFloat(this.form6.pacmoney)
+      let realVal = ''
+      if (!isNaN(value) && value!== '') {
+        // 截取当前数据到小数点后三位
+        let tempVal = parseFloat(value).toFixed(3)
+        realVal = tempVal.substring(0, tempVal.length - 1)
+      } else {
+        realVal = '--'
+      }
+      return realVal
+    },
+  },
   methods: {
+
     back(){
       this.$router.push({
         path:'/bus/claims/edit/index',
@@ -732,15 +760,17 @@ export default {
         (res) => {
           if (res.success) {
             this.form2 = res.data;
+            // console.log(res.data)
+            $.AssetsvalueList({ collateralId: id }).then((res) => {
+              this.form3 = res.data[0];
+              this.form4 = res.data[1];
+              this.form5 = res.data[2];
+              // console.log(res.data)
+            });
           }
         }
       );
-      $.AssetsvalueList({ collateralId: id }).then((res) => {
-        this.form3 = res.data[0];
-        this.form4 = res.data[1];
-        this.form5 = res.data[2];
-        //   console.log(res.data)
-      });
+
     },
     //保证人估值
     guaval() {
@@ -788,6 +818,7 @@ export default {
     assetVal(id) {
       $.AssetsvalueList({ collateralId: id }).then((res) => {
         this.dataList = res.data;
+        console.log(res.data)
         this.$set(this.dataList[0], "a", "房产");
         this.$set(this.dataList[1], "a", "土地");
         this.$set(this.dataList[2], "a", "其他");

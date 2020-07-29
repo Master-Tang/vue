@@ -128,7 +128,6 @@
             @click="addCorporte"
           >添加法人</el-button>
           <el-table
-            id="myform"
             :data="corporateList"
             element-loading-text="Loading"
             border
@@ -208,7 +207,7 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">身份证号</span>
-          <el-input v-model="form1.naturalCard" type="text" 
+          <el-input v-model="form1.naturalCard" type="text"
           placeholder="请输入身份证号"
           onkeyup="value=value.replace(/([^0-9Xx])+/g,'')"
             onchange="value=value.replace(/([^0-9Xx])+/g,'')"
@@ -573,7 +572,7 @@ export default {
 
     cencelguarantee() {
       this.$router.push({
-        path: "index",
+        path: "add",
         query: { activeName: "sixth", claimsNumber: this.form.claimsNumber }
       });
     },
@@ -593,7 +592,7 @@ export default {
             message: "添加成功"
           });
           this.$router.replace({
-            path: "index",
+            path: "add",
             query: {
               activeName: "sixth",
               claimsNumber: this.form.claimsNumber
@@ -616,7 +615,7 @@ export default {
             message: "更改成功"
           });
           this.$router.replace({
-            path: "index",
+            path: "add",
             query: {
               activeName: "sixth",
               claimsNumber: this.form.claimsNumber

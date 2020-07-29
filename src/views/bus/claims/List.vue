@@ -24,18 +24,18 @@
         <template slot-scope="scope">{{ scope.row.borrowers }}</template>
       </el-table-column>
       <el-table-column label="本金金额" align="center">
-        <template slot-scope="scope">{{ scope.row.prinTotal }}</template>
+        <template slot-scope="scope">{{ scope.row.principalTotal }}</template>
       </el-table-column>
       <el-table-column label="利息余额" align="center">
         <template slot-scope="scope">{{ scope.row.interTotal }}</template>
       </el-table-column>
       <el-table-column label="代垫费用" align="center">
-        <template slot-scope="scope">{{ scope.row.balanTotal }}</template>
+        <template slot-scope="scope">{{ scope.row.otherAmo }}</template>
       </el-table-column>
       <el-table-column label="本息合计" align="center">
         <template
           slot-scope="scope"
-        >{{ scope.row.prinTotal+scope.row.interTotal+scope.row.balanTotal }}</template>
+        >{{ scope.row.principalTotal+scope.row.interTotal+scope.row.otherAmo }}</template>
       </el-table-column>
       <el-table-column label="所在机构" align="center">
         <template slot-scope="scope">{{ scope.row.institutions }}</template>
@@ -80,7 +80,7 @@ export default {
         for (var i = 1; i <= this.list.length; i++) {
           this.$set(this.list[i - 1], "a", i);
         }
-        // console.log(response)
+        console.log(response)
       });
     },
 
@@ -88,7 +88,7 @@ export default {
       this.$router.push({
         path: "add"
       });
-      
+
     },
     handleEdit(id) {
       this.$router.push({

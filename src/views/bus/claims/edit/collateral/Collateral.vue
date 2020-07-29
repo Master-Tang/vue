@@ -230,7 +230,6 @@
           <el-button @click="back" style="float:right">返回抵押物信息</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list3"
           element-loading-text="Loading"
           border

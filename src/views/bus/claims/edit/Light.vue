@@ -90,7 +90,7 @@ export default {
           message: "添加成功"
         });
         this.$router.replace({
-          path: "index",
+          path: "add",
           query: {
             activeName: "fifth",
             claimsNumber: this.form.claimsNumber
@@ -112,7 +112,7 @@ export default {
             message: "更改成功"
           });
           this.$router.replace({
-            path: "index",
+            path: "add",
             query: {
               activeName: "fifth",
               claimsNumber: this.form.claimsNumber
@@ -123,7 +123,7 @@ export default {
     },
     cencellight() {
       this.$router.push({
-        path: "index",
+        path: "add",
         query: { activeName: "fifth", claimsNumber: this.form.claimsNumber }
       });
     },

@@ -156,7 +156,7 @@ export default {
             message: "添加成功"
           });
           this.$router.replace({
-            path: "index",
+            path: "add",
             query: {
               activeName: "second",
               claimsNumber: this.form.claimsNumber
@@ -167,7 +167,7 @@ export default {
     },
     cencelborrow() {
       this.$router.push({
-        path: "index",
+        path: "add",
         query: { activeName: "second", claimsNumber: this.form.claimsNumber }
       });
     },
@@ -185,7 +185,7 @@ export default {
             message: "更改成功"
           });
           this.$router.replace({
-            path: "index",
+            path: "add",
             query: {
               activeName: "second",
               claimsNumber: this.form.claimsNumber
