@@ -80,7 +80,7 @@ export default {
         for (var i = 1; i <= this.list.length; i++) {
           this.$set(this.list[i - 1], "a", i);
         }
-        console.log(response)
+        // console.log(response)
       });
     },
 

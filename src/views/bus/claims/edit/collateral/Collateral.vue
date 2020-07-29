@@ -29,7 +29,6 @@
               ></el-option>
             </el-select>
           </el-form-item>
-
           <el-form-item>
             <span slot="label">
               地址（包含楼盘信息）
@@ -48,6 +47,7 @@
           <el-form-item>
             <span slot="label">地图链接</span>
             <el-input v-model="form.mapLink" type="text" placeholder="请输入地图链接"></el-input>
+            <el-button @click="openDialog">地图</el-button>
           </el-form-item>
           <el-form-item>
             <span slot="label">所有权人</span>
@@ -261,6 +261,23 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
+      <el-dialog
+        title="地图"
+        :visible.sync="dialogstate"
+        center
+        :append-to-body="true"
+        :lock-scroll="false"
+        width="100%"
+      >
+        <baidu-map
+          :center="center"
+          :zoom="zoom"
+          @ready="handler"
+          style="width:100%;height:100%"
+          @click="getClickInfo"
+          :scroll-wheel-zoom="true"
+        ></baidu-map>
+      </el-dialog>
     </el-tabs>
   </div>
 </template>
@@ -269,10 +286,14 @@
 import $ from "@/api/bus";
 
 export default {
+  name: 'TestBaiDu',
   data() {
     return {
+      center: {lng: 109.45744048529967, lat: 36.49771311230842},
+      zoom: 13,
       judge: true,
       activeName: "first",
+      dialogstate: false,
       act: "first",
       acte: "first",
       list1: [],
@@ -298,14 +319,14 @@ export default {
         courtSei: "",
         verifyInfo: "",
         collId: "",
-        claimsNumber: ""
+        claimsNumber: "",
       },
       mapList: [],
       coupleList: [],
       assetList: [],
       mortgageList: [],
       seizureList: [],
-      provinceList: []
+      provinceList: [],
     };
   },
 
@@ -317,12 +338,12 @@ export default {
     } else {
       this.act = this.$route.query.activeName;
     }
-    $.mapList({ claimsNumber: this.form.claimsNumber }).then(res => {
+    $.mapList({ claimsNumber: this.form.claimsNumber }).then((res) => {
       if (res.success) {
         this.mapList = res.data.contractMap;
       }
     });
-    $.addInit().then(res => {
+    $.addInit().then((res) => {
       if (res.success) {
         this.provinceList = res.data.province;
         this.coupleList = res.data.coupleList;
@@ -331,7 +352,7 @@ export default {
         this.seizureList = res.data.seizureList;
       }
     });
-    $.collateral({ collId: this.$route.query.collId }).then(res => {
+    $.collateral({ collId: this.$route.query.collId }).then((res) => {
       if (res.success) {
         if (res.data != null) {
           // console.log(res.data)
@@ -342,8 +363,8 @@ export default {
     //房产
     $.propertyList({
       collateralId: this.$route.query.collId,
-      busType: "01"
-    }).then(res => {
+      busType: "01",
+    }).then((res) => {
       if (res.success) {
         this.list1 = res.data;
         // console.log(this.list1)
@@ -354,7 +375,7 @@ export default {
     });
     //土地
     $.landList({ collateralId: this.$route.query.collId, busType: "01" }).then(
-      res => {
+      (res) => {
         if (res.success) {
           this.list2 = res.data;
           // console.log(this.list3)
@@ -366,7 +387,7 @@ export default {
     );
     //其他
     $.otherList({ collateralId: this.$route.query.collId, busType: "01" }).then(
-      res => {
+      (res) => {
         if (res.success) {
           this.list3 = res.data;
           // console.log(this.list1)
@@ -379,19 +400,64 @@ export default {
   },
 
   methods: {
+    handler ({BMap, map}) {
+      // 初始化地图,设置中心点坐标
+      var point = new BMap.Point(119.8025089500, 25.4890556400)
+      map.centerAndZoom(point, 13)
+      
+      // 添加鼠标滚动缩放
+      map.enableScrollWheelZoom();
+      // 添加缩略图控件
+      map.addControl(new BMap.OverviewMapControl({isOpen:false,anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
+      // 添加缩放平移控件
+      map.addControl(new BMap.NavigationControl());
+      //添加比例尺控件
+       map.addControl(new BMap.ScaleControl());
+       //添加地图类型控件
+       //map.addControl(new BMap.MapTypeControl());
+    
+       //设置标注的图标
+       var icon = new BMap.Icon("./static/img/map.png",new BMap.Size(100,100));
+       //设置标注的经纬度
+       var marker = new BMap.Marker(new BMap.Point(121.160724,31.173277),{icon:icon});
+       //把标注添加到地图上
+       map.addOverlay(marker);
+       var content = "<table>";
+       content = content + "<tr><td> 编号：001</td></tr>";
+       content = content + "<tr><td> 地点：上海汉得信息技术股份有限公司</td></tr>";
+       content = content + "<tr><td> 时间：2018-1-3</td></tr>";
+       content += "</table>";
+       var infowindow = new BMap.InfoWindow(content);
+      // 图标点击的时候显示标注
+       marker.addEventListener("click",function(){
+            this.openInfoWindow(infowindow);
+       });
+        // 标注默认显示
+       // var infoWindow = new BMap.InfoWindow(content) // 创建信息窗口对象
+       // map.openInfoWindow(infoWindow, point)
+    },
+    getClickInfo (e) {
+      console.log(e.point.lng)
+      console.log(e.point.lat)
+      this.center.lng = e.point.lng
+      this.center.lat = e.point.lat
+    },
+    openDialog() {
+      this.dialogstate = true;
+    },
     back() {
       this.$router.push({
         path: "/bus/claims/add/index",
-        query: { activeName: "forth", claimsNumber: this.form.claimsNumber }
+        query: { activeName: "forth", claimsNumber: this.form.claimsNumber },
       });
     },
     addcollateral() {
       if (!this.validate()) return;
-      $.addcollateral(this.form).then(response => {
+      $.addcollateral(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该信息已存在,请勿重复添加"
+            message: "该信息已存在,请勿重复添加",
           });
         } else {
           this.form.collId = response.data;
@@ -399,7 +465,7 @@ export default {
           this.judge = true;
           this.$message({
             type: "success",
-            message: "添加成功"
+            message: "添加成功",
           });
         }
       });
@@ -407,21 +473,21 @@ export default {
     cencelcollateral() {
       this.$router.push({
         path: "/bus/claims/add/index",
-        query: { activeName: "forth", claimsNumber: this.form.claimsNumber }
+        query: { activeName: "forth", claimsNumber: this.form.claimsNumber },
       });
     },
     updatecollateral() {
       if (!this.validate()) return;
-      $.updatecollateral(this.form).then(response => {
+      $.updatecollateral(this.form).then((response) => {
         if (response.data == "无此信息") {
           this.$message({
             type: "error",
-            message: "请先保存"
+            message: "请先保存",
           });
         } else {
           this.$message({
             type: "success",
-            message: "更改成功"
+            message: "更改成功",
           });
         }
       });
@@ -437,7 +503,7 @@ export default {
       if (error) {
         this.$message({
           message: error,
-          type: "error"
+          type: "error",
         });
         return false;
       }
@@ -447,12 +513,12 @@ export default {
       if (this.$route.query.collId == null) {
         this.$router.push({
           path: "property",
-          query: { collId: this.form.collId, id: this.form.claimsNumber }
+          query: { collId: this.form.collId, id: this.form.claimsNumber },
         });
       } else {
         this.$router.push({
           path: "property",
-          query: { collId: this.$route.query.collId, id: this.$route.query.id }
+          query: { collId: this.$route.query.collId, id: this.$route.query.id },
         });
       }
     },
@@ -462,27 +528,27 @@ export default {
         query: {
           collId: this.$route.query.collId,
           propertyId: id,
-          id: this.$route.query.id
-        }
+          id: this.$route.query.id,
+        },
       });
     },
     propertyDel(id) {
       this.$confirm("此操作将删除该信息, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           // console.log(id);
-          $.propertyFake({ propertyId: id }).then(response => {
+          $.propertyFake({ propertyId: id }).then((response) => {
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "删除成功!",
             });
             $.propertyList({
               collateralId: this.$route.query.collId,
-              busType: "01"
-            }).then(res => {
+              busType: "01",
+            }).then((res) => {
               if (res.success) {
                 this.list1 = res.data;
                 // console.log(this.list1)
@@ -496,7 +562,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -505,12 +571,12 @@ export default {
       if (this.$route.query.collId == null) {
         this.$router.push({
           path: "land",
-          query: { collId: this.form.collId, id: this.form.claimsNumber }
+          query: { collId: this.form.collId, id: this.form.claimsNumber },
         });
       } else {
         this.$router.push({
           path: "land",
-          query: { collId: this.$route.query.collId, id: this.$route.query.id }
+          query: { collId: this.$route.query.collId, id: this.$route.query.id },
         });
       }
     },
@@ -520,27 +586,27 @@ export default {
         query: {
           collId: this.$route.query.collId,
           landId: id,
-          id: this.$route.query.id
-        }
+          id: this.$route.query.id,
+        },
       });
     },
     landDel(id) {
       this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           // console.log(id);
-          $.landFake({ landId: id }).then(response => {
+          $.landFake({ landId: id }).then((response) => {
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "删除成功!",
             });
             $.landList({
               collateralId: this.$route.query.collId,
-              busType: "01"
-            }).then(res => {
+              busType: "01",
+            }).then((res) => {
               if (res.success) {
                 this.list2 = res.data;
                 // console.log(this.list3)
@@ -554,7 +620,7 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
     },
@@ -563,12 +629,12 @@ export default {
       if (this.$route.query.collId == null) {
         this.$router.push({
           path: "other",
-          query: { collId: this.form.collId, id: this.form.claimsNumber }
+          query: { collId: this.form.collId, id: this.form.claimsNumber },
         });
       } else {
         this.$router.push({
           path: "other",
-          query: { collId: this.$route.query.collId, id: this.$route.query.id }
+          query: { collId: this.$route.query.collId, id: this.$route.query.id },
         });
       }
     },
@@ -578,27 +644,27 @@ export default {
         query: {
           collId: this.$route.query.collId,
           otherId: id,
-          id: this.$route.query.id
-        }
+          id: this.$route.query.id,
+        },
       });
     },
     otherDel(id) {
       this.$confirm("此操作将删除该信息, 是否继续?", "提示", {
         confirmButtonText: "确定",
         cancelButtonText: "取消",
-        type: "warning"
+        type: "warning",
       })
         .then(() => {
           // console.log(id);
-          $.otherFake({ otherId: id }).then(response => {
+          $.otherFake({ otherId: id }).then((response) => {
             this.$message({
               type: "success",
-              message: "删除成功!"
+              message: "删除成功!",
             });
             $.otherList({
               collateralId: this.$route.query.collId,
-              busType: "01"
-            }).then(res => {
+              busType: "01",
+            }).then((res) => {
               if (res.success) {
                 this.list3 = res.data;
                 // console.log(this.list1)
@@ -612,11 +678,11 @@ export default {
         .catch(() => {
           this.$message({
             type: "info",
-            message: "已取消删除"
+            message: "已取消删除",
           });
         });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -625,5 +691,40 @@ export default {
   color: red;
   font-size: 1.5rem;
   vertical-align: middle;
+}
+.BMap_bubble_title{
+  color:black;
+  font-size:13px;
+  font-weight: bold;
+  text-align:left;
+}
+.BMap_pop div:nth-child(1){
+  border-radius:7px 0 0 0;
+}
+.BMap_pop div:nth-child(3){
+  border-radius:0 7px 0 0;background:#ABABAB;;
+  /*background: #ABABAB;*/
+  width:23px;
+  width:0px;
+  height:10px;
+}
+.BMap_pop div:nth-child(3) div{
+  border-radius:7px;
+}
+.BMap_pop div:nth-child(5){
+  border-radius:0 0 0 7px;
+}
+.BMap_pop div:nth-child(5) div{
+  border-radius:7px;
+}
+.BMap_pop div:nth-child(7){
+  border-radius:0 0 7px 0 ;
+}
+.BMap_pop div:nth-child(7) div {
+  border-radius:7px ;
+}
+/* // 标注右上角的关闭按钮隐藏 */
+.BMap_pop>img {
+  display: none;
 }
 </style>

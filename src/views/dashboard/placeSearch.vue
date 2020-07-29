@@ -1,204 +1,102 @@
 <template>
-  <div class="result-list-wrapper" ref="resultWrapper">
-    <ul class="result-list address" :data="result">
-      <li
-        class="result-item address"
-        v-for="(item, index) in result"
-        :key="item.index"
-        @click="setLocation(item)"
-        ref="resultItem"
-      >
-        <p class="result-name address" :class="{'active': index === activeIndex}">{{item.name}}</p>
-        <template v-if="item.address instanceof Array">
-          <p class="result-adress address">{{item.district}}</p>
-        </template>
-        <template v-else>
-          <p class="result-adress address">{{item.address}}</p>
-        </template>
-      </li>
-    </ul>
+  <div class="app-container">
+    <el-autocomplete
+      v-model="mapLocation.address"
+      :fetch-suggestions="querySearch"
+      placeholder="请输入详细地址"
+      style="width: 100%"
+      :trigger-on-focus="false"
+      @select="handleSelect"
+    />
+    <div style="margin: 5px">
+      <baidu-map class="bm-view" :center="mapCenter" :zoom="mapZoom" :scroll-wheel-zoom="true" ak="baidu-ak" @ready="handlerBMap" />
+    </div>
   </div>
 </template>
-<script type="text/ecmascript-6">
+
+<script>
+import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 export default {
-  props: {
-    result: {
-      type: Array,
-      default: null
-    },
-    left: {
-      // 输入框的offsetLeft
-      type: Number,
-      default: 0
-    },
-    top: {
-      // 输入框的offsetTop
-      type: Number,
-      default: 0
-    },
-    width: {
-      // 输入框的宽
-      type: Number,
-      default: 0
-    },
-    height: {
-      // 输入框的高
-      type: Number,
-      default: 0
-    }
+  name: 'BaiduMapDemo',
+  components: {
+    BaiduMap
   },
   data() {
     return {
-      activeIndex: 0 // 激活项
-    };
+      mapZoom: 15,
+      mapCenter: { lng: 0, lat: 0 },
+      mapLocation: {
+        address: undefined,
+        coordinate: undefined
+      }
+    }
   },
   methods: {
-    // 选择下拉的地址
-    setLocation(item) {
-      this.$emit("getLocation", item);
-    },
-    // 初始化地址搜索下拉框位置
-    initPos() {
-      let dom = this.$refs["resultWrapper"];
-      let body = document.getElementsByTagName("body");
-      if (body) {
-        body[0].appendChild(dom);
-        let clientHeight = document.documentElement.clientHeight;
-        let wrapHeight = 0;
-        if (this.result && this.result.length > 5) {
-          wrapHeight = 250;
-        } else if (this.result && this.result.length <= 5) {
-          wrapHeight = this.result.length * 50;
-        }
-        if (clientHeight - this.top < wrapHeight) {
-          // 如果div高度超出底部，div往上移（减去div高度+input高度）
-          dom.style.top = this.top - wrapHeight - this.height + "px";
-        } else {
-          dom.style.top = this.top + "px";
-        }
-        dom.style.left = this.left + "px";
-        dom.style.width = this.width + "px";
-      }
-    },
-    // 窗口resize时改变下拉框的位置
-    changePost(left, top, width, height) {
-      let dom = this.$refs["resultWrapper"];
-      let clientHeight = document.documentElement.clientHeight;
-      let wrapHeight = 0;
-      if (this.result && this.result.length > 5) {
-        wrapHeight = 250;
-      } else if (this.result && this.result.length <= 5) {
-        wrapHeight = this.result.length * 50;
-      }
-      if (clientHeight - top < wrapHeight) {
-        // 如果div高度超出底部，div往上移（减去div高度+input高度）
-        dom.style.top = top - wrapHeight - height + "px";
+    handlerBMap({ BMap, map }) {
+      this.BMap = BMap
+      this.map = map
+      if (this.mapLocation.coordinate && this.mapLocation.coordinate.lng) {
+        this.mapCenter.lng = this.mapLocation.coordinate.lng
+        this.mapCenter.lat = this.mapLocation.coordinate.lat
+        this.mapZoom = 15
+        map.addOverlay(new this.BMap.Marker(this.mapLocation.coordinate))
       } else {
-        dom.style.top = top + "px";
+        this.mapCenter.lng = 113.271429
+        this.mapCenter.lat = 23.135336
+        this.mapZoom = 10
       }
-      dom.style.left = left + "px";
-      dom.style.width = width + "px";
     },
-    // 监听键盘上下方向键并激活当前选项
-    keydownSelect(event) {
-      let e = event || window.event || arguments.callee.caller.arguments[0];
-      if (e && e.keyCode === 38) {
-        //上
-        if (this.$refs["resultWrapper"]) {
-          let items = this.$refs["resultWrapper"].querySelectorAll(
-            ".result-item"
-          );
-          if (items && items.length > 0) {
-            this.activeIndex--;
-            // 滚动条往上滚动
-            if (this.activeIndex < 5) {
-              this.$refs["resultWrapper"].scrollTop = 0;
-            }
-            if (this.activeIndex === 5) {
-              this.$refs["resultWrapper"].scrollTop = 250;
-            }
-            if (this.activeIndex === -1) {
-              this.activeIndex = 0;
-            }
-          }
+    querySearch(queryString, cb) {
+      var that = this
+      var myGeo = new this.BMap.Geocoder()
+      myGeo.getPoint(queryString, function(point) {
+        if (point) {
+          that.mapLocation.coordinate = point
+          that.makerCenter(point)
+        } else {
+          that.mapLocation.coordinate = null
         }
-      } else if (e && e.keyCode === 40) {
-        //下
-        if (this.$refs["resultWrapper"]) {
-          let items = this.$refs["resultWrapper"].querySelectorAll(
-            ".result-item"
-          );
-          if (items && items.length > 0) {
-            this.activeIndex++;
-            // 滚动条往下滚动
-            if (this.activeIndex === 5) {
-              this.$refs["resultWrapper"].scrollTop = 250;
+      }, this.locationCity)
+      var options = {
+        onSearchComplete: function(results) {
+          if (local.getStatus() === 0) {
+            // 判断状态是否正确
+            var s = []
+            for (var i = 0; i < results.getCurrentNumPois(); i++) {
+              var x = results.getPoi(i)
+              var item = { value: x.address + x.title, point: x.point }
+              s.push(item)
+              cb(s)
             }
-            if (this.activeIndex === 9) {
-              // 防止最后一条数据显示不全
-              this.$refs["resultWrapper"].scrollTop = 300;
-            }
-            if (this.activeIndex === items.length) {
-              this.activeIndex = 0;
-              this.$refs["resultWrapper"].scrollTop = 0;
-            }
+          } else {
+            cb()
           }
-        }
-      } else if (e && e.keyCode === 13) {
-        // 监听回车事件，并获取当前选中的地址的经纬度等信息
-        if (this.result && this.result.length > this.activeIndex) {
-          this.setLocation(this.result[this.activeIndex]);
         }
       }
+      var local = new this.BMap.LocalSearch(this.map, options)
+      local.search(queryString)
+    },
+    handleSelect(item) {
+      var { point } = item
+      this.mapLocation.coordinate = point
+      this.makerCenter(point)
+    },
+    makerCenter(point) {
+      if (this.map) {
+        this.map.clearOverlays()
+        this.map.addOverlay(new this.BMap.Marker(point))
+        this.mapCenter.lng = point.lng
+        this.mapCenter.lat = point.lat
+        this.mapZoom = 15
+      }
     }
-  },
-  mounted() {
-    this.initPos();
-    document.addEventListener("keydown", this.keydownSelect, false);
-  },
-  beforeDestroy() {
-    document.removeEventListener("keydown", this.keydownSelect, false);
   }
-};
+}
 </script>
-<style lang="stylus" scoped>
-.result-list-wrapper {
-  position: absolute;
-  max-height: 250px;
-  overflow: auto;
-  z-index: 9999;
-  border: 1px solid #ccc;
-  background-color: #fff;
 
-  .result-list {
-    .result-item {
-      padding: 5px;
-      color: #666;
-      border-bottom: 1px solid #ccc;
-
-      &:hover {
-        background-color: #f5f5f5;
-        cursor: pointer;
-      }
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      .result-name {
-        font-size: 12px;
-        margin-bottom: 0.5rem;
-
-        &.active {
-          color: #259bff;
-        }
-      }
-
-      .result-adress {
-        font-size: 12px;
-        color: #bbb;
-      }
-    }
-  }
+<style>
+.bm-view {
+  width: 100%;
+  height: 500px;
 }
 </style>
