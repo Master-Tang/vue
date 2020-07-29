@@ -139,13 +139,13 @@
           <el-table-column label="借款期限" align="center">
             <template slot-scope="scope">{{ scope.row.beginTime+"~"+scope.row.endTime }}</template>
           </el-table-column>
-          <el-table-column label="合同本金" align="center">
+          <el-table-column label="合同本金(元)" align="center">
             <template slot-scope="scope">{{ scope.row.principal }}</template>
           </el-table-column>
-          <el-table-column label="本金余额" align="center">
+          <el-table-column label="本金余额(元)" align="center">
             <template slot-scope="scope">{{ scope.row.prinBalance }}</template>
           </el-table-column>
-          <el-table-column label="利息余额" align="center">
+          <el-table-column label="利息余额(元)" align="center">
             <template slot-scope="scope">{{ scope.row.interBalance }}</template>
           </el-table-column>
           <el-table-column label="诉讼有效期" align="center">
@@ -181,7 +181,7 @@
           <el-table-column label="合同类型" align="center">
             <template slot-scope="scope">{{ scope.row.type}}</template>
           </el-table-column>
-          <el-table-column label="保证金额" align="center">
+          <el-table-column label="保证金额(元)" align="center">
             <template slot-scope="scope">{{ scope.row.guarantorAmount }}</template>
           </el-table-column>
           <el-table-column label="保证期间" align="center">
@@ -223,7 +223,7 @@
           <el-table-column label="合同类型" align="center">
             <template slot-scope="scope">{{ scope.row.collateralType}}</template>
           </el-table-column>
-          <el-table-column label="抵押金额" align="center">
+          <el-table-column label="抵押金额(元)" align="center">
             <template slot-scope="scope">{{ scope.row.collateralMoney }}</template>
           </el-table-column>
           <el-table-column label="抵押期限" align="center">
@@ -267,7 +267,7 @@
           <el-table-column label="抵质押类型" align="center">
             <template slot-scope="scope">{{ scope.row.mortType }}</template>
           </el-table-column>
-          <el-table-column label="最高额抵押金额" align="center">
+          <el-table-column label="最高额抵押金额(元)" align="center">
             <template slot-scope="scope">{{ scope.row.maxMort }}</template>
           </el-table-column>
           <el-table-column label="抵押顺位" align="center">
@@ -316,7 +316,7 @@
           <el-table-column label="描述" align="center">
             <template slot-scope="scope">{{ scope.row.describes}}</template>
           </el-table-column>
-          <el-table-column label="亮点价值" align="center">
+          <el-table-column label="亮点价值(元)" align="center">
             <template slot-scope="scope">{{ scope.row.value }}</template>
           </el-table-column>
           <el-table-column label="依据" align="center">

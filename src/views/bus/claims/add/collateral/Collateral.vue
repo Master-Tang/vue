@@ -68,13 +68,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <span slot="label">最高额抵押金额</span>
+            <span slot="label">最高额抵押金额(元)</span>
             <el-input
               v-model="form.maxMort"
               type="text"
               placeholder="请输入最高额抵押金额"
-              onkeyup="value=value.replace(/\D/g,'')"
-              onchange="value=value.replace(/\D/g,'')"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -89,13 +88,12 @@
             </el-select>
           </el-form-item>
           <el-form-item>
-            <span slot="label">前序抵押金额</span>
+            <span slot="label">前序抵押金额(元)</span>
             <el-input
               v-model="form.orderMort"
               type="text"
               placeholder="请输入前序抵押金额"
-              onkeyup="value=value.replace(/\D/g,'')"
-              onchange="value=value.replace(/\D/g,'')"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             ></el-input>
           </el-form-item>
           <el-form-item>
@@ -159,7 +157,7 @@
             <template slot-scope="scope">{{ scope.row.buildTime }}</template>
           </el-table-column>
           <el-table-column label="首层层高（工业资产）" align="center">
-            <template slot-scope="scope">{{ scope.row.fishHigh }}</template>
+            <template slot-scope="scope">{{ scope.row.fishHigh +"米"}}</template>
           </el-table-column>
           <el-table-column label="总层数" align="center">
             <template slot-scope="scope">{{ scope.row.layer }}</template>
@@ -208,12 +206,12 @@
             <template slot-scope="scope">{{ scope.row.wayObt }}</template>
           </el-table-column>
           <el-table-column label="剩余使用年限" align="center">
-            <template slot-scope="scope">{{ scope.row.servLife }}</template>
+            <template slot-scope="scope">{{ scope.row.servLife+"年" }}</template>
           </el-table-column>
           <el-table-column label="面积" align="center">
-            <template slot-scope="scope">{{ scope.row.area }}</template>
+            <template slot-scope="scope">{{ scope.row.area+"m²" }}</template>
           </el-table-column>
-          <el-table-column label="土地市场单价" align="center">
+          <el-table-column label="土地市场单价(元)" align="center">
             <template slot-scope="scope">{{ scope.row.landPrice }}</template>
           </el-table-column>
           <el-table-column label="操作" align="center" width="150rem">

@@ -1,6 +1,6 @@
 <template>
 <div class="my-padding">
-  <el-form ref="form" :model="form" label-width="6rem">
+  <el-form ref="form" :model="form" label-width="8rem">
     <el-form-item>
       <span slot="label">
         产证号
@@ -42,33 +42,29 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <span slot="label">剩余使用年限</span>
+      <span slot="label">剩余使用年限(年)</span>
       <el-input
         v-model="form.servLife"
         type="text"
         placeholder="请输入剩余使用年限"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
       ></el-input>
     </el-form-item>
     <el-form-item>
-      <span slot="label">面积</span>
+      <span slot="label">面积(m²)</span>
       <el-input
         v-model="form.area"
         type="text"
         placeholder="请输入土地面积"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
+        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
       ></el-input>
     </el-form-item>
     <el-form-item>
-      <span slot="label">土地市场单价</span>
+      <span slot="label">土地市场单价(元)</span>
       <el-input
         v-model="form.landPrice"
         type="text"
         placeholder="请输入土地市场单价"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
+        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
       ></el-input>
     </el-form-item>
     <el-form-item>

@@ -28,8 +28,13 @@
         </el-row>
         <el-row style="padding-bottom: 1rem">
           <el-col :span="12">
-            <span>报价更新:</span>
-            <el-input v-model="form.quoteUpdate" style="width: 57%" placeholder="请输入报价更新"></el-input>
+            <span>报价更新(元):</span>
+            <el-input
+              v-model="form.quoteUpdate"
+              style="width: 57%"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+              placeholder="请输入报价更新"
+            ></el-input>
           </el-col>
           <el-col :span="12">
             <span>每周更新:</span>
@@ -45,7 +50,7 @@
       <el-table-column prop="a" label="序号" align="center" width="50rem"></el-table-column>
       <el-table-column prop="intentClient" align="center" label="意向客户"></el-table-column>
       <el-table-column prop="cooperateType" align="center" label="合作方式"></el-table-column>
-      <el-table-column prop="quoteUpdate" align="center" label="报价更新"></el-table-column>
+      <el-table-column prop="quoteUpdate" align="center" label="报价更新(元)"></el-table-column>
       <el-table-column prop="weekUpdate" align="center" label="每周更新"></el-table-column>
       <el-table-column align="center" label="操作">
         <template slot-scope="scope">

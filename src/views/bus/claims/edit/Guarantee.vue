@@ -1,6 +1,6 @@
 <template>
   <div class="my-padding">
-    <el-form ref="form" :model="form" label-width="7rem">
+    <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item>
         <span slot="label">对应借款合同</span>
         <el-select v-model="form.loanContract" multiple placeholder="请选择关联借款合同" style="width:100%">
@@ -25,15 +25,14 @@
       </el-form-item>
       <el-form-item>
         <span slot="label">
-          保证人金额
+          保证人金额(元)
           <span class="red">*</span>
         </span>
         <el-input
           v-model="form.guarantorAmount"
           type="text"
           placeholder="请输入保证人金额"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -147,7 +146,7 @@
             <el-table-column label="企业所在地址" align="center">
               <template slot-scope="scope">{{ scope.row.corporateCity+" "+scope.row.address}}</template>
             </el-table-column>
-            <el-table-column label="注册资金" align="center">
+            <el-table-column label="注册资金(元)" align="center">
               <template slot-scope="scope">{{ scope.row.money}}</template>
             </el-table-column>
             <el-table-column label="与借款人关系" align="center">
@@ -207,9 +206,11 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">身份证号</span>
-          <el-input v-model="form1.naturalCard" type="text"
-          placeholder="请输入身份证号"
-          onkeyup="value=value.replace(/([^0-9Xx])+/g,'')"
+          <el-input
+            v-model="form1.naturalCard"
+            type="text"
+            placeholder="请输入身份证号"
+            onkeyup="value=value.replace(/([^0-9Xx])+/g,'')"
             onchange="value=value.replace(/([^0-9Xx])+/g,'')"
           ></el-input>
         </el-form-item>
@@ -227,11 +228,7 @@
         </el-form-item>
         <el-form-item>
           <span slot="label">联系方式</span>
-          <el-input
-            v-model="form1.contact"
-            type="text"
-            placeholder="请输入联系方式"
-          ></el-input>
+          <el-input v-model="form1.contact" type="text" placeholder="请输入联系方式"></el-input>
         </el-form-item>
         <el-form-item>
           <span slot="label">与借款人关系</span>
@@ -288,13 +285,12 @@
           <el-input v-model="form1.address" type="text" placeholder="请输入详细地址"></el-input>
         </el-form-item>
         <el-form-item>
-          <span slot="label">注册资金</span>
+          <span slot="label">注册资金(元)</span>
           <el-input
             v-model="form1.money"
             type="text"
             placeholder="请输入注册资金"
-            onkeyup="value=value.replace(/\D/g,'')"
-            onchange="value=value.replace(/\D/g,'')"
+            oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
           ></el-input>
         </el-form-item>
         <el-form-item>
@@ -339,7 +335,7 @@ export default {
         type: "",
         relation: "",
         claimsNumber: "",
-        guarantorList: []
+        guarantorList: [],
       },
       form1: {
         legalId: "",
@@ -367,7 +363,7 @@ export default {
         //联系方式
         contact: "",
         //外键id
-        contractId: ""
+        contractId: "",
       },
       collateralContract: [],
       guaranteeList: [],
@@ -379,19 +375,19 @@ export default {
       guacolList: [],
       naturedList: [],
       corporateList: [],
-      corporatedList:[],
+      corporatedList: [],
     };
   },
 
   created() {
     this.form.claimsNumber = this.$route.query.id;
     this.form.guarantorId = this.$route.query.guarantorId;
-    $.mapBorrow({ claimsNumber: this.form.claimsNumber }).then(res => {
+    $.mapBorrow({ claimsNumber: this.form.claimsNumber }).then((res) => {
       if (res.success) {
         this.collateralContract = res.data.collateralContract;
       }
     });
-    $.addInit().then(res => {
+    $.addInit().then((res) => {
       if (res.success) {
         this.provinceList = res.data.province;
         this.guaranteeList = res.data.guaranteeList;
@@ -400,10 +396,10 @@ export default {
         this.relationshipList = res.data.relationshipList;
         this.guarantorList = res.data.guarantorList;
         this.guacolList = res.data.guacolList;
-        this.corporatedList=res.data.corporateList;
+        this.corporatedList = res.data.corporateList;
       }
     });
-    $.guarantor({ guarantorId: this.$route.query.guarantorId }).then(res => {
+    $.guarantor({ guarantorId: this.$route.query.guarantorId }).then((res) => {
       if (res.success) {
         if (res.data != null) {
           // console.log(res.data)
@@ -411,7 +407,7 @@ export default {
         }
       }
     });
-    $.legalList({ contractId: this.$route.query.guarantorId }).then(res => {
+    $.legalList({ contractId: this.$route.query.guarantorId }).then((res) => {
       if (res.success) {
         this.naturedList = res.data.naturalList;
         this.corporateList = res.data.legalList;
@@ -420,14 +416,14 @@ export default {
   },
   methods: {
     handleNatureDel(id) {
-      $.legalFake({ legalId: id }).then(res => {
+      $.legalFake({ legalId: id }).then((res) => {
         if (res.success) {
           this.$message({
             type: "success",
-            message: "删除成功"
+            message: "删除成功",
           });
           $.legalList({ contractId: this.$route.query.guarantorId }).then(
-            res => {
+            (res) => {
               if (res.success) {
                 this.naturedList = res.data.naturalList;
                 this.corporateList = res.data.legalList;
@@ -440,24 +436,26 @@ export default {
     },
     handleNatureEdit(id) {
       this.dialogTableVisible1 = true;
-      $.legal({ legalId: id }).then(res => {
+      $.legal({ legalId: id }).then((res) => {
         this.form1 = res.data;
       });
     },
     handleNatureEditData() {
       this.dialogTableVisible1 = false;
-      $.legalUpdate(this.form1).then(res => {
+      $.legalUpdate(this.form1).then((res) => {
         this.$message({
           type: "success",
-          message: "更改成功"
+          message: "更改成功",
         });
-        $.legalList({ contractId: this.$route.query.guarantorId }).then(res => {
-          if (res.success) {
-            this.naturedList = res.data.naturalList;
-            this.corporateList = res.data.legalList;
-            // console.log(res.data);
+        $.legalList({ contractId: this.$route.query.guarantorId }).then(
+          (res) => {
+            if (res.success) {
+              this.naturedList = res.data.naturalList;
+              this.corporateList = res.data.legalList;
+              // console.log(res.data);
+            }
           }
-        });
+        );
       });
     },
     addNature() {
@@ -479,10 +477,10 @@ export default {
       this.dialogTableVisible1 = false;
       this.form1.contractId = this.form.guarantorId;
       this.form1.contractType = "01";
-      $.legalAdd(this.form1).then(response => {
+      $.legalAdd(this.form1).then((response) => {
         if (response.success) {
           $.legalList({ contractId: this.$route.query.guarantorId }).then(
-            res => {
+            (res) => {
               if (res.success) {
                 this.naturedList = res.data.naturalList;
                 this.corporateList = res.data.legalList;
@@ -495,19 +493,19 @@ export default {
     },
     handleCorporteEdit(id) {
       this.dialogTableVisible2 = true;
-      $.legal({ legalId: id }).then(res => {
+      $.legal({ legalId: id }).then((res) => {
         this.form1 = res.data;
       });
     },
     handleCorporteDel(id) {
-      $.legalFake({ legalId: id }).then(res => {
+      $.legalFake({ legalId: id }).then((res) => {
         if (res.success) {
           this.$message({
             type: "success",
-            message: "删除成功"
+            message: "删除成功",
           });
           $.legalList({ contractId: this.$route.query.guarantorId }).then(
-            res => {
+            (res) => {
               if (res.success) {
                 this.naturedList = res.data.naturalList;
                 this.corporateList = res.data.legalList;
@@ -521,18 +519,20 @@ export default {
     handleCorporteEditData() {
       this.dialogTableVisible2 = false;
       // console.log(this.form1)
-      $.legalUpdate(this.form1).then(res => {
+      $.legalUpdate(this.form1).then((res) => {
         this.$message({
           type: "success",
-          message: "更改成功"
+          message: "更改成功",
         });
-        $.legalList({ contractId: this.$route.query.guarantorId }).then(res => {
-          if (res.success) {
-            this.naturedList = res.data.naturalList;
-            this.corporateList = res.data.legalList;
-            // console.log(res.data);
+        $.legalList({ contractId: this.$route.query.guarantorId }).then(
+          (res) => {
+            if (res.success) {
+              this.naturedList = res.data.naturalList;
+              this.corporateList = res.data.legalList;
+              // console.log(res.data);
+            }
           }
-        });
+        );
       });
     },
     addCorporte() {
@@ -555,10 +555,10 @@ export default {
       this.form1.contractId = this.form.guarantorId;
       this.form1.contractType = "02";
       // console.log(this.form1.contractId)
-      $.legalAdd(this.form1).then(response => {
+      $.legalAdd(this.form1).then((response) => {
         if (response.success) {
           $.legalList({ contractId: this.$route.query.guarantorId }).then(
-            res => {
+            (res) => {
               if (res.success) {
                 this.naturedList = res.data.naturalList;
                 this.corporateList = res.data.legalList;
@@ -573,53 +573,53 @@ export default {
     cencelguarantee() {
       this.$router.push({
         path: "add",
-        query: { activeName: "sixth", claimsNumber: this.form.claimsNumber }
+        query: { activeName: "sixth", claimsNumber: this.form.claimsNumber },
       });
     },
     addguarantee() {
       // console.log(this.form);
       if (!this.validate()) return;
-      $.addguarantee(this.form).then(response => {
+      $.addguarantee(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该编号已存在,请勿重复添加"
+            message: "该编号已存在,请勿重复添加",
           });
         } else {
           this.form.guarantorId = response.data;
           this.$message({
             type: "success",
-            message: "添加成功"
+            message: "添加成功",
           });
           this.$router.replace({
             path: "add",
             query: {
               activeName: "sixth",
-              claimsNumber: this.form.claimsNumber
-            }
+              claimsNumber: this.form.claimsNumber,
+            },
           });
         }
       });
     },
     updateguarantee() {
       if (!this.validate()) return;
-      $.updateguarantee(this.form).then(response => {
+      $.updateguarantee(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该合同编号已存在,请重新更改"
+            message: "该合同编号已存在,请重新更改",
           });
         } else {
           this.$message({
             type: "success",
-            message: "更改成功"
+            message: "更改成功",
           });
           this.$router.replace({
             path: "add",
             query: {
               activeName: "sixth",
-              claimsNumber: this.form.claimsNumber
-            }
+              claimsNumber: this.form.claimsNumber,
+            },
           });
         }
       });
@@ -635,13 +635,13 @@ export default {
       if (error) {
         this.$message({
           message: error,
-          type: "error"
+          type: "error",
         });
         return false;
       }
       return true;
     },
-  }
+  },
 };
 </script>
 

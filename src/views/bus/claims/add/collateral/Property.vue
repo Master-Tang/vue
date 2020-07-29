@@ -1,6 +1,6 @@
 <template>
 <div class="my-padding">
-  <el-form ref="form" :model="form" label-width="10rem">
+  <el-form ref="form" :model="form" label-width="11rem">
     <el-form-item>
       <span slot="label">
         产证号
@@ -30,13 +30,12 @@
       ></el-date-picker>
     </el-form-item>
     <el-form-item>
-      <span slot="label">首层层高（工业资产）</span>
+      <span slot="label">首层层高（工业资产）/米</span>
       <el-input
         v-model="form.fishHigh"
         type="text"
         placeholder="请输入首层层高（工业资产）"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
+        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
       ></el-input>
     </el-form-item>
     <el-form-item>
@@ -45,8 +44,6 @@
         v-model="form.layer"
         type="text"
         placeholder="请输入总层数"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
       ></el-input>
     </el-form-item>
     <el-form-item>
@@ -55,8 +52,6 @@
         v-model="form.inLayer"
         type="text"
         placeholder="请输入所在层数"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
       ></el-input>
     </el-form-item>
     <el-form-item>
@@ -93,13 +88,12 @@
       </el-select>
     </el-form-item>
     <el-form-item>
-      <span slot="label">建筑面积</span>
+      <span slot="label">建筑面积(m²)</span>
       <el-input
         v-model="form.structArea"
         type="text"
         placeholder="请输入建筑面积"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
+        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
       ></el-input>
     </el-form-item>
     <el-form-item>

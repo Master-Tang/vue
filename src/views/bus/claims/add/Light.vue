@@ -1,6 +1,6 @@
 <template>
 <div class="my-padding">
-  <el-form ref="form" :model="form" label-width="5rem">
+  <el-form ref="form" :model="form" label-width="7rem">
     <el-form-item>
       <span slot="label">
         类型
@@ -20,13 +20,12 @@
       <el-input v-model="form.describes" type="text" placeholder="请输入亮点描述"></el-input>
     </el-form-item>
     <el-form-item>
-      <span slot="label">亮点价值</span>
+      <span slot="label">亮点价值(元)</span>
       <el-input
         v-model="form.value"
         type="text"
         placeholder="请输入亮点价值"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
+        oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
       ></el-input>
     </el-form-item>
     <el-form-item>

@@ -6,13 +6,12 @@
         <el-input v-model="form.contNum" type="text" placeholder="请输入借款合同编号"></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">合同本金</span>
+        <span slot="label">合同本金(元)</span>
         <el-input
           v-model="form.principal"
           type="text"
           placeholder="请输入合同本金"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -35,37 +34,34 @@
       </el-form-item>
       <el-form-item>
         <span slot="label">
-          本金余额
+          本金余额(元)
           <span class="red">*</span>
         </span>
         <el-input
           v-model="form.prinBalance"
           type="text"
           placeholder="请输入本金余额"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">利息余额</span>
+        <span slot="label">利息余额(元)</span>
         <el-input
           v-model="form.interBalance"
           type="text"
           placeholder="请输入利息余额"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">其他金额</span>
+        <span slot="label">其他金额(元)</span>
         <el-row>
           <el-col :span="6">
             <el-input
               v-model="form.otherMoney"
               type="text"
               placeholder="请输入其他金额"
-              onkeyup="value=value.replace(/\D/g,'')"
-              onchange="value=value.replace(/\D/g,'')"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             ></el-input>
           </el-col>
           <el-col :span=2 align="center">

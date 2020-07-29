@@ -6,13 +6,12 @@
         <el-input v-model="form.contNum" type="text" placeholder="请输入借款合同编号"></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">合同本金</span>
+        <span slot="label">合同本金(元)</span>
         <el-input
           v-model="form.principal"
           type="text"
           placeholder="请输入合同本金"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -35,42 +34,37 @@
       </el-form-item>
       <el-form-item>
         <span slot="label">
-          本金余额
+          本金余额(元)
           <span class="red">*</span>
         </span>
         <el-input
           v-model="form.prinBalance"
           type="text"
           placeholder="请输入本金余额"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">利息余额</span>
+        <span slot="label">利息余额(元)</span>
         <el-input
           v-model="form.interBalance"
           type="text"
           placeholder="请输入利息余额"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
-        <span slot="label">其他金额</span>
+        <span slot="label">其他金额(元)</span>
         <el-row>
           <el-col :span="6">
             <el-input
               v-model="form.otherMoney"
               type="text"
               placeholder="请输入其他金额"
-              onkeyup="value=value.replace(/\D/g,'')"
-              onchange="value=value.replace(/\D/g,'')"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
             ></el-input>
           </el-col>
-          <el-col :span=2 align="center">
-            {{"————"}}
-          </el-col>
+          <el-col :span="2" align="center">{{"————"}}</el-col>
           <el-col :span="8">
             <el-input v-model="form.note" type="text" placeholder="请输入备注"></el-input>
           </el-col>
@@ -113,25 +107,25 @@ export default {
         principal: 0,
         beginTime: "",
         endTime: "",
-        borTerms:"",
+        borTerms: "",
         prinBalance: 0,
         interBalance: 0,
         otherMoney: 0,
         litigationBegin: "",
         litigationEnd: "",
-        validity:"",
+        validity: "",
         //备注
         note: "",
         claimsNumber: "",
-        borrowId: ""
-      }
+        borrowId: "",
+      },
     };
   },
   created() {
     this.form.claimsNumber = this.$route.query.id;
     this.form.borrowId = this.$route.query.borrowId;
     // console.log(this.form.borrowId)
-    $.borrow({ borrowId: this.$route.query.borrowId }).then(res => {
+    $.borrow({ borrowId: this.$route.query.borrowId }).then((res) => {
       if (res.success) {
         if (res.data != null) {
           // console.log(res.data)
@@ -143,24 +137,24 @@ export default {
   methods: {
     addborrow() {
       if (!this.validate()) return;
-      $.addborrow(this.form).then(response => {
+      $.addborrow(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "已存在,请勿重复添加"
+            message: "已存在,请勿重复添加",
           });
         } else {
           this.form.borrowId = response.data;
           this.$message({
             type: "success",
-            message: "添加成功"
+            message: "添加成功",
           });
           this.$router.replace({
             path: "add",
             query: {
               activeName: "second",
-              claimsNumber: this.form.claimsNumber
-            }
+              claimsNumber: this.form.claimsNumber,
+            },
           });
         }
       });
@@ -168,28 +162,28 @@ export default {
     cencelborrow() {
       this.$router.push({
         path: "add",
-        query: { activeName: "second", claimsNumber: this.form.claimsNumber }
+        query: { activeName: "second", claimsNumber: this.form.claimsNumber },
       });
     },
     updateborrow() {
       if (!this.validate()) return;
-      $.updateborrow(this.form).then(response => {
+      $.updateborrow(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该合同编号已存在"
+            message: "该合同编号已存在",
           });
         } else {
           this.$message({
             type: "success",
-            message: "更改成功"
+            message: "更改成功",
           });
           this.$router.replace({
             path: "add",
             query: {
               activeName: "second",
-              claimsNumber: this.form.claimsNumber
-            }
+              claimsNumber: this.form.claimsNumber,
+            },
           });
         }
       });
@@ -205,13 +199,13 @@ export default {
       if (error) {
         this.$message({
           message: error,
-          type: "error"
+          type: "error",
         });
         return false;
       }
       return true;
-    }
-  }
+    },
+  },
 };
 </script>
  <style scoped>

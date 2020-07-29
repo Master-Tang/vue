@@ -1,78 +1,84 @@
 <template>
-  <el-form ref="form" :model="form" label-width="8rem">
-    <el-form-item>
-      <span slot="label">
-        抵押物合同编号
-        <span class="red">*</span>
-      </span>
-      <el-input v-model="form.collateralNumber" type="text" placeholder="请输入抵押物合同编号"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <span slot="label">
-        合同类型
-        <span class="red">*</span>
-      </span>
-      <el-select v-model="form.collateralType" placeholder="请选择抵押物合同类型" style="width:100%">
-        <el-option
-          v-for="item in procolList"
-          :key="item.dicValue"
-          :label="item.dicKey"
-          :value="item.dicValue"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item>
-      <span slot="label">
-        抵押金额
-        <span class="red">*</span>
-      </span>
-      <el-input
-        v-model="form.collateralMoney"
-        type="text"
-        placeholder="请输入抵押金额"
-        onkeyup="value=value.replace(/\D/g,'')"
-        onchange="value=value.replace(/\D/g,'')"
-      ></el-input>
-    </el-form-item>
-    <el-form-item>
-      <span slot="label">抵押期限</span>
-      <el-date-picker
-        v-model="form.collateralBegin"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择抵押起始期限"
-      ></el-date-picker>
-      {{"~"}}
-      <el-date-picker
-        v-model="form.collateralEnd"
-        type="date"
-        format="yyyy年MM月dd日"
-        value-format="yyyy年MM月dd日"
-        placeholder="请选择抵押终止期限"
-      ></el-date-picker>
-    </el-form-item>
-    <el-form-item>
-      <span slot="label">关联借款合同</span>
-      <el-select v-model="form.collateralLink" multiple placeholder="请选择关联借款合同" style="width:100%">
-        <el-option
-          v-for="item in collateralContract"
-          :key="item.contNum"
-          :label="item.contNum"
-          :value="item.contNum"
-        ></el-option>
-      </el-select>
-    </el-form-item>
-    <el-form-item>
-      <span slot="label">备注</span>
-      <el-input v-model="form.note" type="text" placeholder="请输入备注"></el-input>
-    </el-form-item>
-    <el-form-item>
-      <el-button type="primary" @click="addcontract" v-if="form.contractId==null">保存</el-button>
-      <el-button type="warning" @click="updatecontract" v-if="form.contractId!=null">更改</el-button>
-      <el-button @click="cencelcontract">取消</el-button>
-    </el-form-item>
-  </el-form>
+  <div class="my-padding">
+    <el-form ref="form" :model="form" label-width="8rem">
+      <el-form-item>
+        <span slot="label">
+          抵押物合同编号
+          <span class="red">*</span>
+        </span>
+        <el-input v-model="form.collateralNumber" type="text" placeholder="请输入抵押物合同编号"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">
+          合同类型
+          <span class="red">*</span>
+        </span>
+        <el-select v-model="form.collateralType" placeholder="请选择抵押物合同类型" style="width:100%">
+          <el-option
+            v-for="item in procolList"
+            :key="item.dicValue"
+            :label="item.dicKey"
+            :value="item.dicValue"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">
+          抵押金额(元)
+          <span class="red">*</span>
+        </span>
+        <el-input
+          v-model="form.collateralMoney"
+          type="text"
+          placeholder="请输入抵押金额"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+        ></el-input>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">抵押期限</span>
+        <el-date-picker
+          v-model="form.collateralBegin"
+          type="date"
+          format="yyyy年MM月dd日"
+          value-format="yyyy年MM月dd日"
+          placeholder="请选择抵押起始期限"
+        ></el-date-picker>
+        {{"~"}}
+        <el-date-picker
+          v-model="form.collateralEnd"
+          type="date"
+          format="yyyy年MM月dd日"
+          value-format="yyyy年MM月dd日"
+          placeholder="请选择抵押终止期限"
+        ></el-date-picker>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">关联借款合同</span>
+        <el-select
+          v-model="form.collateralLink"
+          multiple
+          placeholder="请选择关联借款合同"
+          style="width:100%"
+        >
+          <el-option
+            v-for="item in collateralContract"
+            :key="item.contNum"
+            :label="item.contNum"
+            :value="item.contNum"
+          ></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item>
+        <span slot="label">备注</span>
+        <el-input v-model="form.note" type="text" placeholder="请输入备注"></el-input>
+      </el-form-item>
+      <el-form-item>
+        <el-button type="primary" @click="addcontract" v-if="form.contractId==null">保存</el-button>
+        <el-button type="warning" @click="updatecontract" v-if="form.contractId!=null">更改</el-button>
+        <el-button @click="cencelcontract">取消</el-button>
+      </el-form-item>
+    </el-form>
+  </div>
 </template>
 <script>
 import $ from "@/api/bus";
@@ -92,31 +98,31 @@ export default {
         note: "",
         collateralLink: "",
         claimsNumber: "",
-        contractId: ""
+        contractId: "",
       },
       procolList: [],
-      collateralContract: []
+      collateralContract: [],
     };
   },
 
   created() {
     this.form.claimsNumber = this.$route.query.id;
     this.form.contractId = this.$route.query.contractId;
-    $.mapBorrow({ claimsNumber: this.form.claimsNumber }).then(res => {
+    $.mapBorrow({ claimsNumber: this.form.claimsNumber }).then((res) => {
       if (res.success) {
         this.collateralContract = res.data.collateralContract;
       }
     });
-    $.addInit().then(res => {
+    $.addInit().then((res) => {
       if (res.success) {
         this.procolList = res.data.procolList;
       }
     });
-    $.contract({ contractId: this.$route.query.contractId}).then(res => {
+    $.contract({ contractId: this.$route.query.contractId }).then((res) => {
       if (res.success) {
-        if(res.data!=null){
-        // console.log(res.data)
-        this.form = res.data;
+        if (res.data != null) {
+          // console.log(res.data)
+          this.form = res.data;
         }
       }
     });
@@ -124,24 +130,24 @@ export default {
   methods: {
     addcontract() {
       if (!this.validate()) return;
-      $.addcontract(this.form).then(response => {
+      $.addcontract(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该编号已存在,请勿重复添加"
+            message: "该编号已存在,请勿重复添加",
           });
         } else {
           this.form.contractId = response.data;
           this.$message({
             type: "success",
-            message: "添加成功"
+            message: "添加成功",
           });
           this.$router.replace({
             path: "index",
             query: {
               activeName: "third",
-              claimsNumber: this.form.claimsNumber
-            }
+              claimsNumber: this.form.claimsNumber,
+            },
           });
         }
       });
@@ -149,28 +155,28 @@ export default {
     cencelcontract() {
       this.$router.push({
         path: "index",
-        query: { activeName: "third", claimsNumber: this.form.claimsNumber }
+        query: { activeName: "third", claimsNumber: this.form.claimsNumber },
       });
     },
     updatecontract() {
       if (!this.validate()) return;
-      $.updatecontract(this.form).then(response => {
+      $.updatecontract(this.form).then((response) => {
         if (response.data == "已存在") {
           this.$message({
             type: "error",
-            message: "该合同编号已存在,请重新更改"
+            message: "该合同编号已存在,请重新更改",
           });
         } else {
           this.$message({
-            type:"success",
-            message: "更改成功"
+            type: "success",
+            message: "更改成功",
           });
-           this.$router.replace({
+          this.$router.replace({
             path: "index",
             query: {
               activeName: "third",
-              claimsNumber: this.form.claimsNumber
-            }
+              claimsNumber: this.form.claimsNumber,
+            },
           });
         }
       });
@@ -188,13 +194,13 @@ export default {
       if (error) {
         this.$message({
           message: error,
-          type: "error"
+          type: "error",
         });
         return false;
       }
       return true;
-    }
-  }
+    },
+  },
 };
 </script>
  <style scoped>

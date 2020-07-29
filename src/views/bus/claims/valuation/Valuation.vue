@@ -18,11 +18,19 @@
           </el-form-item>
           <el-form-item>
             <span slot="label">保守回现(万元)</span>
-            <el-input v-model="form1.conservativeMoney" placeholder="保守回现(万元)"></el-input>
+            <el-input
+              v-model="form1.conservativeMoney"
+              placeholder="保守回现(万元)"
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+            ></el-input>
           </el-form-item>
           <el-form-item>
             <span slot="label">乐观回现(万元)</span>
-            <el-input v-model="form1.optimisticMoney" placeholder="乐观回现(万元)"></el-input>
+            <el-input
+              v-model="form1.optimisticMoney"
+              placeholder="乐观回现(万元) "
+              oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+            ></el-input>
           </el-form-item>
           <el-form-item>
             <span slot="label">依据</span>
@@ -44,7 +52,7 @@
       </el-tab-pane>
 
       <el-tab-pane label="资产估值" name="second">
-        <el-table  :data="assetsValList" border fit style="width: 100%">
+        <el-table :data="assetsValList" border fit style="width: 100%">
           <el-table-column prop="a" label="序号" align="center" width="60rem"></el-table-column>
           <el-table-column prop="address" label="抵押物描述（包括地址／楼盘名称）" align="center" width="300rem"></el-table-column>
           <el-table-column prop="mortgageType" label="抵/质押物类型" align="center"></el-table-column>
@@ -117,7 +125,7 @@
             </el-row>
             <el-row style="margin-bottom:2rem">
               <el-col :span="8">
-                <span>最高额抵押金额:</span>
+                <span>最高额抵押金额(元):</span>
                 {{form2.maxMort}}
               </el-col>
               <el-col :span="8">
@@ -125,17 +133,17 @@
                 {{form2.sequenceMort}}
               </el-col>
               <el-col :span="8">
-                <span>前序顺位抵押金额:</span>
+                <span>前序顺位抵押金额(元):</span>
                 {{form2.orderMort}}
               </el-col>
             </el-row>
             <el-row style="margin-bottom:2rem">
               <el-col :span="8">
-                <span>房产面积:</span>
+                <span>房产面积(m²):</span>
                 {{form2.propertyArea}}
               </el-col>
               <el-col :span="8">
-                <span>土地面积:</span>
+                <span>土地面积(m²):</span>
                 {{form2.landArea}}
               </el-col>
               <el-col :span="8">
@@ -170,14 +178,24 @@
                 </el-col>
                 <el-col :span="12">
                   <span>变现系数——保守:</span>
-                  <el-input v-model="form3.conservative" placeholder="请输入保守变现系数" style="width:50%"></el-input>
+                  <el-input
+                    v-model="form3.conservative"
+                    placeholder="请输入保守变现系数"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                    style="width:50%"
+                  ></el-input>
                   {{"%"}}
                 </el-col>
               </el-row>
               <el-row style="margin-bottom:2rem">
                 <el-col :span="12" style="padding-top:0.7rem">
                   <span>变现系数——乐观:</span>
-                  <el-input v-model="form3.optimistic" placeholder="请输入乐观变现系数" style="width:50%"></el-input>
+                  <el-input
+                    v-model="form3.optimistic"
+                    placeholder="请输入乐观变现系数"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                    style="width:50%"
+                  ></el-input>
                   {{"%"}}
                 </el-col>
                 <el-col :span="12">
@@ -191,6 +209,7 @@
                   <el-input
                     v-model="form3.conservativeRate"
                     placeholder="请输入抵质押物情况（银行信息，尽调信息）"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
                     style="width:50%"
                   ></el-input>
                   {{"%"}}
@@ -200,6 +219,7 @@
                   <el-input
                     v-model="form3.optimisticRate"
                     placeholder="请输入抵质押物情况（银行信息，尽调信息）"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
                     style="width:50%"
                   ></el-input>
                   {{"%"}}
@@ -222,14 +242,24 @@
                 </el-col>
                 <el-col :span="12">
                   <span>变现系数——保守:</span>
-                  <el-input v-model="form4.conservative" placeholder="请输入保守变现系数" style="width:50%"></el-input>
+                  <el-input
+                    v-model="form4.conservative"
+                    placeholder="请输入保守变现系数"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                    style="width:50%"
+                  ></el-input>
                   {{"%"}}
                 </el-col>
               </el-row>
               <el-row style="margin-bottom:2rem">
                 <el-col :span="12" style="padding-top:0.7rem">
                   <span>变现系数——乐观:</span>
-                  <el-input v-model="form4.optimistic" placeholder="请输入乐观变现系数" style="width:50%"></el-input>
+                  <el-input
+                    v-model="form4.optimistic"
+                    placeholder="请输入乐观变现系数"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                    style="width:50%"
+                  ></el-input>
                   {{"%"}}
                 </el-col>
                 <el-col :span="12">
@@ -243,6 +273,7 @@
                   <el-input
                     v-model="form4.conservativeRate"
                     placeholder="请输入抵质押物情况（银行信息，尽调信息）"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
                     style="width:50%"
                   ></el-input>
                   {{"%"}}
@@ -252,6 +283,7 @@
                   <el-input
                     v-model="form4.optimisticRate"
                     placeholder="请输入抵质押物情况（银行信息，尽调信息）"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
                     style="width:50%"
                   ></el-input>
                   {{"%"}}
@@ -274,14 +306,24 @@
                 </el-col>
                 <el-col :span="12">
                   <span>变现系数——保守:</span>
-                  <el-input v-model="form5.conservative" placeholder="请输入保守变现系数" style="width:50%"></el-input>
+                  <el-input
+                    v-model="form5.conservative"
+                    placeholder="请输入保守变现系数"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                    style="width:50%"
+                  ></el-input>
                   {{"%"}}
                 </el-col>
               </el-row>
               <el-row style="margin-bottom:2rem">
                 <el-col :span="12" style="padding-top:0.7rem">
                   <span>变现系数——乐观:</span>
-                  <el-input v-model="form5.optimistic" placeholder="请输入乐观变现系数" style="width:50%"></el-input>
+                  <el-input
+                    v-model="form5.optimistic"
+                    placeholder="请输入乐观变现系数"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                    style="width:50%"
+                  ></el-input>
                   {{"%"}}
                 </el-col>
                 <el-col :span="12">
@@ -295,6 +337,7 @@
                   <el-input
                     v-model="form5.conservativeRate"
                     placeholder="请输入抵质押物情况（银行信息，尽调信息）"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
                     style="width:50%"
                   ></el-input>
                   {{"%"}}
@@ -304,6 +347,7 @@
                   <el-input
                     v-model="form5.optimisticRate"
                     placeholder="请输入抵质押物情况（银行信息，尽调信息）"
+                    oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
                     style="width:50%"
                   ></el-input>
                   {{"%"}}
@@ -405,7 +449,12 @@
                 <span>包内现金(万元):</span>
               </el-col>
               <el-col :xs="4" :sm="6" :md="8" :lg="5" :xl="11">
-                <el-input v-model="form.cashBag" placeholder="请输入包内现金(万元)" @change="cashBagChange"></el-input>
+                <el-input
+                  v-model="form.cashBag"
+                  placeholder="请输入包内现金(万元)"
+                  oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
+                  @change="cashBagChange"
+                ></el-input>
               </el-col>
             </el-row>
             <el-row>
@@ -444,17 +493,17 @@
           </el-row>
           <el-row style="margin-bottom:2rem">
             <el-col :span="4" align="center">{{"保守"}}</el-col>
-            <el-col :span="5" align="center">{{form6.guacon}}</el-col>
-            <el-col :span="5" align="center">{{form6.asscon}}</el-col>
-            <el-col :span="5" align="center">{{form6.pacmoney}}</el-col>
-            <el-col :span="5" align="center">{{sum1}}</el-col>
+            <el-col :span="5" align="center">{{form6.guacon+"万元"}}</el-col>
+            <el-col :span="5" align="center">{{form6.asscon+"万元"}}</el-col>
+            <el-col :span="5" align="center">{{form6.pacmoney+"万元"}}</el-col>
+            <el-col :span="5" align="center">{{sum1+"万元"}}</el-col>
           </el-row>
           <el-row style="margin-bottom:2rem">
             <el-col :span="4" align="center">{{"乐观"}}</el-col>
-            <el-col :span="5" align="center">{{form6.guaopt}}</el-col>
-            <el-col :span="5" align="center">{{form6.assopt}}</el-col>
-            <el-col :span="5" align="center">{{form6.pacmoney}}</el-col>
-            <el-col :span="5" align="center">{{sum2}}</el-col>
+            <el-col :span="5" align="center">{{form6.guaopt+"万元"}}</el-col>
+            <el-col :span="5" align="center">{{form6.assopt+"万元"}}</el-col>
+            <el-col :span="5" align="center">{{form6.pacmoney+"万元"}}</el-col>
+            <el-col :span="5" align="center">{{sum2+"万元"}}</el-col>
           </el-row>
         </div>
       </el-tab-pane>
@@ -464,7 +513,6 @@
 
 <script>
 import $ from "@/api/valuation";
-import  math from 'mathjs'
 
 export default {
   data() {
@@ -688,40 +736,44 @@ export default {
       }
     });
   },
-  computed :{
-    sum1(){
-      let value=parseFloat(this.form6.guacon)+parseFloat(this.form6.asscon)+parseFloat(this.form6.pacmoney)
-      let realVal = ''
-      if (!isNaN(value) && value!== '') {
+  computed: {
+    sum1() {
+      let value =
+        parseFloat(this.form6.guacon) +
+        parseFloat(this.form6.asscon) +
+        parseFloat(this.form6.pacmoney);
+      let realVal = "";
+      if (!isNaN(value) && value !== "") {
         // 截取当前数据到小数点后三位
-        let tempVal = parseFloat(value).toFixed(3)
-        realVal = tempVal.substring(0, tempVal.length - 1)
+        let tempVal = parseFloat(value).toFixed(3);
+        realVal = tempVal.substring(0, tempVal.length - 1);
       } else {
-        realVal = '--'
+        realVal = "--";
       }
-      return realVal
-
+      return realVal;
     },
-    sum2(){
-      let value=parseFloat(this.form6.guaopt)+parseFloat(this.form6.assopt)+parseFloat(this.form6.pacmoney)
-      let realVal = ''
-      if (!isNaN(value) && value!== '') {
+    sum2() {
+      let value =
+        parseFloat(this.form6.guaopt) +
+        parseFloat(this.form6.assopt) +
+        parseFloat(this.form6.pacmoney);
+      let realVal = "";
+      if (!isNaN(value) && value !== "") {
         // 截取当前数据到小数点后三位
-        let tempVal = parseFloat(value).toFixed(3)
-        realVal = tempVal.substring(0, tempVal.length - 1)
+        let tempVal = parseFloat(value).toFixed(3);
+        realVal = tempVal.substring(0, tempVal.length - 1);
       } else {
-        realVal = '--'
+        realVal = "--";
       }
-      return realVal
+      return realVal;
     },
   },
   methods: {
-
-    back(){
+    back() {
       this.$router.push({
-        path:'/bus/claims/edit/index',
-        query: {  claimsNumber: this.$route.query.claimsNumber }
-        })
+        path: "/bus/claims/edit/index",
+        query: { claimsNumber: this.$route.query.claimsNumber },
+      });
     },
     //包内现金
     cashBagChange() {
@@ -770,7 +822,6 @@ export default {
           }
         }
       );
-
     },
     //保证人估值
     guaval() {
@@ -818,7 +869,7 @@ export default {
     assetVal(id) {
       $.AssetsvalueList({ collateralId: id }).then((res) => {
         this.dataList = res.data;
-        console.log(res.data)
+        // console.log(res.data)
         this.$set(this.dataList[0], "a", "房产");
         this.$set(this.dataList[1], "a", "土地");
         this.$set(this.dataList[2], "a", "其他");

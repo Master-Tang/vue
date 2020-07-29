@@ -1,6 +1,6 @@
 <template>
   <div class="my-padding">
-    <el-form ref="form" :model="form" label-width="7rem">
+    <el-form ref="form" :model="form" label-width="8rem">
       <el-form-item>
         <span slot="label">对应借款合同</span>
         <el-select v-model="form.loanContract" multiple placeholder="请选择关联借款合同" style="width:100%">
@@ -25,15 +25,14 @@
       </el-form-item>
       <el-form-item>
         <span slot="label">
-          保证人金额
+          保证人金额(元)
           <span class="red">*</span>
         </span>
         <el-input
           v-model="form.guarantorAmount"
           type="text"
           placeholder="请输入保证人金额"
-          onkeyup="value=value.replace(/\D/g,'')"
-          onchange="value=value.replace(/\D/g,'')"
+          oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
         ></el-input>
       </el-form-item>
       <el-form-item>
@@ -148,7 +147,7 @@
             <el-table-column label="企业所在地址" align="center">
               <template slot-scope="scope">{{ scope.row.corporateCity+" "+scope.row.address}}</template>
             </el-table-column>
-            <el-table-column label="注册资金" align="center">
+            <el-table-column label="注册资金(元)" align="center">
               <template slot-scope="scope">{{ scope.row.money}}</template>
             </el-table-column>
             <el-table-column label="与借款人关系" align="center">
@@ -289,13 +288,12 @@
           <el-input v-model="form1.address" type="text" placeholder="请输入详细地址"></el-input>
         </el-form-item>
         <el-form-item>
-          <span slot="label">注册资金</span>
+          <span slot="label">注册资金(元)</span>
           <el-input
             v-model="form1.money"
             type="text"
             placeholder="请输入注册资金"
-            onkeyup="value=value.replace(/\D/g,'')"
-            onchange="value=value.replace(/\D/g,'')"
+            oninput="if(isNaN(value)) { value = null } if(value.indexOf('.')>0){value=value.slice(0,value.indexOf('.')+3)}"
           ></el-input>
         </el-form-item>
         <el-form-item>
