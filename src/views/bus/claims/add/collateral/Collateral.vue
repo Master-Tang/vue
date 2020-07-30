@@ -43,7 +43,7 @@
               :props="{value:'regionId',label:'regionName',children:'children' }"
               filterable
             ></el-cascader>
-            <el-input v-model="form.address" type="text" placeholder="请输入详细地址"></el-input>
+            <el-input v-model="form.cityAddress" type="text" placeholder="请输入详细地址"></el-input>
           </el-form-item>
           <el-form-item>
             <span slot="label">地图链接</span>
@@ -287,7 +287,7 @@ export default {
         mortType: "",
         prinBegin: "",
         prinEnd: "",
-        address: "",
+        cityAddress: "",
         mapLink: "",
         home: "",
         owner: "",

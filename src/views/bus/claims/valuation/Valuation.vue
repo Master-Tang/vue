@@ -467,7 +467,6 @@
 
           <el-drawer :visible.sync="promise" size="20%">
             <el-table
-              id="myform"
               :data="borrowers"
               element-loading-text="Loading"
               border

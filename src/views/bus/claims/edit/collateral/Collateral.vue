@@ -42,7 +42,7 @@
               :props="{value:'regionId',label:'regionName',children:'children' }"
               filterable
             ></el-cascader>
-            <el-input v-model="form.address" type="text" placeholder="请输入详细地址"></el-input>
+            <el-input v-model="form.cityAddress" type="text" placeholder="请输入详细地址"></el-input>
           </el-form-item>
           <el-form-item>
             <span slot="label">地图链接</span>
@@ -136,7 +136,6 @@
           <el-button @click="back" style="float:right">返回抵押物信息</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list1"
           element-loading-text="Loading"
           border
@@ -182,7 +181,6 @@
           <el-button @click="back" style="float:right">返回抵押物信息</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list2"
           element-loading-text="Loading"
           border
@@ -261,470 +259,469 @@
           </el-table-column>
         </el-table>
       </el-tab-pane>
-      <el-dialog
-        title="地图"
-        :visible.sync="dialogstate"
-        center
-        :append-to-body="true"
-        :lock-scroll="false"
-        width="100%"
-      >
-        <baidu-map
-          :center="center"
-          :zoom="zoom"
-          @ready="handler"
-          style="width:100%;height:100%"
-          @click="getClickInfo"
-          :scroll-wheel-zoom="true"
-        ></baidu-map>
-      </el-dialog>
+      <el-drawer title="地图" align="center" :visible.sync="dialogstate" size="50%">
+        <div class="app-container">
+          <el-autocomplete
+            v-model="form.mapLocation.address"
+            :fetch-suggestions="querySearch"
+            placeholder="请输入详细地址"
+            style="width: 100%"
+            :trigger-on-focus="false"
+            @select="handleSelect"
+          />
+          <div style="margin: 1rem">
+            <baidu-map class="bm-view" :center="mapCenter" :zoom="mapZoom" :scroll-wheel-zoom="true" ak="baidu-ak"
+                       @ready="handlerBMap"/>
+          </div>
+        </div>
+      </el-drawer>
+
     </el-tabs>
   </div>
 </template>
 
 <script>
-import $ from "@/api/bus";
+  import $ from "@/api/bus";
+  import BaiduMap from 'vue-baidu-map/components/map/Map.vue'
 
-export default {
-  name: 'TestBaiDu',
-  data() {
-    return {
-      center: {lng: 109.45744048529967, lat: 36.49771311230842},
-      zoom: 13,
-      judge: true,
-      activeName: "first",
-      dialogstate: false,
-      act: "first",
-      acte: "first",
-      list1: [],
-      list2: [],
-      list3: [],
-      form: {
-        loanCont: "",
-        city: [],
-        courtSeizureCity: [],
-        noContract: "",
-        mortType: "",
-        prinBegin: "",
-        prinEnd: "",
-        address: "",
-        mapLink: "",
-        home: "",
-        owner: "",
-        assetType: "",
-        maxMort: "",
-        seqMort: "",
-        orderMort: "",
-        sequenceSei: "",
-        courtSei: "",
-        verifyInfo: "",
-        collId: "",
-        claimsNumber: "",
-      },
-      mapList: [],
-      coupleList: [],
-      assetList: [],
-      mortgageList: [],
-      seizureList: [],
-      provinceList: [],
-    };
-  },
+  export default {
+    components: {
+      BaiduMap
+    },
+    data() {
+      return {
+        mapZoom: 15,
+        mapCenter: {lng: 0, lat: 0},
+        dialogstate: false,
+        judge: true,
+        activeName: "first",
+        act: "first",
+        acte: "first",
+        list1: [],
+        list2: [],
+        list3: [],
+        form: {
+          loanCont: "",
+          city: [],
+          courtSeizureCity: [],
+          noContract: "",
+          mortType: "",
+          prinBegin: "",
+          prinEnd: "",
+          cityAddress: "",
+          mapLink: "",
+          home: "",
+          owner: "",
+          assetType: "",
+          maxMort: "",
+          seqMort: "",
+          orderMort: "",
+          sequenceSei: "",
+          courtSei: "",
+          verifyInfo: "",
+          mapLocation: {
+            address: "江苏省无锡市滨湖区家乐福",
+            coordinate: {
+              lat:31.555396,
+              lng:120.267897
+            }
+          },
+          collId: "",
+          claimsNumber: "",
+        },
+        mapList: [],
+        coupleList: [],
+        assetList: [],
+        mortgageList: [],
+        seizureList: [],
+        provinceList: [],
+      };
+    },
 
-  created() {
-    this.form.claimsNumber = this.$route.query.id;
-    this.form.collId = this.$route.query.collId;
-    if (this.$route.query.activeName == null) {
-      this.act = "first";
-    } else {
-      this.act = this.$route.query.activeName;
-    }
-    $.mapList({ claimsNumber: this.form.claimsNumber }).then((res) => {
-      if (res.success) {
-        this.mapList = res.data.contractMap;
+    created() {
+      this.form.claimsNumber = this.$route.query.id;
+      this.form.collId = this.$route.query.collId;
+      if (this.$route.query.activeName == null) {
+        this.act = "first";
+      } else {
+        this.act = this.$route.query.activeName;
       }
-    });
-    $.addInit().then((res) => {
-      if (res.success) {
-        this.provinceList = res.data.province;
-        this.coupleList = res.data.coupleList;
-        this.assetList = res.data.assetList;
-        this.mortgageList = res.data.mortgageList;
-        this.seizureList = res.data.seizureList;
-      }
-    });
-    $.collateral({ collId: this.$route.query.collId }).then((res) => {
-      if (res.success) {
-        if (res.data != null) {
-          // console.log(res.data)
-          this.form = res.data;
-        }
-      }
-    });
-    //房产
-    $.propertyList({
-      collateralId: this.$route.query.collId,
-      busType: "01",
-    }).then((res) => {
-      if (res.success) {
-        this.list1 = res.data;
-        // console.log(this.list1)
-        for (var i = 1; i <= this.list1.length; i++) {
-          this.$set(this.list1[i - 1], "a", i);
-        }
-      }
-    });
-    //土地
-    $.landList({ collateralId: this.$route.query.collId, busType: "01" }).then(
-      (res) => {
+      $.mapList({claimsNumber: this.form.claimsNumber}).then((res) => {
         if (res.success) {
-          this.list2 = res.data;
-          // console.log(this.list3)
-          for (var i = 1; i <= this.list2.length; i++) {
-            this.$set(this.list2[i - 1], "a", i);
+          this.mapList = res.data.contractMap;
+        }
+      });
+      $.addInit().then((res) => {
+        if (res.success) {
+          this.provinceList = res.data.province;
+          this.coupleList = res.data.coupleList;
+          this.assetList = res.data.assetList;
+          this.mortgageList = res.data.mortgageList;
+          this.seizureList = res.data.seizureList;
+        }
+      });
+      $.collateral({collId: this.$route.query.collId}).then((res) => {
+        if (res.success) {
+          if (res.data != null) {
+            // console.log(res.data)
+            this.form = res.data;
           }
         }
-      }
-    );
-    //其他
-    $.otherList({ collateralId: this.$route.query.collId, busType: "01" }).then(
-      (res) => {
+      });
+      //房产
+      $.propertyList({
+        collateralId: this.$route.query.collId,
+        busType: "01",
+      }).then((res) => {
         if (res.success) {
-          this.list3 = res.data;
+          this.list1 = res.data;
           // console.log(this.list1)
-          for (var i = 1; i <= this.list3.length; i++) {
-            this.$set(this.list3[i - 1], "a", i);
+          for (var i = 1; i <= this.list1.length; i++) {
+            this.$set(this.list1[i - 1], "a", i);
           }
         }
-      }
-    );
-  },
-
-  methods: {
-    handler ({BMap, map}) {
-      // 初始化地图,设置中心点坐标
-      var point = new BMap.Point(119.8025089500, 25.4890556400)
-      map.centerAndZoom(point, 13)
-      
-      // 添加鼠标滚动缩放
-      map.enableScrollWheelZoom();
-      // 添加缩略图控件
-      map.addControl(new BMap.OverviewMapControl({isOpen:false,anchor:BMAP_ANCHOR_BOTTOM_RIGHT}));
-      // 添加缩放平移控件
-      map.addControl(new BMap.NavigationControl());
-      //添加比例尺控件
-       map.addControl(new BMap.ScaleControl());
-       //添加地图类型控件
-       //map.addControl(new BMap.MapTypeControl());
-    
-       //设置标注的图标
-       var icon = new BMap.Icon("./static/img/map.png",new BMap.Size(100,100));
-       //设置标注的经纬度
-       var marker = new BMap.Marker(new BMap.Point(121.160724,31.173277),{icon:icon});
-       //把标注添加到地图上
-       map.addOverlay(marker);
-       var content = "<table>";
-       content = content + "<tr><td> 编号：001</td></tr>";
-       content = content + "<tr><td> 地点：上海汉得信息技术股份有限公司</td></tr>";
-       content = content + "<tr><td> 时间：2018-1-3</td></tr>";
-       content += "</table>";
-       var infowindow = new BMap.InfoWindow(content);
-      // 图标点击的时候显示标注
-       marker.addEventListener("click",function(){
-            this.openInfoWindow(infowindow);
-       });
-        // 标注默认显示
-       // var infoWindow = new BMap.InfoWindow(content) // 创建信息窗口对象
-       // map.openInfoWindow(infoWindow, point)
-    },
-    getClickInfo (e) {
-      console.log(e.point.lng)
-      console.log(e.point.lat)
-      this.center.lng = e.point.lng
-      this.center.lat = e.point.lat
-    },
-    openDialog() {
-      this.dialogstate = true;
-    },
-    back() {
-      this.$router.push({
-        path: "/bus/claims/add/index",
-        query: { activeName: "forth", claimsNumber: this.form.claimsNumber },
       });
+      //土地
+      $.landList({collateralId: this.$route.query.collId, busType: "01"}).then(
+        (res) => {
+          if (res.success) {
+            this.list2 = res.data;
+            // console.log(this.list3)
+            for (var i = 1; i <= this.list2.length; i++) {
+              this.$set(this.list2[i - 1], "a", i);
+            }
+          }
+        }
+      );
+      //其他
+      $.otherList({collateralId: this.$route.query.collId, busType: "01"}).then(
+        (res) => {
+          if (res.success) {
+            this.list3 = res.data;
+            // console.log(this.list1)
+            for (var i = 1; i <= this.list3.length; i++) {
+              this.$set(this.list3[i - 1], "a", i);
+            }
+          }
+        }
+      );
     },
-    addcollateral() {
-      if (!this.validate()) return;
-      $.addcollateral(this.form).then((response) => {
-        if (response.data == "已存在") {
+
+    methods: {
+      handlerBMap({BMap, map}) {
+        this.BMap = BMap
+        this.map = map
+        if (this.form.mapLocation.coordinate && this.form.mapLocation.coordinate.lng) {
+          this.mapCenter.lng = this.form.mapLocation.coordinate.lng
+          this.mapCenter.lat = this.form.mapLocation.coordinate.lat
+          this.mapZoom = 15
+          map.addOverlay(new this.BMap.Marker(this.form.mapLocation.coordinate))
+        }
+        // else {
+        //   this.mapCenter.lng = 120.267897
+        //   this.mapCenter.lat = 31.555396
+        //   this.mapZoom = 20
+        // }
+      },
+      querySearch(queryString, cb) {
+        var that = this
+        var myGeo = new this.BMap.Geocoder()
+        myGeo.getPoint(queryString, function (point) {
+          if (point) {
+            that.form.mapLocation.coordinate = point
+            that.makerCenter(point)
+          } else {
+            that.form.mapLocation.coordinate = null
+          }
+        }, this.locationCity)
+        var options = {
+          onSearchComplete: function (results) {
+            if (local.getStatus() === 0) {
+              // 判断状态是否正确
+              var s = []
+              for (var i = 0; i < results.getCurrentNumPois(); i++) {
+                var x = results.getPoi(i)
+                var item = {value: x.address + x.title, point: x.point}
+                s.push(item)
+                cb(s)
+                console.log(item)
+              }
+            } else {
+              cb()
+            }
+          }
+        }
+        var local = new this.BMap.LocalSearch(this.map, options)
+        local.search(queryString)
+      },
+      handleSelect(item) {
+        var {point} = item
+        console.log(point)
+        this.form.mapLocation.coordinate = point
+        this.makerCenter(point)
+      },
+      makerCenter(point) {
+        if (this.map) {
+          this.map.clearOverlays()
+          this.map.addOverlay(new this.BMap.Marker(point))
+          this.mapCenter.lng = point.lng
+          this.mapCenter.lat = point.lat
+          this.mapZoom = 15
+        }
+      },
+      openDialog() {
+        this.dialogstate = true;
+      },
+      back() {
+        this.$router.push({
+          path: "/bus/claims/add/index",
+          query: {activeName: "forth", claimsNumber: this.form.claimsNumber},
+        });
+      },
+      addcollateral() {
+        if (!this.validate()) return;
+        $.addcollateral(this.form).then((response) => {
+          if (response.data == "已存在") {
+            this.$message({
+              type: "error",
+              message: "该信息已存在,请勿重复添加",
+            });
+          } else {
+            this.form.collId = response.data;
+            // console.log(response.data)
+            this.judge = true;
+            this.$message({
+              type: "success",
+              message: "添加成功",
+            });
+          }
+        });
+      },
+      cencelcollateral() {
+        this.$router.push({
+          path: "/bus/claims/add/index",
+          query: {activeName: "forth", claimsNumber: this.form.claimsNumber},
+        });
+      },
+      updatecollateral() {
+        if (!this.validate()) return;
+        $.updatecollateral(this.form).then((response) => {
+          if (response.data == "无此信息") {
+            this.$message({
+              type: "error",
+              message: "请先保存",
+            });
+          } else {
+            this.$message({
+              type: "success",
+              message: "更改成功",
+            });
+          }
+        });
+      },
+      validate() {
+        let error = "";
+        if (this.form.city.length == 0) {
+          error = "地址所在城市必选\n";
+        } else if (this.form.assetType.length == 0) {
+          error = "资产类型必选\n";
+        }
+
+        if (error) {
           this.$message({
+            message: error,
             type: "error",
-            message: "该信息已存在,请勿重复添加",
+          });
+          return false;
+        }
+        return true;
+      },
+      Toproperty() {
+        if (this.$route.query.collId == null) {
+          this.$router.push({
+            path: "property",
+            query: {collId: this.form.collId, id: this.form.claimsNumber},
           });
         } else {
-          this.form.collId = response.data;
-          // console.log(response.data)
-          this.judge = true;
-          this.$message({
-            type: "success",
-            message: "添加成功",
+          this.$router.push({
+            path: "property",
+            query: {collId: this.$route.query.collId, id: this.$route.query.id},
           });
         }
-      });
-    },
-    cencelcollateral() {
-      this.$router.push({
-        path: "/bus/claims/add/index",
-        query: { activeName: "forth", claimsNumber: this.form.claimsNumber },
-      });
-    },
-    updatecollateral() {
-      if (!this.validate()) return;
-      $.updatecollateral(this.form).then((response) => {
-        if (response.data == "无此信息") {
-          this.$message({
-            type: "error",
-            message: "请先保存",
+      },
+      propertyEdit(id) {
+        this.$router.push({
+          path: "property",
+          query: {
+            collId: this.$route.query.collId,
+            propertyId: id,
+            id: this.$route.query.id,
+          },
+        });
+      },
+      propertyDel(id) {
+        this.$confirm("此操作将删除该信息, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
+        })
+          .then(() => {
+            // console.log(id);
+            $.propertyFake({propertyId: id}).then((response) => {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              $.propertyList({
+                collateralId: this.$route.query.collId,
+                busType: "01",
+              }).then((res) => {
+                if (res.success) {
+                  this.list1 = res.data;
+                  // console.log(this.list1)
+                  for (var i = 1; i <= this.list1.length; i++) {
+                    this.$set(this.list1[i - 1], "a", i);
+                  }
+                }
+              });
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
+          });
+      },
+
+      Toland() {
+        if (this.$route.query.collId == null) {
+          this.$router.push({
+            path: "land",
+            query: {collId: this.form.collId, id: this.form.claimsNumber},
           });
         } else {
-          this.$message({
-            type: "success",
-            message: "更改成功",
+          this.$router.push({
+            path: "land",
+            query: {collId: this.$route.query.collId, id: this.$route.query.id},
           });
         }
-      });
-    },
-    validate() {
-      let error = "";
-      if (this.form.city.length == 0) {
-        error = "地址所在城市必选\n";
-      } else if (this.form.assetType.length == 0) {
-        error = "资产类型必选\n";
-      }
-
-      if (error) {
-        this.$message({
-          message: error,
-          type: "error",
-        });
-        return false;
-      }
-      return true;
-    },
-    Toproperty() {
-      if (this.$route.query.collId == null) {
-        this.$router.push({
-          path: "property",
-          query: { collId: this.form.collId, id: this.form.claimsNumber },
-        });
-      } else {
-        this.$router.push({
-          path: "property",
-          query: { collId: this.$route.query.collId, id: this.$route.query.id },
-        });
-      }
-    },
-    propertyEdit(id) {
-      this.$router.push({
-        path: "property",
-        query: {
-          collId: this.$route.query.collId,
-          propertyId: id,
-          id: this.$route.query.id,
-        },
-      });
-    },
-    propertyDel(id) {
-      this.$confirm("此操作将删除该信息, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          // console.log(id);
-          $.propertyFake({ propertyId: id }).then((response) => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-            $.propertyList({
-              collateralId: this.$route.query.collId,
-              busType: "01",
-            }).then((res) => {
-              if (res.success) {
-                this.list1 = res.data;
-                // console.log(this.list1)
-                for (var i = 1; i <= this.list1.length; i++) {
-                  this.$set(this.list1[i - 1], "a", i);
-                }
-              }
-            });
-          });
-        })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
-          });
-        });
-    },
-
-    Toland() {
-      if (this.$route.query.collId == null) {
+      },
+      landEdit(id) {
         this.$router.push({
           path: "land",
-          query: { collId: this.form.collId, id: this.form.claimsNumber },
+          query: {
+            collId: this.$route.query.collId,
+            landId: id,
+            id: this.$route.query.id,
+          },
         });
-      } else {
-        this.$router.push({
-          path: "land",
-          query: { collId: this.$route.query.collId, id: this.$route.query.id },
-        });
-      }
-    },
-    landEdit(id) {
-      this.$router.push({
-        path: "land",
-        query: {
-          collId: this.$route.query.collId,
-          landId: id,
-          id: this.$route.query.id,
-        },
-      });
-    },
-    landDel(id) {
-      this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          // console.log(id);
-          $.landFake({ landId: id }).then((response) => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-            $.landList({
-              collateralId: this.$route.query.collId,
-              busType: "01",
-            }).then((res) => {
-              if (res.success) {
-                this.list2 = res.data;
-                // console.log(this.list3)
-                for (var i = 1; i <= this.list2.length; i++) {
-                  this.$set(this.list2[i - 1], "a", i);
-                }
-              }
-            });
-          });
+      },
+      landDel(id) {
+        this.$confirm("此操作将删除该伙伴, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
+          .then(() => {
+            // console.log(id);
+            $.landFake({landId: id}).then((response) => {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              $.landList({
+                collateralId: this.$route.query.collId,
+                busType: "01",
+              }).then((res) => {
+                if (res.success) {
+                  this.list2 = res.data;
+                  // console.log(this.list3)
+                  for (var i = 1; i <= this.list2.length; i++) {
+                    this.$set(this.list2[i - 1], "a", i);
+                  }
+                }
+              });
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
           });
-        });
-    },
+      },
 
-    Toother() {
-      if (this.$route.query.collId == null) {
-        this.$router.push({
-          path: "other",
-          query: { collId: this.form.collId, id: this.form.claimsNumber },
-        });
-      } else {
-        this.$router.push({
-          path: "other",
-          query: { collId: this.$route.query.collId, id: this.$route.query.id },
-        });
-      }
-    },
-    otherEdit(id) {
-      this.$router.push({
-        path: "other",
-        query: {
-          collId: this.$route.query.collId,
-          otherId: id,
-          id: this.$route.query.id,
-        },
-      });
-    },
-    otherDel(id) {
-      this.$confirm("此操作将删除该信息, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning",
-      })
-        .then(() => {
-          // console.log(id);
-          $.otherFake({ otherId: id }).then((response) => {
-            this.$message({
-              type: "success",
-              message: "删除成功!",
-            });
-            $.otherList({
-              collateralId: this.$route.query.collId,
-              busType: "01",
-            }).then((res) => {
-              if (res.success) {
-                this.list3 = res.data;
-                // console.log(this.list1)
-                for (var i = 1; i <= this.list3.length; i++) {
-                  this.$set(this.list3[i - 1], "a", i);
-                }
-              }
-            });
+      Toother() {
+        if (this.$route.query.collId == null) {
+          this.$router.push({
+            path: "other",
+            query: {collId: this.form.collId, id: this.form.claimsNumber},
           });
+        } else {
+          this.$router.push({
+            path: "other",
+            query: {collId: this.$route.query.collId, id: this.$route.query.id},
+          });
+        }
+      },
+      otherEdit(id) {
+        this.$router.push({
+          path: "other",
+          query: {
+            collId: this.$route.query.collId,
+            otherId: id,
+            id: this.$route.query.id,
+          },
+        });
+      },
+      otherDel(id) {
+        this.$confirm("此操作将删除该信息, 是否继续?", "提示", {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+          type: "warning",
         })
-        .catch(() => {
-          this.$message({
-            type: "info",
-            message: "已取消删除",
+          .then(() => {
+            // console.log(id);
+            $.otherFake({otherId: id}).then((response) => {
+              this.$message({
+                type: "success",
+                message: "删除成功!",
+              });
+              $.otherList({
+                collateralId: this.$route.query.collId,
+                busType: "01",
+              }).then((res) => {
+                if (res.success) {
+                  this.list3 = res.data;
+                  // console.log(this.list1)
+                  for (var i = 1; i <= this.list3.length; i++) {
+                    this.$set(this.list3[i - 1], "a", i);
+                  }
+                }
+              });
+            });
+          })
+          .catch(() => {
+            this.$message({
+              type: "info",
+              message: "已取消删除",
+            });
           });
-        });
+      },
     },
-  },
-};
+  };
 </script>
 
 <style>
-.red {
-  color: red;
-  font-size: 1.5rem;
-  vertical-align: middle;
-}
-.BMap_bubble_title{
-  color:black;
-  font-size:13px;
-  font-weight: bold;
-  text-align:left;
-}
-.BMap_pop div:nth-child(1){
-  border-radius:7px 0 0 0;
-}
-.BMap_pop div:nth-child(3){
-  border-radius:0 7px 0 0;background:#ABABAB;;
-  /*background: #ABABAB;*/
-  width:23px;
-  width:0px;
-  height:10px;
-}
-.BMap_pop div:nth-child(3) div{
-  border-radius:7px;
-}
-.BMap_pop div:nth-child(5){
-  border-radius:0 0 0 7px;
-}
-.BMap_pop div:nth-child(5) div{
-  border-radius:7px;
-}
-.BMap_pop div:nth-child(7){
-  border-radius:0 0 7px 0 ;
-}
-.BMap_pop div:nth-child(7) div {
-  border-radius:7px ;
-}
-/* // 标注右上角的关闭按钮隐藏 */
-.BMap_pop>img {
-  display: none;
-}
+  .red {
+    color: red;
+    font-size: 1.5rem;
+    vertical-align: middle;
+  }
+
+  .bm-view {
+    width: 100%;
+    height: 30rem;
+  }
 </style>

@@ -122,7 +122,6 @@
           <el-button type="primary" @click="ToBorrow()">添加</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list1"
           element-loading-text="Loading"
           border
@@ -247,7 +246,6 @@
           <el-button type="primary" @click="Tocoll">添加</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list4"
           element-loading-text="Loading"
           border
@@ -301,7 +299,6 @@
           <el-button type="primary" @click="Tolight">添加</el-button>
         </div>
         <el-table
-          id="myform"
           :data="list5"
           element-loading-text="Loading"
           border
@@ -335,7 +332,7 @@
     </el-tabs>
   </div>
 </template>
-  
+
 <script>
 import $ from "@/api/bus";
 
@@ -580,7 +577,7 @@ export default {
           query: { id: this.$route.query.claimsNumber ,guarantorId:res.data}
         });
         })
-       
+
       }
     },
     guaranteEdit(id) {
